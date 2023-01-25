@@ -7,14 +7,11 @@ use Fanky\Admin\Models\NewProduct;
 use Fanky\Admin\Models\Product;
 use Fanky\Admin\Models\ProductImage;
 use Fanky\Admin\Text;
+use GuzzleHttp\Cookie\CookieJar;
 use SVG\SVG;
 use Symfony\Component\DomCrawler\Crawler;
 
 trait ParseFunctions {
-
-    public $baseUrl = 'https://rus-kab.ru';
-
-    private $updateOneTime = false;
 
     public $userAgents = [
         "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
@@ -63,20 +60,22 @@ trait ParseFunctions {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
 
+        //['beget' => 'begetok', 'PHPSESSID' => '1db29869cfa1ece545d452dc2aa9cc80']
         $res = $this->client->get($categoryUrl);
         $html = $res->getBody()->getContents();
         $sectionCrawler = new Crawler($html); //section page from url
 
-        $this->info($sectionCrawler->filter('.bx_catalog_tile_ul')->count());
-        if($sectionCrawler->filter('.bx_catalog_tile_ul')->count() != 0) {
-            $sectionCrawler->filter('.bx_catalog_tile_ul li')->each(function (Crawler $inner) {
-                $innerCatName = $inner->filter('.bx_catalog_tile_title a')->first()->text();
-                $innerCatUrl = $inner->filter('.bx_catalog_tile_title a')->first()->attr('href');
-                $this->info($innerCatName);
-                $this->info($innerCatUrl);
-                exit();
-            });
-        }
+        var_dump($html);
+//        $this->info($sectionCrawler->filter('.bx_catalog_tile_category_title')->count());
+//        if($sectionCrawler->filter('ul.bx_catalog_tile_ul')->first()->count() != 0) {
+//            $sectionCrawler->filter('.bx_catalog_tile_ul li')->each(function (Crawler $inner) {
+//                $innerCatName = $inner->filter('.bx_catalog_tile_title a')->first()->text();
+//                $innerCatUrl = $inner->filter('.bx_catalog_tile_title a')->first()->attr('href');
+//                $this->info($innerCatName);
+//                $this->info($innerCatUrl);
+//                exit();
+//            });
+//        }
 
 
 
@@ -179,13 +178,13 @@ trait ParseFunctions {
 
     public function downloadJpgFile($url, $uploadPath, $fileName): bool {
         $safeUrl = str_replace(' ', '%20', $url);
-        $this->info('downloadJpgFile url: ' . $safeUrl);
-        $file = file_get_contents($this->baseUrl . $safeUrl);
+        $this->info('downloadImageFile: ' . $safeUrl);
+        $file = file_get_contents($safeUrl);
         if (!is_dir(public_path($uploadPath))) {
             mkdir(public_path($uploadPath), 0777, true);
         }
         try {
-            file_put_contents(public_path($fileName), $file);
+            file_put_contents(public_path($uploadPath . $fileName), $file);
             return true;
         } catch (\Exception $e) {
             $this->warn('download jpg error: ' . $e->getMessage());
@@ -317,5 +316,32 @@ trait ParseFunctions {
 
     }
 
+    public function getExtensionFromSrc(string $url): string {
+        $mark = strripos($url, '.');
+        if ($mark) {
+            return trim(substr($url, $mark));
+        } else {
+            return '.none';
+        }
 
+    }
+
+    public function getTextWithNewImage(string $text, string $imgUrl): string {
+        if($text == null) return '';
+        $start = stripos($text, '<img');
+        if(!$start) return $text;
+
+        $end = stripos($text, '>', $start);
+        $searchString = substr($text, $start, $end - $start + 1);
+        $img = '<img src="' . $imgUrl . '">';
+        return str_replace($searchString, $img, $text);
+    }
+
+    public function getUpdatedTextWithNewImages(string $text, array $imgArr): string {
+        if($text == null) return '';
+        foreach ($imgArr as $oldOne => $newOne) {
+            str_replace($oldOne, $newOne, $text);
+        }
+        return $text;
+    }
 }

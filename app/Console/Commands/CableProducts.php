@@ -19,7 +19,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use SVG\SVG;
 use App\Traits\ParseFunctions;
 
-class CabelProducts extends Command {
+class CableProducts extends Command {
 
     use ParseFunctions;
 
@@ -28,8 +28,8 @@ class CabelProducts extends Command {
      *
      * @var string
      */
-    protected $signature = 'parse:cabel-products';
-    private $basePath = ProductImage::UPLOAD_URL . 'cabel-products/';
+    protected $signature = 'parse:cable-products';
+    private $basePath = ProductImage::UPLOAD_URL . 'cable-products/';
     public $client;
 
     /**
