@@ -21,7 +21,8 @@ use Symfony\Component\DomCrawler\Crawler;
 use SVG\SVG;
 use App\Traits\ParseFunctions;
 
-class CableSystems extends Command {
+class CableSystems extends Command
+{
 
     use ParseFunctions;
 
@@ -59,7 +60,8 @@ class CableSystems extends Command {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->client = new Client([
             'headers' => ['User-Agent' => Arr::random($this->userAgents)],
@@ -71,7 +73,8 @@ class CableSystems extends Command {
      *
      * @return mixed
      */
-    public function handle() {
+    public function handle()
+    {
         foreach ($this->categoryList() as $categoryName => $categoryUrl) {
             $this->parseCategoryCableSystems($categoryName, $categoryUrl, 2);
         }
@@ -81,7 +84,8 @@ class CableSystems extends Command {
         $this->info('The command was successful!');
     }
 
-    public function categoryList(): array {
+    public function categoryList(): array
+    {
         return [
 //            'ГЭМ' => 'https://asd-e.ru/product/gem/',
             'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
@@ -89,7 +93,8 @@ class CableSystems extends Command {
         ];
     }
 
-    public function parseCategoryCableSystems($categoryName, $categoryUrl, $parentId) {
+    public function parseCategoryCableSystems($categoryName, $categoryUrl, $parentId)
+    {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
         $uploadPath = $this->basePath . $catalog->alias . '/';
@@ -106,14 +111,14 @@ class CableSystems extends Command {
                     $sectionCrawler->filter('.text_after_items img')->count();
                     if ($sectionCrawler->filter('.text_after_items img')->count() != 0) {
                         $imgArr = [];
-                        $sectionCrawler->filter('.text_after_items img')->each(function (Crawler $img, $n) use (&$imgArr, $catalog, $uploadPath) {
+                        $sectionCrawler->filter('.text_after_items img')
+                            ->each(function (Crawler $img, $n) use (&$imgArr, $catalog, $uploadPath) {
                             $imageSrc = $this->baseUrl . $img->attr('src');
                             $ext = $this->getExtensionFromSrc($imageSrc);
-                            $fileName = 'section_' . $catalog->id . '_text_img_' .$n . $ext;
+                            $fileName = 'section_' . $catalog->id . '_text_img_' . $n . $ext;
                             $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                            $imgArr[$img->attr('src')] = $fileName;
+                            $imgArr[] = $uploadPath . $fileName;
                         });
-                        var_dump($imgArr);
                         $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgArr);
                         $catalog->save();
                     }
@@ -132,7 +137,7 @@ class CableSystems extends Command {
             } else {
                 //парсим товары
 //                try {
-                    $this->parseListProductsCableSystems($catalog, $categoryUrl);
+                $this->parseListProductsCableSystems($catalog, $categoryUrl);
 //                } catch (\Exception $e) {
 //                    $this->error('Error Parse Products from section: ' . $e->getMessage());
 //                    $this->error('See line: ' . $e->getLine());
@@ -143,7 +148,8 @@ class CableSystems extends Command {
         }
     }
 
-    public function parseListProductsCableSystems($catalog, $categoryUrl) {
+    public function parseListProductsCableSystems($catalog, $categoryUrl)
+    {
         $this->info('Parse products from: ' . $catalog->name);
 
         try {
@@ -153,7 +159,7 @@ class CableSystems extends Command {
 
             $uploadPath = $this->basePath . $catalog->alias . '/';
 
-            if($crawler->filter('.catalog.item-views.table.many')->count() != 0) {
+            if ($crawler->filter('.catalog.item-views.table.many')->count() != 0) {
                 $table = $crawler->filter('.catalog.item-views.table.many')->first(); //table of products
                 $table->filter('a.dark-color')
                     ->reduce(function (Crawler $none, $i) {
@@ -187,17 +193,19 @@ class CableSystems extends Command {
 
                                 //текстовое описание товара
                                 if ($productCrawler->filter('.content')->count() != 0) {
-                                    $text = $productCrawler->filter('.content')->outerHtml();
+                                    $text = $productCrawler->filter('.content')->html();
                                     if ($productCrawler->filter('.content img')->count() != 0) {
-                                        $imgUrl = $productCrawler->filter('.content img')->first()->attr('src');
-                                        $imageSrc = $this->baseUrl . $imgUrl;
-                                        $ext = $this->getExtensionFromSrc($imageSrc);
-                                        $fileName = 'product_' . $newProd->id . '_text_img' . $ext;
-                                        $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                                        if ($res) {
-                                            $newProd->text = $this->getTextWithNewImage($text, $this->basePath . $fileName);
-                                            $newProd->save();
-                                        }
+                                        $fileNamesToRemove = [];
+                                        $productCrawler->filter('.content img')
+                                            ->each(function (Crawler $img) use ($newProd, $uploadPath, &$fileNamesToRemove) {
+                                                $imageSrc = $this->baseUrl . $img->attr('src');
+                                                $ext = $this->getExtensionFromSrc($imageSrc);
+                                                $fileName = 'product_' . $newProd->id . '_text_img' . $ext;
+                                                $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                                $fileNamesToRemove[] = $uploadPath . $fileName;
+                                            });
+                                        $newProd->text = $this->getUpdatedTextWithNewImages($text, $fileNamesToRemove);
+                                        $newProd->save();
                                     } else {
                                         $newProd->text = $text;
                                         $newProd->save();
@@ -258,7 +266,7 @@ class CableSystems extends Command {
             }
 
             //проход по страницам
-            if($crawler->filter('.next a')->count() != 0) {
+            if ($crawler->filter('.next a')->count() != 0) {
                 $nextUrl = $crawler->filter('.next a');
                 $nextUrl = $this->baseUrl . $nextUrl->attr('href');
                 $this->info('parse next url: ' . $nextUrl);
