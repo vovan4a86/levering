@@ -136,12 +136,12 @@ class CableSystems extends Command
                 });
             } else {
                 //парсим товары
-//                try {
+                try {
                 $this->parseListProductsCableSystems($catalog, $categoryUrl);
-//                } catch (\Exception $e) {
-//                    $this->error('Error Parse Products from section: ' . $e->getMessage());
-//                    $this->error('See line: ' . $e->getLine());
-//                }
+                } catch (\Exception $e) {
+                    $this->error('Error Parse Products from section: ' . $e->getMessage());
+                    $this->error('See line: ' . $e->getLine());
+                }
             }
         } catch (GuzzleException $e) {
             $this->error('Error Parse Sections: ' . $e->getMessage());

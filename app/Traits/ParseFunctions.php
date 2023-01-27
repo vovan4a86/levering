@@ -339,18 +339,19 @@ trait ParseFunctions {
 
     public function getUpdatedTextWithNewImages(string $text, array $imgArr): string {
         if($text == null) return '';
-        $start = stripos($text, '<img');
-        $end = stripos($text, '>', $start);
+        $txt = $text;
+        $start = strpos($txt, '<img');
+        $end = strpos($txt, '>', $start);
         for($i = 0; $i < count($imgArr); $i++ ) {
-            $searchString = substr($text, $start, $end - $start + 1);
+            $searchString = substr($txt, $start, $end - $start + 1);
             $img = '<img src="' . $imgArr[$i] . '">';
-            str_replace($searchString, $img, $text);
+            $txt = str_replace($searchString, $img, $txt);
 
             $this->info('remove: ' . $searchString . ' to: ' . $img);
 
-            $start = stripos($text, '<img', $end + 1);
-            $end = stripos($text, '>', $start);
+            $start = strpos($txt, '<img', $end + 1);
+            $end = strpos($txt, '>', $start);
         }
-        return $text;
+        return $txt;
     }
 }

@@ -56,9 +56,15 @@ class CableProducts extends Command {
      * @return mixed
      */
     public function handle() {
-        foreach ($this->categoryList() as $categoryName => $categoryUrl) {
-            $this->parseCategory($categoryName, $categoryUrl, 1);
-        }
+//        $url = 'https://rus-kab.ru/catalog';
+//        $ch = curl_init($url);
+//        curl_setopt($ch, CURLOPT_FOLLOWLOCATION,    1);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie: beget=begetok"));
+//        $response = curl_exec($ch);
+//        var_dump($response);
+//        foreach ($this->categoryList() as $categoryName => $categoryUrl) {
+//            $this->parseCategory($categoryName, $categoryUrl, 1);
+//        }
         $this->info('The command was successful!');
     }
 
