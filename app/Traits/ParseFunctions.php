@@ -11,7 +11,8 @@ use GuzzleHttp\Cookie\CookieJar;
 use SVG\SVG;
 use Symfony\Component\DomCrawler\Crawler;
 
-trait ParseFunctions {
+trait ParseFunctions
+{
 
     public $userAgents = [
         "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
@@ -56,7 +57,8 @@ trait ParseFunctions {
     ];
 
     //парсим категории
-    public function parseCategory($categoryName, $categoryUrl, $parentId) {
+    public function parseCategory($categoryName, $categoryUrl, $parentId)
+    {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
 
@@ -78,7 +80,6 @@ trait ParseFunctions {
 //        }
 
 
-
         //парсим товары
 //        try {
 //            $this->parseListProducts($catalog, $categoryUrl, $categoryName);
@@ -88,7 +89,8 @@ trait ParseFunctions {
     }
 
     //парсим товары
-    public function parseListProducts($catalog, $categoryUrl, $subcatName) {
+    public function parseListProducts($catalog, $categoryUrl, $subcatName)
+    {
         $this->info('Parse products from: ' . $catalog->name);
         $res = $this->client->get($categoryUrl);
         $html = $res->getBody()->getContents();
@@ -124,7 +126,7 @@ trait ParseFunctions {
                             $propValue = trim($prop->filter('.char_value span')->first()->text());
                             if ($propName != 'Код') {
                                 $dbProp = $this->propsMap[$propName];
-                                if($propName == 'Применяемость') {
+                                if ($propName == 'Применяемость') {
                                     $data[$dbProp] = $propValue;
                                 } else {
                                     $data[$dbProp] = preg_replace("/[^,.0-9]/", '', $propValue);
@@ -156,7 +158,7 @@ trait ParseFunctions {
             $currentPage = $crawler->filter('.navigation-pages .nav-current-page')->first()->text();
 
             $nextUrl = $this->baseUrl . $nextUrl->attr('href');
-            $this->info('parse: ' . $nextUrl . ' (' . ++$currentPage . '/' . $pages .')');
+            $this->info('parse: ' . $nextUrl . ' (' . ++$currentPage . '/' . $pages . ')');
             $this->parseListProducts($catalog, $nextUrl, $subcatName);
         }
     }
@@ -166,7 +168,8 @@ trait ParseFunctions {
      * @param string $str
      * @return bool
      */
-    public function checkIsImageJpg(string $str): bool {
+    public function checkIsImageJpg(string $str): bool
+    {
         $imgEnds = ['.jpg', 'jpeg', 'png'];
         foreach ($imgEnds as $ext) {
             if (str_ends_with($str, $ext)) {
@@ -176,7 +179,8 @@ trait ParseFunctions {
         return false;
     }
 
-    public function downloadJpgFile($url, $uploadPath, $fileName): bool {
+    public function downloadJpgFile($url, $uploadPath, $fileName): bool
+    {
         $safeUrl = str_replace(' ', '%20', $url);
         $this->info('downloadImageFile: ' . $safeUrl);
         $file = file_get_contents($safeUrl);
@@ -192,7 +196,8 @@ trait ParseFunctions {
         }
     }
 
-    public function downloadSvgFile($url, $uploadPath, $fileName): bool {
+    public function downloadSvgFile($url, $uploadPath, $fileName): bool
+    {
         $safeUrl = str_replace(' ', '%20', $url);
 
         $image = SVG::fromFile($this->baseUrl . $safeUrl);
@@ -208,7 +213,8 @@ trait ParseFunctions {
         }
     }
 
-    public function parseProductWallFromString($str, $productSize, $rectangle = null) {
+    public function parseProductWallFromString($str, $productSize, $rectangle = null)
+    {
         if (!$productSize) return null;
         if (!$rectangle) {
             $sizePos = mb_stripos($str, $productSize); //находим место в строке с текущим размером
@@ -238,7 +244,8 @@ trait ParseFunctions {
         }
     }
 
-    public function getKFromScriptUrl($scriptUrl) {
+    public function getKFromScriptUrl($scriptUrl)
+    {
         try {
             $scriptPage = $this->client->get($scriptUrl);
             $scriptHtml = $scriptPage->getBody()->getContents();
@@ -257,7 +264,8 @@ trait ParseFunctions {
      * @param int $parentId
      * @return Catalog
      */
-    private function getCatalogByName(string $categoryName, int $parentId, string $catFilters = null): Catalog {
+    private function getCatalogByName(string $categoryName, int $parentId, string $catFilters = null): Catalog
+    {
         $catalog = Catalog::whereName($categoryName)->first();
         if (!$catalog) {
             $catalog = Catalog::create([
@@ -278,16 +286,18 @@ trait ParseFunctions {
         return $catalog;
     }
 
-    private function updateCatalogUpdatedAt(Catalog $catalog) {
+    private function updateCatalogUpdatedAt(Catalog $catalog)
+    {
         $catalog->updated_at = Carbon::now();
         $catalog->save();
-        if($catalog->parent_id !== 0) {
+        if ($catalog->parent_id !== 0) {
             $cat = Catalog::find($catalog->parent_id);
             $this->updateCatalogUpdatedAt($cat);
         }
     }
 
-    public function getInnerSiteScript($node): string {
+    public function getInnerSiteScript($node): string
+    {
         $idt = $node->attr('idt');
         $idf = $node->attr('idf');
         $idb = $node->attr('idb');
@@ -295,7 +305,8 @@ trait ParseFunctions {
         return 'mc.ru//pages/blocks/add_basket.asp/id/' . $idt . '/idf/' . $idf . '/idb/' . $idb;
     }
 
-    public function getArticulFromName(string $name): string {
+    public function getArticulFromName(string $name): string
+    {
         $start = stripos($name, '[');
         $end = stripos($name, ']');
         if ($start && $end) {
@@ -306,7 +317,8 @@ trait ParseFunctions {
 
     }
 
-    public function getNameFromString(string $name): string {
+    public function getNameFromString(string $name): string
+    {
         $mark = stripos($name, '[');
         if ($mark) {
             return trim(substr($name, 0, $mark));
@@ -316,7 +328,8 @@ trait ParseFunctions {
 
     }
 
-    public function getExtensionFromSrc(string $url): string {
+    public function getExtensionFromSrc(string $url): string
+    {
         $mark = strripos($url, '.');
         if ($mark) {
             return trim(substr($url, $mark));
@@ -326,10 +339,11 @@ trait ParseFunctions {
 
     }
 
-    public function getTextWithNewImage(string $text, string $imgUrl): string {
-        if($text == null) return '';
+    public function getTextWithNewImage(string $text, string $imgUrl): string
+    {
+        if ($text == null) return '';
         $start = stripos($text, '<img');
-        if(!$start) return $text;
+        if (!$start) return $text;
 
         $end = stripos($text, '>', $start);
         $searchString = substr($text, $start, $end - $start + 1);
@@ -337,21 +351,79 @@ trait ParseFunctions {
         return str_replace($searchString, $img, $text);
     }
 
-    public function getUpdatedTextWithNewImages(string $text, array $imgArr): string {
-        if($text == null) return '';
-        $txt = $text;
-        $start = strpos($txt, '<img');
-        $end = strpos($txt, '>', $start);
-        for($i = 0; $i < count($imgArr); $i++ ) {
-            $searchString = substr($txt, $start, $end - $start + 1);
-            $img = '<img src="' . $imgArr[$i] . '">';
-            $txt = str_replace($searchString, $img, $txt);
+    public function getUpdatedTextWithNewImages(string $text, array $imgSrc, array $imgArr): string
+    {
+        if ($text == null) return '';
+        if(count($imgArr) == 0) return $text;
+        $res = str_replace($imgSrc, $imgArr, $text);
 
-            $this->info('remove: ' . $searchString . ' to: ' . $img);
+//        $start = strpos($txt, '<img');
+//        $end = strpos($txt, '>', $start);
+//        for ($i = 0; $i < count($imgArr); $i++) {
+//            $searchString = substr($txt, $start, $end - $start + 1);
+//            $img = '<img src="' . $imgArr[$i] . '">';
+//            str_replace($searchString, $img, $txt);
+//
+//            $this->info('remove: ' . $searchString);
+//            $this->info('insert: ' . $img);
+//            $this->info('start: ' . $start . ' | end:' . $end);
+//
+//            $start = strpos($txt, '<img', $end);
+//            $end = strpos($txt, '>', $start);
+//        }
+        var_dump($res);
+        return $res;
+//        $crawler = new Crawler($text);
+//        $crawler->filter('img')->each(function (Crawler $img) {
+//
+//        });
 
-            $start = strpos($txt, '<img', $end + 1);
-            $end = strpos($txt, '>', $start);
+    }
+
+    //чтобы найти название файла на русском для последующей замены
+    public function encodeUrlFileName($url) {
+        $start = strripos($url, '/') + 1 ;
+        $end = strripos($url, '.');
+        if($start && $end) {
+            $searchName = substr($url, $start, $end - $start);
+            $encodeName = urlencode($searchName);
+            $encodeName = str_replace('25', '', $encodeName);
+            return str_replace($searchName, $encodeName, $url);
         }
-        return $txt;
+    }
+
+    public function curlGetData(string $url): string
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie: beget=begetok")); //only for https://rus-kab.ru
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return $response;
+    }
+
+    public function curlSaveDataToFile(string $url, string $fileName)
+    {
+        $uploadPath = '/data-site/';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie: beget=begetok")); //only for https://rus-kab.ru
+        $response = curl_exec($ch);
+        if (!is_dir(public_path($uploadPath))) {
+            mkdir(public_path($uploadPath), 0777, true);
+        }
+
+        file_put_contents(public_path($uploadPath . $fileName), $response);
+    }
+
+    //used only for https://rus-kab.ru
+    public function extractCableProductName(string $name)
+    {
+        if (!stripos($name, ' ')) return $name;
+
+        $result = explode(' ', $name);
+        return $result[0];
     }
 }

@@ -22,9 +22,6 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab_1" data-toggle="tab">Параметры</a></li>
             <li><a href="#tab_2" data-toggle="tab">Тексты</a></li>
-            @if($catalog->parent_id == 0)
-                <li><a href="#tab_3" data-toggle="tab">Акции в главном меню</a></li>
-            @endif
             @if($catalog->id)
                 <li class="pull-right">
                     <a href="{{ $catalog->url }}" target="_blank">Посмотреть</a>
@@ -45,18 +42,14 @@
                 {!! Form::groupText('description', $catalog->description, 'description') !!}
 
 
-                @if(!$catalog->image && $catalog->section_image)
-                    <img class="img-polaroid" src="{{ $catalog->section_image }}" height="100">
-                @endif
-
                 <div class="form-group">
                     <label for="article-image">Изображение</label>
                     <input id="article-image" type="file" name="image" value=""
                            onchange="return newsImageAttache(this, event)">
                     <div id="article-image-block">
                         @if ($catalog->image)
-                            <img class="img-polaroid" src="{{ $catalog->thumb(1) }}" height="100"
-                                 data-image="{{ $catalog->thumb(1) }}"
+                            <img class="img-polaroid" src="{{ \Fanky\Admin\Models\Catalog::UPLOAD_URL . $catalog->image }}" height="100"
+                                 data-image="{{ \Fanky\Admin\Models\Catalog::UPLOAD_URL . $catalog->image }}"
                                  onclick="return popupImage($(this).data('image'))">
                         @else
                             <p class="text-yellow">Изображение не загружено.</p>
@@ -66,30 +59,6 @@
                 {!! Form::hidden('published', 0) !!}
                 {!! Form::hidden('on_main_list', 0) !!}
                 {!! Form::groupCheckbox('published', 1, $catalog->published, 'Показывать раздел') !!}
-
-                <input type="checkbox" id="is_action" name="is_action" value="1"
-                       {{ $catalog->is_action ? 'checked' : null }}
-                       onchange="showHidden(this)">
-                <label for="is_action">Применить акцию к категории(только на главной)</label>
-                <div class="form-group action-hidden" style="{{ $catalog->is_action ? '' : 'display: none;' }}">
-                    {!! Form::groupText('action_text', $catalog->action_text, 'Текст') !!}
-                    {!! Form::groupText('action_old_price', $catalog->action_old_price, 'Старая цена') !!}
-                    {!! Form::groupText('action_new_price', $catalog->action_new_price, 'Новая цена') !!}
-                    <div class="form-group">
-                        <label for="action-image">Изображение (225x270 .png)</label>
-                        <input id="action-image" type="file" name="aimage" value=""
-                               onchange="return actionImageAttache(this, event)">
-                        <div id="action-image-block">
-                            @if ($catalog->action_image)
-                                <img class="img-polaroid" src="{{ $catalog->getActionImage() }}" height="100"
-                                     data-image="{{ $catalog->getActionImage() }}"
-                                     onclick="return popupImage($(this).data('image'))">
-                            @else
-                                <p class="text-yellow">Изображение не загружено.</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
 
                 @if($catalog->parent_id == 0)
                     {!! Form::hidden('on_main', 1) !!}
@@ -132,13 +101,9 @@
             </div>
 
             <div class="tab-pane" id="tab_2">
-                {!! Form::groupRichtext('announce', $catalog->announce, 'Вводный текст', ['rows' => 3]) !!}
                 {!! Form::groupRichtext('text', $catalog->text, 'Основной текст', ['rows' => 3]) !!}
-                {!! Form::groupText('about_announce', $catalog->about_announce, 'Описание категории для страницы "О компании"') !!}
-            </div>
-
-            <div class="tab-pane" id="tab_3">
-                @include('admin::catalog.tabs.menu_actions')
+                {!! Form::groupRichtext('chars', $catalog->chars, 'Характеристики', ['rows' => 3]) !!}
+                {!! Form::groupRichtext('sphere', $catalog->sphere, 'Сфера применения', ['rows' => 3]) !!}
             </div>
         </div>
 

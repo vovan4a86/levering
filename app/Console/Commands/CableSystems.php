@@ -97,7 +97,8 @@ class CableSystems extends Command
     {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
-        $uploadPath = $this->basePath . $catalog->alias . '/';
+//        $uploadPath = $this->basePath . $catalog->alias . '/';
+        $uploadPath = Catalog::UPLOAD_URL;
 
         try {
             $res = $this->client->get($categoryUrl);
@@ -107,20 +108,25 @@ class CableSystems extends Command
             //текст раздела
             if ($sectionCrawler->filter('.text_after_items')->count() != 0) {
                 if ($sectionCrawler->filter('.text_after_items b')->count() > 0) {
-                    $text = $sectionCrawler->filter('.text_after_items')->outerHtml();
-                    $sectionCrawler->filter('.text_after_items img')->count();
+                    $text = $sectionCrawler->filter('.text_after_items')->html();
                     if ($sectionCrawler->filter('.text_after_items img')->count() != 0) {
-                        $imgArr = [];
+                        $imgSrc = [];
+                        $newImgSrc = [];
                         $sectionCrawler->filter('.text_after_items img')
-                            ->each(function (Crawler $img, $n) use (&$imgArr, $catalog, $uploadPath) {
+                            ->each(function (Crawler $img, $n) use (&$newImgSrc, &$imgSrc, $catalog, $uploadPath) {
                             $imageSrc = $this->baseUrl . $img->attr('src');
+                            $find = $img->attr('src');
                             $ext = $this->getExtensionFromSrc($imageSrc);
                             $fileName = 'section_' . $catalog->id . '_text_img_' . $n . $ext;
-                            $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                            $imgArr[] = $uploadPath . $fileName;
+                            if(!file_exists(public_path($uploadPath . $fileName))) {
+                                $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                            }
+                            $imgSrc[] = $this->encodeUrlFileName($find);
+                            $newImgSrc[] = $fileName;
                         });
-                        $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgArr);
+                        $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
                         $catalog->save();
+                        exit();
                     }
                 } else {
                     $catalog->text = null;
@@ -195,16 +201,22 @@ class CableSystems extends Command
                                 if ($productCrawler->filter('.content')->count() != 0) {
                                     $text = $productCrawler->filter('.content')->html();
                                     if ($productCrawler->filter('.content img')->count() != 0) {
-                                        $fileNamesToRemove = [];
+                                        $imgSrc = [];
+                                        $newImgSrc = [];
                                         $productCrawler->filter('.content img')
-                                            ->each(function (Crawler $img) use ($newProd, $uploadPath, &$fileNamesToRemove) {
+                                            ->each(function (Crawler $img) use ($newProd, $uploadPath, &$newImgSrc, &$imgSrc) {
                                                 $imageSrc = $this->baseUrl . $img->attr('src');
+                                                $find = $img->attr('src');
                                                 $ext = $this->getExtensionFromSrc($imageSrc);
                                                 $fileName = 'product_' . $newProd->id . '_text_img' . $ext;
-                                                $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                                                $fileNamesToRemove[] = $uploadPath . $fileName;
+                                                if(!file_exists(public_path($uploadPath . $fileName))) {
+                                                    $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                                }
+
+                                                $imgSrc[] = $this->encodeUrlFileName($find);
+                                                $newImgSrc[] = $fileName;
                                             });
-                                        $newProd->text = $this->getUpdatedTextWithNewImages($text, $fileNamesToRemove);
+                                        $newProd->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
                                         $newProd->save();
                                     } else {
                                         $newProd->text = $text;

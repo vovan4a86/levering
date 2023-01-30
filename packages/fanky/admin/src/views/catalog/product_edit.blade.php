@@ -43,39 +43,15 @@
                 {!! Form::groupText('title', $product->title, 'Title') !!}
                 {!! Form::groupText('keywords', $product->keywords, 'keywords') !!}
                 {!! Form::groupText('description', $product->description, 'description') !!}
+                {!! Form::groupText('price', $product->price ?: 0, 'price') !!}
                 <hr>
                 <h4>Характеристики:</h4>
                 <div style="display: flex; flex-shrink: 1;">
-                    {!! Form::groupText('size', $product->size, 'Размер') !!}
-                    {!! Form::groupText('wall', $product->wall, 'Стенка') !!}
-                    {!! Form::groupText('steel', $product->steel, 'Марка стали') !!}
-                    {!! Form::groupText('length', $product->length, 'Длина') !!}
+                    {!! Form::groupText('height', $product->height, 'Высота, мм') !!}
+                    {!! Form::groupText('width', $product->width, 'Ширина, мм') !!}
+                    {!! Form::groupText('length', $product->length, 'Длина, мм') !!}
+                    {!! Form::groupText('depth', $product->depth, 'Толщина металла, мм') !!}
                 </div>
-                <div style="display: flex; flex-shrink: 1;">
-                    {!! Form::groupText('type', $product->type, 'Тип') !!}
-                    {!! Form::groupText('py', $product->py, 'Py') !!}
-                    {!! Form::groupText('comment', $product->comment, 'Пояснение') !!}
-                    {!! Form::groupText('measure', $product->measure, 'Измерение') !!}
-                </div>
-                <div style="display: flex; flex-shrink: 1;">
-                    {!! Form::groupText('brand', $product->brand, 'Бренд') !!}
-                    {!! Form::groupText('model', $product->model, 'Модель') !!}
-                </div>
-
-                <hr>
-
-                <h4>Цены:</h4>
-                <div style="display: flex; flex-shrink: 1;">
-                    {!! Form::groupText('raw_price', $product->raw_price, 'Парсинг-цена за т.', ['disabled']) !!}
-                    {!! Form::groupNumber('price', $product->price, 'Цена за т.', ['step' => 1])!!}
-                    {!! Form::groupNumber('price_per_item', $product->price_per_item, 'Цена за шт.', ['step' => 1])!!}
-                    {!! Form::groupNumber('price_per_metr', $product->price_per_metr, 'Цена за м.', ['step' => 1])!!}
-                    {!! Form::groupNumber('price_per_kilo', $product->price_per_kilo, 'Цена за кг.', ['step' => 1])!!}
-                    {!! Form::groupNumber('price_per_m2', $product->price_per_m2, 'Цена за м2.', ['step' => 1])!!}
-                </div>
-
-
-
                 <hr>
 {{--                {!! Form::groupSelect('in_stock', [0 => 'Временно отсутствует', 1 => 'В наличии', 2 => 'Под заказ' ], $product->in_stock, 'Наличие') !!}--}}
                 {!! Form::hidden('in_stock', 0) !!}

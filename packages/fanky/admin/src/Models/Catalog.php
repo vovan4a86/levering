@@ -29,6 +29,8 @@ use URL;
  * @property string             $section_image
  * @property string             $announce
  * @property string             $text
+ * @property string             $chars
+ * @property string             $sphere
  * @property string             $alias
  * @property string             $slug
  * @property string             $title
