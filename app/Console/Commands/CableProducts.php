@@ -29,7 +29,7 @@ class CableProducts extends Command
      *
      * @var string
      */
-    protected $signature = 'parse:cable-products';
+    protected $signature = 'parse:cp';
     private $basePath = ProductImage::UPLOAD_URL . 'cable-products/';
     private $baseUrl = 'https://rus-kab.ru';
     public $client;

@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use Fanky\Admin\Models\Catalog;
+use Fanky\Admin\Models\CatalogTest;
 use Fanky\Admin\Models\CatalogParam;
 use Fanky\Admin\Models\Param;
-use Fanky\Admin\Models\Product;
+use Fanky\Admin\Models\ProductTest;
 use Fanky\Admin\Models\ProductImage;
 use Fanky\Admin\Text;
 use GuzzleHttp\Client;
@@ -31,7 +31,7 @@ class CableSystems extends Command
      *
      * @var string
      */
-    protected $signature = 'parse:cable-systems';
+    protected $signature = 'parse:cs';
     private $basePath = ProductImage::UPLOAD_URL . 'cable-systems/';
     public $baseUrl = 'https://asd-e.ru';
     public $client;
@@ -40,6 +40,8 @@ class CableSystems extends Command
         'Высота, мм' => 'height',
         'Ширина, мм' => 'width',
         'Длина, мм' => 'length',
+        'Масса, кг' => 'weight',
+        'Материал' => 'material',
         'Толщина металла, мм' => 'depth'
     ];
 
@@ -79,16 +81,16 @@ class CableSystems extends Command
             $this->parseCategoryCableSystems($categoryName, $categoryUrl, 2);
         }
 //        $this->info($this->getDescriptionWithNewImage($data, '/upload/1.jpg'));
-//        $catalog = Catalog::find(17);
-//        $this->parseListProductsCableSystems($catalog, 'https://asd-e.ru/product/gem/lotki-lestnichnye-nl/lotki-lestnichnye-pryamye-nl/', null);
+//        $catalog = CatalogTest::find(17);
+//        $this->parseListProductTestsCableSystems($catalog, 'https://asd-e.ru/product/gem/lotki-lestnichnye-nl/lotki-lestnichnye-pryamye-nl/', null);
         $this->info('The command was successful!');
     }
 
     public function categoryList(): array
     {
         return [
-//            'ГЭМ' => 'https://asd-e.ru/product/gem/',
-            'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
+            'ГЭМ' => 'https://asd-e.ru/product/gem/',
+//            'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
 //            'PROMTRAY' => 'https://asd-e.ru/product/promtray/',
         ];
     }
@@ -96,9 +98,8 @@ class CableSystems extends Command
     public function parseCategoryCableSystems($categoryName, $categoryUrl, $parentId)
     {
         $this->info($categoryName . ' => ' . $categoryUrl);
-        $catalog = $this->getCatalogByName($categoryName, $parentId);
-//        $uploadPath = $this->basePath . $catalog->alias . '/';
-        $uploadPath = Catalog::UPLOAD_URL;
+        $catalog = $this->getCatalogTestByName($categoryName, $parentId);
+        $uploadPath = CatalogTest::UPLOAD_URL;
 
         try {
             $res = $this->client->get($categoryUrl);
@@ -126,7 +127,6 @@ class CableSystems extends Command
                         });
                         $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
                         $catalog->save();
-                        exit();
                     }
                 } else {
                     $catalog->text = null;
@@ -143,9 +143,9 @@ class CableSystems extends Command
             } else {
                 //парсим товары
                 try {
-                $this->parseListProductsCableSystems($catalog, $categoryUrl);
+                $this->parseListProductTestsCableSystems($catalog, $categoryUrl);
                 } catch (\Exception $e) {
-                    $this->error('Error Parse Products from section: ' . $e->getMessage());
+                    $this->error('Error Parse ProductTests from section: ' . $e->getMessage());
                     $this->error('See line: ' . $e->getLine());
                 }
             }
@@ -154,7 +154,7 @@ class CableSystems extends Command
         }
     }
 
-    public function parseListProductsCableSystems($catalog, $categoryUrl)
+    public function parseListProductTestsCableSystems($catalog, $categoryUrl)
     {
         $this->info('Parse products from: ' . $catalog->name);
 
@@ -182,7 +182,7 @@ class CableSystems extends Command
 
                             $this->info(++$n . ') ' . $data['name']);
 
-                            $product = Product::whereParseUrl($url)->first();
+                            $product = ProductTest::whereParseUrl($url)->first();
 
                             if (!$product) {
                                 $productPage = $this->client->get($url);
@@ -190,7 +190,7 @@ class CableSystems extends Command
                                 $productCrawler = new Crawler($productHtml); //product page
 
                                 $order = $catalog->products()->max('order') + 1;
-                                $newProd = Product::create(array_merge([
+                                $newProd = ProductTest::create(array_merge([
                                     'catalog_id' => $catalog->id,
                                     'parse_url' => $url,
                                     'published' => 1,
@@ -226,14 +226,17 @@ class CableSystems extends Command
 
                                 //характеристики
                                 if ($productCrawler->filter('#props tr.char')->count() != 0) {
-                                    $chars = [];
+//                                    $chars = [];
                                     $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use (&$chars) {
                                         $name = $char->filter('.char_name span')->text();
                                         $value = $char->filter('.char_value span')->text();
-                                        $chars[$this->chars[$name]] = $value;
+                                        $paramId = $this->addProductParamName($name);
+
+
+//                                        $chars[$this->chars[$name]] = $value;
                                     });
-                                    $newProd->update($chars);
-                                    $newProd->save();
+//                                    $newProd->update($chars);
+//                                    $newProd->save();
                                 }
 
                                 //сертификаты и ту
@@ -282,10 +285,10 @@ class CableSystems extends Command
                 $nextUrl = $crawler->filter('.next a');
                 $nextUrl = $this->baseUrl . $nextUrl->attr('href');
                 $this->info('parse next url: ' . $nextUrl);
-                $this->parseListProductsCableSystems($catalog, $nextUrl);
+                $this->parseListProductTestsCableSystems($catalog, $nextUrl);
             }
         } catch (GuzzleException $e) {
-            $this->error('Error Parse Product: ' . $e->getMessage());
+            $this->error('Error Parse ProductTest: ' . $e->getMessage());
             $this->error('See: ' . $e->getLine());
         }
     }

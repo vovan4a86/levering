@@ -2,8 +2,10 @@
 
 use Carbon\Carbon;
 use Fanky\Admin\Models\Catalog;
+use Fanky\Admin\Models\CatalogTest;
 use Fanky\Admin\Models\Filter;
 use Fanky\Admin\Models\NewProduct;
+use Fanky\Admin\Models\Param;
 use Fanky\Admin\Models\Product;
 use Fanky\Admin\Models\ProductImage;
 use Fanky\Admin\Text;
@@ -286,6 +288,28 @@ trait ParseFunctions
         return $catalog;
     }
 
+    private function getCatalogTestByName(string $categoryName, int $parentId, string $catFilters = null): CatalogTest
+    {
+        $catalog = CatalogTest::whereName($categoryName)->first();
+        if (!$catalog) {
+            $catalog = CatalogTest::create([
+                'name' => $categoryName,
+                'title' => $categoryName,
+                'h1' => $categoryName,
+                'parent_id' => $parentId,
+                'filters' => $catFilters,
+                'alias' => Text::translit($categoryName),
+                'slug' => Text::translit($categoryName),
+                'order' => CatalogTest::whereParentId($parentId)->max('order') + 1,
+                'published' => 1,
+            ]);
+        } else {
+            $catalog->filters = $catFilters;
+            $catalog->save();
+        }
+        return $catalog;
+    }
+
     private function updateCatalogUpdatedAt(Catalog $catalog)
     {
         $catalog->updated_at = Carbon::now();
@@ -371,7 +395,6 @@ trait ParseFunctions
 //            $start = strpos($txt, '<img', $end);
 //            $end = strpos($txt, '>', $start);
 //        }
-        var_dump($res);
         return $res;
 //        $crawler = new Crawler($text);
 //        $crawler->filter('img')->each(function (Crawler $img) {
@@ -425,5 +448,15 @@ trait ParseFunctions
 
         $result = explode(' ', $name);
         return $result[0];
+    }
+
+    public function addProductParamName($name) {
+        $param = Param::whereName($name)->first();
+        if(!$param) {
+            $param = Param::create([
+                'name' => $name,
+            ]);
+        }
+        return $param->id;
     }
 }
