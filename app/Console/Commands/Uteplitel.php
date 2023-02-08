@@ -110,7 +110,7 @@ class Uteplitel extends Command {
                         $data['name'] = trim($node->filter('.woocommerce-loop-product__title')->first()->text());
                         $rawPrice = $node->filter('.woocommerce-Price-amount.amount')->first()->text();
                         $data['price'] = preg_replace("/[^,.0-9]/", null, $rawPrice);
-                        $data['price'] = $this->deleteDotFromPriceEnd($data['price']); //убрать точку в конце цены
+                        $data['price'] = $this->excludeCharFromEnd($data['price']); //убрать точку в конце цены
                         $data['measure'] = $node->filter('.unitprice')->first()->text();
                         $data['measure'] = substr($data['measure'], 1); //убрать / в начале
                         $data['manufacturer'] = $node->filter('.product_sub_cat a')->first()->text();
@@ -145,7 +145,7 @@ class Uteplitel extends Command {
                                     $name = $char->filter('td')->first()->filter('span')->text();
                                     $value = $char->filter('td')->last()->filter('span')->text();
 
-                                    $this->info($name);
+                                    $this->info($this->excludeCharFromEnd($name));
                                     $this->info($value);
                                     exit();
 
@@ -229,9 +229,10 @@ class Uteplitel extends Command {
         }
     }
 
-    public function deleteDotFromPriceEnd(string $price) {
+    private $excludeChars = ['.', ':'];
+    public function excludeCharFromEnd(string $price) {
         $n = strlen($price);
-        if($price[$n-1] != '.') return $price;
+        if(!in_array($price[$n-1], $this->excludeChars)) return $price;
 
         return substr($price, 0, $n-1);
     }
