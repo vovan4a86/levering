@@ -89,6 +89,7 @@ class Page extends Model {
         'directory',
         'answers',
         'faq',
+        'kompleksnie-resheniya'
 	];
 
     private $regionPage = [

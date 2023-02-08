@@ -94,6 +94,11 @@ class AdminCatalogController extends AdminController {
         if(!array_get($data, 'title')) $data['title'] = $data['name'];
         if(!array_get($data, 'h1')) $data['h1'] = $data['name'];
         if(!array_get($data, 'is_action')) $data['is_action'] = 0;
+        if(!array_get($data, 'on_main')) $data['on_main'] = 0;
+        if(!array_get($data, 'on_menu')) $data['on_menu'] = 0;
+        if(!array_get($data, 'on_main_list')) $data['on_main_list'] = 0;
+        if(!array_get($data, 'on_footer_menu')) $data['on_footer_menu'] = 0;
+
         $image = Request::file('image');
         $actionImage = Request::file('aimage');
 //        $filters = Request::get('filters', []);
@@ -127,24 +132,6 @@ class AdminCatalogController extends AdminController {
             $redirect = true;
 
         } else {
-            //проверяем какие подкаталоги отмечены для вывода
-//            $show_catalogs = $catalog->public_children()->pluck('id')->all();
-//            foreach ($show_catalogs as $id) {
-//                if(in_array($id, $checked_subcatalogs)) {
-//                    $item = CatalogSubShow::where('catalog_id', $catalog->id)->where('catalog_sub_show_id', $id)->first();
-//                    if(!$item) {
-//                        CatalogSubShow::create([
-//                            'catalog_id' => $catalog->id,
-//                            'catalog_sub_show_id' => $id
-//                        ]);
-//                    }
-//                } else {
-//                    //удаляем, если у подкаталога убрана галочка
-//                    $item = CatalogSubShow::where('catalog_id', $catalog->id)->where('catalog_sub_show_id', $id)->first();
-//                    if($item) $item->delete();
-//                }
-//            }
-//
             $catalog->update($data);
         }
 
@@ -159,8 +146,6 @@ class AdminCatalogController extends AdminController {
         // изменение родителя
         $id = Request::input('id');
         $parent = Request::input('parent');
-        \Debugbar::log($id);
-        \Debugbar::log($parent);
         DB::table('catalogs')->where('id', $id)->update(array('parent_id' => $parent));
         // сортировка
         $sorted = Request::input('sorted', []);

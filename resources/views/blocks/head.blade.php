@@ -21,6 +21,7 @@
     <meta name="theme-color" content="#ffffff">
     {!! OpenGraph::generate() !!}
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link href="/static/fonts/InterTight-Light.woff2" rel="preload" as="font" type="font/woff2" crossorigin="anonymous">
     <link href="/static/fonts/InterTight-Regular.woff2" rel="preload" as="font" type="font/woff2" crossorigin="anonymous">
     <link href="/static/fonts/InterTight-Medium.woff2" rel="preload" as="font" type="font/woff2" crossorigin="anonymous">

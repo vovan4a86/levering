@@ -57,17 +57,12 @@
                     </div>
                 </div>
                 {!! Form::hidden('published', 0) !!}
-                {!! Form::hidden('on_main_list', 0) !!}
                 {!! Form::groupCheckbox('published', 1, $catalog->published, 'Показывать раздел') !!}
 
                 @if($catalog->parent_id == 0)
-                    {!! Form::hidden('on_main', 1) !!}
-                    {!! Form::groupCheckbox('on_main', 1, $catalog->on_main, 'Показывать на главной странице') !!}
-                    {!! Form::hidden('on_menu', 1) !!}
-                    {!! Form::groupCheckbox('on_menu', 1, $catalog->on_main, 'Показывать в главном меню') !!}
-                    {!! Form::hidden('on_main_list', 1) !!}
+                    {!! Form::groupCheckbox('on_main', 1, $catalog->on_main, 'Показывать в каталоге на главной') !!}
+                    {!! Form::groupCheckbox('on_menu', 1, $catalog->on_menu, 'Показывать в главном меню') !!}
                     {!! Form::groupCheckbox('on_main_list', 1, $catalog->on_main_list, 'Показывать в каталоге продукции') !!}
-                    {!! Form::hidden('on_footer_menu', 1) !!}
                     {!! Form::groupCheckbox('on_footer_menu', 1, $catalog->on_footer_menu, 'Показывать в футере') !!}
                 @endif
 

@@ -1,13 +1,12 @@
-@php
-    $headerIsWhite = true;
-@endphp
+@php $innerPage = true; @endphp
 @extends('template')
 @section('content')
+    @include('blocks.bread')
     <main>
-        @include('blocks.bread')
-        @include('blocks.page_head')
-        <div class="container">
-            {!! $text !!}
+        <div class="_container container">
+            <div class="text-block">
+                {!! $text !!}
+            </div>
         </div>
     </main>
 @stop

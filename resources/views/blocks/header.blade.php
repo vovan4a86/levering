@@ -1,215 +1,462 @@
-<!-- homepage && 'header--home'-->
-<!-- headerIsWhite && 'header--white'-->
-<!-- headerIsBlack && 'header--black'-->
+<!--
+    class=(homepage && "header--home")
+    class=(landingPage && "header--landing")
+    class=(innerPage && "header--inner")
+-->
+{{--<header class="header --}}
 <header class="header {{ Request::url() == route('main') ? 'header--home' : null }}
-{{ isset($headerIsWhite) ? 'header--white' : null }}
-{{ isset($headerIsBlack) ? 'header--black' : null }}">
+        {{ isset($innerPage) ? 'header--inner' : null }}
+        {{ isset($landingPage) ? 'header--landing' : null }}">
     <div class="header__top">
-        <div class="header__container header__container--top container">
-            @include('blocks.show_small_region_confirm')
-            <div class="header__info">
-                @if($topMenu)
-                    <nav class="header__top-nav">
-                        <ul class="list-reset">
+        <div class="header__container container">
+            <div class="header__row">
+                <div class="header__col">
+                    <!-- homepage ? block : link-->
+                    <!-- innerPage ? "logo--solid.svg" : "logo.svg"-->
+                    <div class="header__logo lazy" data-bg="/static/images/common/{{ isset($innerPage) ? 'logo--solid.svg' : 'logo.svg' }}"></div>
+                    @if(count($topMenu))
+                    <nav class="header__nav">
+                        <ul class="header__nav-list list-reset">
                             @foreach($topMenu as $item)
-                                <li>
-                                    <a href="{{ $item->url }}">{{ $item->name }}</a>
-                                </li>
+                            <li class="header__nav-item">
+                                <a class="header__nav-link" href="{{ $item->url }}">{{ $item->name }}</a>
+                            </li>
                             @endforeach
                         </ul>
                     </nav>
-                @endif
-                <button class="header__callback btn-reset" type="button" data-popup data-src="#callback"
-                        aria-label="Заказать звонок">
-                    <svg width="15" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 .975C15 .69 14.812.5 14.531.5H.47C.188.5 0 .69 0 .975v18.05c0 .285.188.475.469.475H14.53c.281 0 .469-.19.469-.475V.975ZM13.125 2.4v12.35H9.469c0 .95-.89 1.9-1.922 1.9-1.031 0-1.922-.95-1.922-1.9h-3.75V2.4h11.25Z"
-                              fill="currentColor"
-                        />
-                    </svg>
-                    <span>Заказать звонок</span>
-                </button>
-                <div class="header__messengers">
-                    <div class="messenger">
-                        @if(Settings::get('header_whatsapp'))
-                            <a class="messenger__item"
-                               href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('header_whatsapp')) }}"
-                               title="Написать в Whatsapp">
-                                <span class="lazy" data-bg="/static/images/common/ico_wa.svg"></span>
-                            </a>
-                        @endif
-                        @if(Settings::get('header_telegram'))
-                            <a class="messenger__item"
-                               href="https://t.me/{{ preg_replace('/[^\d+]/', '', Settings::get('header_telegram')) }}"
-                               title="Написать в Telegram">
-                                <span class="lazy" data-bg="/static/images/common/ico_telegram.svg"></span>
-                            </a>
-                        @endif
-                    </div>
+                    @endif
                 </div>
-                @if(Settings::get('header_phone'))
-                    <a class="header__phone"
-                       href="tel:{{ preg_replace('/[^\d+]/', '', Settings::get('header_phone')) }}">{{ Settings::get('header_phone') }}
-                    </a>
-                @endif
+                <div class="header__col">
+                    <button class="header__callback btn-reset" type="button" data-popup data-src="#callback" aria-label="Перезвоните мне">Перезвоните мне</button>
+                    <div class="header__msg">
+                        <a class="header__msg-icon lazy" href="javascript:void(0)" data-bg="/static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
+                        <a class="header__msg-icon lazy" href="javascript:void(0)" data-bg="/static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
+                    </div>
+                    <a class="header__phone" href="tel:+78000000000" title="Позвонить нам">+7 (800) 000 00 00</a>
+                    <button class="header__burger btn-reset" type="button" aria-label="Открыть меню">
+                        <span class="iconify" data-icon="charm:menu-hamburger" data-width="40"></span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="header__bottom">
-        <div class="header__container header__container--bottom container">
-            <div class="header__grid">
-                <!-- if homepage-->
-                @if(Request::url() == route('main'))
-                    <a class="header__logo logo lazy" href="{{ route('main') }}"
-                       data-bg="/static/images/common/logo.svg" data-white="/static/images/common/logo.svg"
-                       data-dark="/static/images/common/logo--accent.svg"></a>
-                @endif
-                @if(isset($headerIsWhite))
-                    <a class="header__logo logo lazy" href="{{ route('main') }}"
-                       data-bg="/static/images/common/logo--accent.svg"></a>
-                @endif
-                <div class="header__nav">
-                    <div class="top-nav">
-                        <button class="top-nav__catalog btn-reset" type="button" data-open-catalog
-                                aria-label="Каталог товаров">
-                            <svg width="19" height="14" viewBox="0 0 19 14" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2.34983 0.464844H17.1505C17.9124 0.464844 18.53 1.08249 18.53 1.84441C18.53 2.60632 17.9124 3.22397 17.1505 3.22397H2.34983C1.58792 3.22397 0.970268 2.60632 0.970268 1.84441C0.970268 1.08249 1.58792 0.464844 2.34983 0.464844Z"
-                                      fill="currentColor"
-                                />
-                                <path d="M2.36023 5.45801H12.2219C12.9839 5.45801 13.6016 6.0757 13.6016 6.83767C13.6016 7.59963 12.9839 8.21733 12.2219 8.21733H2.36023C1.59827 8.21733 0.980572 7.59963 0.980572 6.83767C0.980572 6.0757 1.59826 5.45801 2.36023 5.45801Z"
-                                      fill="currentColor"
-                                />
-                                <path d="M2.34993 10.7129H17.1504C17.9123 10.7129 18.53 11.3306 18.53 12.0925C18.53 12.8545 17.9123 13.4722 17.1504 13.4722H2.34993C1.58796 13.4722 0.970268 12.8545 0.970268 12.0925C0.970268 11.3306 1.58796 10.7129 2.34993 10.7129Z"
-                                      fill="currentColor"
-                                />
-                            </svg>
-                            <span>Каталог товаров</span>
-                        </button>
-                        <button class="top-nav__catalog top-nav__catalog--mobile btn-reset" type="button"
-                                data-mobile-catalog aria-label="Каталог товаров">
-                            <svg width="19" height="14" viewBox="0 0 19 14" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2.34983 0.464844H17.1505C17.9124 0.464844 18.53 1.08249 18.53 1.84441C18.53 2.60632 17.9124 3.22397 17.1505 3.22397H2.34983C1.58792 3.22397 0.970268 2.60632 0.970268 1.84441C0.970268 1.08249 1.58792 0.464844 2.34983 0.464844Z"
-                                      fill="currentColor"
-                                />
-                                <path d="M2.36023 5.45801H12.2219C12.9839 5.45801 13.6016 6.0757 13.6016 6.83767C13.6016 7.59963 12.9839 8.21733 12.2219 8.21733H2.36023C1.59827 8.21733 0.980572 7.59963 0.980572 6.83767C0.980572 6.0757 1.59826 5.45801 2.36023 5.45801Z"
-                                      fill="currentColor"
-                                />
-                                <path d="M2.34993 10.7129H17.1504C17.9123 10.7129 18.53 11.3306 18.53 12.0925C18.53 12.8545 17.9123 13.4722 17.1504 13.4722H2.34993C1.58796 13.4722 0.970268 12.8545 0.970268 12.0925C0.970268 11.3306 1.58796 10.7129 2.34993 10.7129Z"
-                                      fill="currentColor"
-                                />
-                            </svg>
-
-                        </button>
-                        @if($mainMenu)
-                            <nav class="top-nav__nav" itemscope itemtype="https://schema.org/SiteNavigationElement"
-                                 aria-label="Меню">
-                                <ul class="top-nav__list list-reset" itemprop="about" itemscope
-                                    itemtype="https://schema.org/ItemList">
-                                    @foreach($mainMenu as $item)
-                                        <li class="top-nav__item" itemprop="itemListElement" itemscope
-                                            itemtype="https://schema.org/ItemList">
-                                            <a class="top-nav__link" href="{{ $item->url }}"
-                                               itemprop="url">{{ $item->name }}</a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </nav>
-                        @endif
-                    </div>
-                </div>
-                <div class="header__actions">
-                    <button class="header__search btn-reset" type="button" data-search-popup data-src="#search"
-                            aria-label="Поиск по сайту">
-                        <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M12.9258 13.5192C15.3027 11.0743 15.3027 7.11035 12.9258 4.66543C10.549 2.22052 6.69531 2.22052 4.31844 4.66543C1.94158 7.11035 1.94158 11.0743 4.31844 13.5192C6.69531 15.9642 10.549 15.9642 12.9258 13.5192ZM14.3441 14.9781C17.5043 11.7276 17.5043 6.45717 14.3441 3.20654C11.1839 -0.044107 6.06032 -0.044107 2.90015 3.20654C-0.260013 6.45717 -0.260013 11.7276 2.90015 14.9781C6.06032 18.2288 11.1839 18.2288 14.3441 14.9781Z"
-                                  fill="currentColor"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M19.1117 21.4365L12.5808 14.7186L13.9991 13.2598L20.53 19.9776L19.1117 21.4365Z"
-                                  fill="currentColor"/>
-                        </svg>
-
+    <div class="header__body">
+        <div class="header__container container">
+            <div class="header__content">
+                <div class="header__catalog">
+                    <button class="catalog-btn btn-reset" type="button" aria-label="Открыть каталог" @click="menuIsOpen = !menuIsOpen" :class="menuIsOpen &amp;&amp; 'is-active'">
+                        <span class="catalog-btn__icon lazy" data-bg="/static/images/common/ico_catalog.svg"></span>
+                        <span class="catalog-btn__label">Каталог</span>
                     </button>
-                    @include('blocks.header_cart')
                 </div>
+                <div class="header__search">
+                    <form class="search-field" action="#">
+                        <!-- innerPage ? "ico_loupe--grey.svg" : "ico_loupe.svg"-->
+                        <button class="search-field__btn btn-reset lazy" data-bg="/static/images/common/{{ isset($innerPage) ? 'ico_loupe--grey.svg' : 'ico_loupe.svg' }}" name="submit" aria-label="Найти"></button>
+                        <input class="search-field__input input-reset" type="search" name="search" placeholder="Что Вы ищете?" required autocomplete="off">
+                    </form>
+                </div>
+                <!-- innerPage ? "ico_basket--black.svg" : "ico_basket.svg"-->
+                <a class="header__basket lazy" data-bg="/static/images/common/{{ isset($innerPage) ? 'ico_basket--black.svg' : 'ico_basket.svg' }}" href="javascript:void(0)" title="Перейти в корзину"></a>
             </div>
         </div>
-        <div class="overlay-nav">
-            <div class="overlay-nav__container container">
-                <div class="overlay-nav__grid tab-core" data-catalog-tabs>
-                    <!-- navigation-->
-                    <div class="overlay-nav__navigation">
-                        @foreach($overlayNavigation as $item)
-                            <div class="overlay-nav__link tab-core__nav {{ $loop->iteration == 1 ? 'is-active' : null }}"
-                                 data-open="{{ $item->name }}">
-                                <div class="overlay-nav__label">
-                                    <div class="overlay-nav__icon lazy"
-                                         data-bg="{{ $overlayNavigationIcons[$item->name] }}"></div>
-                                    <span>{{ $item->name }}</span>
-                                </div>
-                                <svg class="svg-sprite-icon icon-right">
-                                    <use xlink:href="/static/images/sprite/symbol/sprite.svg#right"></use>
-                                </svg>
-                            </div>
-                        @endforeach
+        <div class="header__dropdown">
+            <div class="o-nav" x-show="menuIsOpen" @click.away="menuIsOpen = false" x-transition.duration.300ms x-cloak>
+                <!-- current — какое меню показано по-умолчанию-->
+                <div class="o-nav__container container" x-data="{current: 'Кабельная продукция'}">
+                    <!-- o-nav__aside-->
+                    <div class="o-nav__aside">
+                        <!-- o-link-->
+                        <div class="o-link" :class="current == 'Кабельная продукция' &amp;&amp; 'is-active'" @click="current = 'Кабельная продукция'" aria-label="Кабельная продукция">
+                            <div class="o-link__label">Кабельная продукция</div>
+                            <div class="o-link__icon lazy" data-bg="/static/images/common/ico_link.svg"></div>
+                        </div>
+                        <!-- o-link-->
+                        <div class="o-link" :class="current == 'Кабеленесущие системы' &amp;&amp; 'is-active'" @click="current = 'Кабеленесущие системы'" aria-label="Кабеленесущие системы">
+                            <div class="o-link__label">Кабеленесущие системы</div>
+                            <div class="o-link__icon lazy" data-bg="/static/images/common/ico_link.svg"></div>
+                        </div>
+                        <!-- o-link-->
+                        <div class="o-link" :class="current == 'Теплоизоляция' &amp;&amp; 'is-active'" @click="current = 'Теплоизоляция'" aria-label="Теплоизоляция">
+                            <div class="o-link__label">Теплоизоляция</div>
+                            <div class="o-link__icon lazy" data-bg="/static/images/common/ico_link.svg"></div>
+                        </div>
+                        <!-- o-link-->
+                        <div class="o-link" :class="current == 'Промышленное освещение' &amp;&amp; 'is-active'" @click="current = 'Промышленное освещение'" aria-label="Промышленное освещение">
+                            <div class="o-link__label">Промышленное освещение</div>
+                            <div class="o-link__icon lazy" data-bg="/static/images/common/ico_link.svg"></div>
+                        </div>
+                        <!-- o-link-->
+                        <div class="o-link" :class="current == 'Водосточные системы' &amp;&amp; 'is-active'" @click="current = 'Водосточные системы'" aria-label="Водосточные системы">
+                            <div class="o-link__label">Водосточные системы</div>
+                            <div class="o-link__icon lazy" data-bg="/static/images/common/ico_link.svg"></div>
+                        </div>
+                        <!-- o-link-->
+                        <div class="o-link" :class="current == 'Трубы для инженерных систем' &amp;&amp; 'is-active'" @click="current = 'Трубы для инженерных систем'" aria-label="Трубы для инженерных систем">
+                            <div class="o-link__label">Трубы для инженерных систем</div>
+                            <div class="o-link__icon lazy" data-bg="/static/images/common/ico_link.svg"></div>
+                        </div>
+                        <!-- o-link-->
+                        <div class="o-link" :class="current == 'Аренда спецтехники' &amp;&amp; 'is-active'" @click="current = 'Аренда спецтехники'" aria-label="Аренда спецтехники">
+                            <div class="o-link__label">Аренда спецтехники</div>
+                            <div class="o-link__icon lazy" data-bg="/static/images/common/ico_link.svg"></div>
+                        </div>
                     </div>
-                    <!-- content-->
-                    <div class="overlay-nav__content">
-                        @foreach($overlayNavigation as $item)
-                            <div class="overlay-nav__view tab-core__view {{ $loop->iteration == 1 ? 'is-active' : null }}"
-                                 data-view="{{ $item->name }}">
-                                <div class="overlay-nav__lists">
-                                    @if(count($item->public_children))
-                                        @foreach($item->public_children as $child)
-                                            <ul class="overlay-nav__list list-reset">
-                                                <li>
-                                                    <a href="{{ $child->url }}">
-                                                        <strong>{{ $child->name }}</strong>
-                                                    </a>
-                                                </li>
-                                                @if($child->public_children)
-                                                    @foreach($child->public_children as $grandchild)
-                                                        <li>
-                                                            <a href="{{ $grandchild->url }}">{{ $grandchild->name }}</a>
-                                                        </li>
-                                                    @endforeach
-                                                @endif
-                                            </ul>
-                                        @endforeach
-                                    @else
-                                        @foreach($item->products as $prod)
-                                            <ul class="overlay-nav__list list-reset">
-                                                <li>
-                                                    <a href="{{ $prod->url }}">{{ $prod->name }}</a>
-                                                </li>
-                                            </ul>
-                                        @endforeach
-                                    @endif
-                                </div>
-                                @if($menuActions = $item->menu_actions)
-                                    <div class="overlay-nav__actions">
-                                        @foreach($menuActions as $action)
-                                            <a class="action-link {{$action->style}}" href="{{$action->url}}"
-                                               title="{{$action->title}}">
-                                                <img class="action-link__picture lazy" src="/"
-                                                     data-src="{{ \Fanky\Admin\Models\Catalog::UPLOAD_URL . $action->image }}"
-                                                     alt="" width="153"
-                                                     height="161"/>
-                                                <span class="action-link__title">{{ $action->title }}</span>
-                                                <span class="action-link__subtitle">{{ $action->text }}</span>
-                                                <span class="action-link__price">от&nbsp;
-												<span class="action-link__current">{{$action->price}}</span>&nbsp;₽/{{$action->measure}}</span>
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                @endif
+                    <!-- o-nav__body-->
+                    <div class="o-nav__body">
+                        <!-- o-nav__view-->
+                        <div class="o-nav__view" x-show="current == 'Кабельная продукция'">
+                            <ul class="o-nav__list list-reset">
+                                <li>
+                                    <a href="javascript:void(0)">Кабели силовые с ПВХ изоляцией</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели гибкие с резиновой изоляцией</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Авиационный провод</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Автомобильный провод</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Волоконно-оптический кабель</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели бронированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели и провода монтажные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели контрольные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели связи</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели сигнальные огнестойкие</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели силовые с бумажной изоляцией</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабели управления</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Провода для воздушных линий</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Провода изолированные самонесущие</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Провода обмоточные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Провода установочные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Радиочастотный кабель (коаксиальный)</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Судовой кабель</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- o-nav__view-->
+                        <div class="o-nav__view" x-show="current == 'Кабеленесущие системы'">
+                            <div class="o-nav__columns">
+                                <ul class="o-nav__biglist list-reset">
+                                    <li>
+                                        <a class="o-nav__subtitle" href="javascript:void(0)">ГЭМ</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки листовые ЛЛ</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки лестничные НЛ</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Метрический крепёж ГЭМ</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Монтажные элементы ГЭМ</a>
+                                    </li>
+                                </ul>
+                                <ul class="o-nav__biglist list-reset">
+                                    <li>
+                                        <a class="o-nav__subtitle" href="javascript:void(0)">СТАНДАРТ</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки листовые ST</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки лестничные LT</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки лестничные усиленные LHT</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Проволочные лотки RT</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Короба кабельные блочные</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Монтажные элементы</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Метрический крепеж</a>
+                                    </li>
+                                </ul>
+                                <ul class="o-nav__biglist list-reset">
+                                    <li>
+                                        <a class="o-nav__subtitle" href="javascript:void(0)">PROMTRAY</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки листовые TS</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки лестничные TL</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Лотки лестничные усиленные THL</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Монтажные элементы MP</a>
+                                    </li>
+                                    <li>
+                                        <a class="o-nav__sublink" href="javascript:void(0)">Метрический крепеж</a>
+                                    </li>
+                                </ul>
                             </div>
-                        @endforeach
+                        </div>
+                        <!-- o-nav__view-->
+                        <div class="o-nav__view" x-show="current == 'Теплоизоляция'">
+                            <ul class="o-nav__list list-reset">
+                                <li>
+                                    <a href="javascript:void(0)">Наружное освещение</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Производственное освещение</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Светильники для АЗС</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Взрывозащищенные светильники</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Парковое освещение</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Освещение для ЖКХ</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Освещение для офисов</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Архитектурное освещение</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- o-nav__view-->
+                        <div class="o-nav__view" x-show="current == 'Промышленное освещение'">
+                            <ul class="o-nav__list list-reset">
+                                <li>
+                                    <a href="javascript:void(0)">Базальтовая теплоизоляция</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Минеральная теплоизоляция (кварц)</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Экструдированный пенополистирол</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Джут, пакля</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Вспененный полиэтилен</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- o-nav__view-->
+                        <div class="o-nav__view" x-show="current == 'Водосточные системы'">
+                            <ul class="o-nav__list list-reset">
+                                <li>
+                                    <a href="javascript:void(0)">Grand Line 125/90</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Grand Line 150/100</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Optima круглый 125/90</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Optima круглый 150/100</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Vortex прямоугольный</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Vortex прямоугольный Matt</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Vortex Lite</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Vortex Lite Matt</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Vortex Project</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Vortex Mix</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- o-nav__view-->
+                        <div class="o-nav__view" x-show="current == 'Трубы для инженерных систем'">
+                            <ul class="o-nav__list list-reset">
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПЭ 100 газовые ГОСТ Р 58121.2-2018</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Ленты сигнальные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПНД обсадные для скважин</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Плиты ПЗК для закрытия кабеля</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПЭ 100 питьевые ГОСТ 18599-2001</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПВХ гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПНД гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПП гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПА гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПВХ жесткие</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Коробки электромонтажные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Аксессуары для труб</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы НПВХ обсадные для скважин</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПНД технические безнапорные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ЗПТ защитные пластмассовые</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПВХ канализационные наружные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПВХ канализационные внутренние</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПНД гофрированные двустенные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Фитинги ПЭ 100</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПНД дренажные гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Кабель-каналы</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Колодцы кабельные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы хризотилцементные напорные (ВТ, ТТ)</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПНД канализационные гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПП канализационные гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы ПП дренажные гофрированные</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Металлорукав</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трубы хризотилцементные безнапорные (БНТ)</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- o-nav__view-->
+                        <div class="o-nav__view" x-show="current == 'Аренда спецтехники'">
+                            <ul class="o-nav__list list-reset">
+                                <li>
+                                    <a href="javascript:void(0)">Экскаваторы-погрузчики</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Экскаваторы</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Фронтальные погрузчики</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Самосвалы</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Автокраны</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Манипуляторы</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Автовышки</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Бульдозеры</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Катки</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Трактор с щеткой</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Автокомпрессор</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Ямобуры</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Тралы</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Гидромолот</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Дизельные генераторы DCA</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="overlay-nav__backdrop"></div>
         </div>
     </div>
 </header>

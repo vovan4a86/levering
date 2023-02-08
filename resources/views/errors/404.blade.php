@@ -1,18 +1,18 @@
-@php $headerIsWhite = true; @endphp
+@php $innerPage = true; @endphp
 @extends('template')
 @section('content')
     <main>
-        <section class="error">
-            <div class="error__container container">
-                <div class="error__title">Страница не найдена</div>
-                <img class="error__pic" src="/static/images/common/error.png" width="927" height="444" alt="">
-                <div class="error__text">Запрашиваемая страница не найдена. Возможно вы сделали опечатку в адресе или страница была перемещена</div>
-                <div class="error__action">
-                    <a class="button button--primary" href="{{ route('main') }}" title="На главную">
+        <div class="container">
+            <div class="error-page">
+                <div class="error-page__title">Страница не найдена</div>
+                <div class="error-page__view lazy entered loaded" data-bg="static/images/common/404.svg" data-ll-status="loaded" style="background-image: url(&quot;static/images/common/404.svg&quot;);"></div>
+                <div class="error-page__text">Запрашиваемая страница не найдена. Возможно вы сделали опечатку в адресе или страница была перемещена</div>
+                <div class="error-page__action">
+                    <a class="btn btn--primary" href="{{ route('main') }}">
                         <span>На главную</span>
                     </a>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 @stop

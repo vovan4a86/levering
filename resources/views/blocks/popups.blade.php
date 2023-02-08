@@ -1,10 +1,175 @@
+<form class="popup" id="callback" action="#" style="display: none">
+    <div class="popup__container">
+        <div class="popup__head">
+            <div class="popup__title">Обратный звонок</div>
+        </div>
+        <div class="popup__fields">
+            <label class="popup__label">
+                <span data-required="*">Имя</span>
+                <input class="popup__input" type="text" name="name" placeholder="Введите имя" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span data-required="*">Телефон</span>
+                <input class="popup__input" type="tel" name="phone" placeholder="+7 (___) ___-__-__" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span data-required="*">Удобное время</span>
+                <input class="popup__input" type="text" name="time" placeholder="с 8 до 18" autocomplete="off" required>
+            </label>
+        </div>
+        <div class="popup__policy">
+            <label class="checkbox checkbox--popup">
+                <input class="checkbox__input" type="checkbox" checked required>
+                <span class="checkbox__box"></span>
+                <span class="checkbox__policy">Согласен на обработку
+							<a href="javascript:void(0)" target="_blank">персональных данных</a>
+						</span>
+            </label>
+        </div>
+        <div class="popup__action">
+            <button class="btn btn--primary btn-reset" name="submit" aria-label="Оставить заявку">
+                <span>Оставить заявку</span>
+            </button>
+        </div>
+    </div>
+</form>
+<form class="popup" id="request" action="#" style="display: none">
+    <div class="popup__container">
+        <div class="popup__head">
+            <div class="popup__title">Запрос менеджеру</div>
+        </div>
+        <div class="popup__fields">
+            <label class="popup__label">
+                <span data-required="*">Имя</span>
+                <input class="popup__input" type="text" name="name" placeholder="Введите имя" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span data-required="*">Телефон</span>
+                <input class="popup__input" type="tel" name="phone" placeholder="+7 (___) ___-__-__" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span>Сообщение</span>
+                <textarea class="popup__input" name="message" placeholder="Введите сообщение" rows="4"></textarea>
+            </label>
+        </div>
+        <div class="popup__policy">
+            <label class="checkbox checkbox--popup">
+                <input class="checkbox__input" type="checkbox" checked required>
+                <span class="checkbox__box"></span>
+                <span class="checkbox__policy">Согласен на обработку
+							<a href="javascript:void(0)" target="_blank">персональных данных</a>
+						</span>
+            </label>
+        </div>
+        <div class="popup__action">
+            <button class="btn btn--primary btn-reset" name="submit" aria-label="Оставить заявку">
+                <span>Оставить заявку</span>
+            </button>
+        </div>
+    </div>
+</form>
+<form class="popup" id="calc" action="#" style="display: none">
+    <div class="popup__container">
+        <div class="popup__head">
+            <div class="popup__title">Оставьте заявку</div>
+            <div class="popup__text">Введите данные для связи и наш менеджер свяжется с Вами в течении нескольких минут</div>
+        </div>
+        <div class="popup__fields">
+            <label class="popup__label">
+                <span data-required="*">Имя</span>
+                <input class="popup__input" type="text" name="name" placeholder="Введите имя" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span data-required="*">Телефон</span>
+                <input class="popup__input" type="tel" name="phone" placeholder="+7 (___) ___-__-__" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span>Сообщение</span>
+                <textarea class="popup__input" name="message" placeholder="Введите сообщение" rows="4"></textarea>
+            </label>
+        </div>
+        <div class="popup__file">
+            <div class="popup__file-upload">
+                <label class="upload upload--popup">
+                    <span class="upload__name">Прикрепить файл</span>
+                    <input type="file" name="file" accept=".jpg, .jpeg, .png, .pdf, .doc, .docs, .xls, .xlsx">
+                </label>
+            </div>
+        </div>
+        <div class="popup__policy">
+            <label class="checkbox checkbox--popup">
+                <input class="checkbox__input" type="checkbox" checked required>
+                <span class="checkbox__box"></span>
+                <span class="checkbox__policy">Согласен на обработку
+							<a href="javascript:void(0)" target="_blank">персональных данных</a>
+						</span>
+            </label>
+        </div>
+        <div class="popup__action">
+            <button class="btn btn--primary btn-reset" name="submit" aria-label="Оставить заявку">
+                <span>Оставить заявку</span>
+            </button>
+        </div>
+    </div>
+</form>
+<form class="popup" id="consult" action="#" style="display: none">
+    <div class="popup__container">
+        <div class="popup__head">
+            <div class="popup__title">Заказать консультацию</div>
+            <div class="popup__text">Заполните данные для получения консультации по товару</div>
+        </div>
+        <div class="popup__fields">
+            <label class="popup__label">
+                <span data-required="*">Имя</span>
+                <input class="popup__input" type="text" name="name" placeholder="Введите имя" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span data-required="*">Телефон</span>
+                <input class="popup__input" type="tel" name="phone" placeholder="+7 (___) ___-__-__" autocomplete="off" required>
+            </label>
+            <label class="popup__label">
+                <span>Сообщение</span>
+                <textarea class="popup__input" name="message" placeholder="Введите сообщение" rows="4"></textarea>
+            </label>
+        </div>
+        <div class="popup__file">
+            <div class="popup__file-upload">
+                <label class="upload upload--popup">
+                    <span class="upload__name">Прикрепить файл</span>
+                    <input type="file" name="file" accept=".jpg, .jpeg, .png, .pdf, .doc, .docs, .xls, .xlsx">
+                </label>
+            </div>
+        </div>
+        <div class="popup__policy">
+            <label class="checkbox checkbox--popup">
+                <input class="checkbox__input" type="checkbox" checked required>
+                <span class="checkbox__box"></span>
+                <span class="checkbox__policy">Согласен на обработку
+							<a href="javascript:void(0)" target="_blank">персональных данных</a>
+						</span>
+            </label>
+        </div>
+        <div class="popup__action">
+            <button class="btn btn--primary btn-reset" name="submit" aria-label="Оставить заявку">
+                <span>Оставить заявку</span>
+            </button>
+        </div>
+    </div>
+</form>
+<div class="popup" id="request-done" style="display:none">
+    <div class="popup__complete">
+        <div class="popup__complete-icon lazy" data-bg="static/images/common/ico_done.svg"></div>
+        <div class="popup__complete-label">Ваша заявка отправлена. Наши специалисты свяжутся с вами в ближайшее время. Спасибо.</div>
+    </div>
+</div>
+
+<!--
 <div class="popup" id="request-done" style="display:none; padding: 50px;">
     <div class="popup__complete">
         <div class="popup__complete-icon lazy" data-bg="/static/images/common/ico_done.svg"></div>
         <div class="popup__complete-label">Ваша заявка отправлена. Наши специалисты свяжутся с вами в ближайшее время. Спасибо.</div>
     </div>
 </div>
-
 <div class="popup" id="order-done" style="display:none">
     <div class="popup__complete">
         <div class="popup__complete-icon lazy" data-bg="/static/images/common/ico_box.svg"></div>
@@ -12,10 +177,10 @@
     </div>
 </div>
 
-<form class="popup" id="search" action="{{ route('search') }}" style="display:none">
+{{--<form class="popup" id="search" action="{{ route('search') }}" style="display:none">--}}
     <div class="popup__search-field">
         <div class="field field--promo">
-            <input class="field__input" type="search" name="q" value="{{ Request::get('q') }}" required>
+{{--            <input class="field__input" type="search" name="q" value="{{ Request::get('q') }}" required>--}}
             <span class="field__highlight"></span>
             <span class="field__bar"></span>
             <label class="field__label">Найти</label>
@@ -24,7 +189,7 @@
     </div>
 </form>
 
-<form class="order-popup popup" id="order_tonn" action="{{ route('ajax.add-to-cart') }}"
+{{--<form class="order-popup popup" id="order_tonn" action="{{ route('ajax.add-to-cart') }}"--}}
       style="display:none" onsubmit="addToCartProductPopup(this, event)">
     <div class="order-popup__head">
         <div class="order-popup__title" data-order-title></div>
@@ -67,179 +232,7 @@
     </div>
 </form>
 
-<form class="order-popup popup" id="order_tonn_item" action="{{ route('ajax.add-to-cart') }}"
-      style="display:none" onsubmit="addToCartProductPopup(this, event)">
-    <div class="order-popup__head">
-        <div class="order-popup__title" data-order-title></div>
-        <div class="p-status in-stock">
-            <span>В наличии</span>
-            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.6562 4.71875L6.09375 11.281L2.8125 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-
-        </div>
-    </div>
-    <div class="order-popup__body">
-        <div class="order-popup__grid">
-            <div class="order-popup__col">
-                <label class="order-popup__label">Количество, т
-                    <input class="order-popup__input" type="number" step="0.001" name="weight"
-                           data-order-weight onkeyup="changeWeightPopup(this)">
-                </label>
-            </div>
-{{--            <div class="order-popup__col">--}}
-{{--                <label class="order-popup__label">Количество, м--}}
-{{--                    <input class="order-popup__input" type="number" name="size" data-order-size>--}}
-{{--                </label>--}}
-{{--            </div>--}}
-            <div class="order-popup__col">
-                <div class="order-popup__label">Цена, т</div>
-                <div class="order-popup__input" data-order-price></div>
-            </div>
-            <div class="order-popup__col">
-                <div class="order-popup__label">Сумма</div>
-                <div class="order-popup__input" data-order-total></div>
-            </div>
-        </div>
-        <div class="order-popup__action">
-            <button class="button button--primary button--popup"
-                    name="submit" aria-label="Добавить в корзину">
-                <span>Добавить в корзину</span>
-            </button>
-        </div>
-    </div>
-</form>
-
-<form class="order-popup popup" id="order_metr" action="{{ route('ajax.add-to-cart') }}"
-      style="display:none" onsubmit="addToCartProductPopup(this, event)">
-    <div class="order-popup__head">
-        <div class="order-popup__title" data-order-title></div>
-        <div class="p-status in-stock">
-            <span>В наличии</span>
-            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.6562 4.71875L6.09375 11.281L2.8125 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-
-        </div>
-    </div>
-    <div class="order-popup__body">
-        <div class="order-popup__grid">
-            <div class="order-popup__col">
-                <label class="order-popup__label">Количество, м
-                    <input class="order-popup__input" type="number"  name="weight"
-                           data-order-weight onkeyup="changeWeightPopup(this)">
-                </label>
-            </div>
-{{--            <div class="order-popup__col">--}}
-{{--                <label class="order-popup__label">Количество, т--}}
-{{--                    <input class="order-popup__input" type="number" step="0.001" name="size" data-order-size>--}}
-{{--                </label>--}}
-{{--            </div>--}}
-            <div class="order-popup__col">
-                <div class="order-popup__label">Цена, м</div>
-                <div class="order-popup__input" data-order-price></div>
-            </div>
-            <div class="order-popup__col">
-                <div class="order-popup__label">Сумма</div>
-                <div class="order-popup__input" data-order-total></div>
-            </div>
-        </div>
-        <div class="order-popup__action">
-            <button class="button button--primary button--popup"
-                    name="submit" aria-label="Добавить в корзину">
-                <span>Добавить в корзину</span>
-            </button>
-        </div>
-    </div>
-</form>
-
-<form class="order-popup popup" id="order_kilo" action="{{ route('ajax.add-to-cart') }}"
-      style="display:none" onsubmit="addToCartProductPopup(this, event)">
-    <div class="order-popup__head">
-        <div class="order-popup__title" data-order-title></div>
-        <div class="p-status in-stock">
-            <span>В наличии</span>
-            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.6562 4.71875L6.09375 11.281L2.8125 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-
-        </div>
-    </div>
-    <div class="order-popup__body">
-        <div class="order-popup__grid">
-            <div class="order-popup__col">
-                <label class="order-popup__label">Количество, кг
-                    <input class="order-popup__input" type="number" step="0.001" name="weight"
-                           data-order-weight onkeyup="changeWeightPopup(this)">
-                </label>
-            </div>
-            <div class="order-popup__col">
-                <label class="order-popup__label">Количество, шт
-                    <input class="order-popup__input" type="number" name="size" data-order-size>
-                </label>
-            </div>
-            <div class="order-popup__col">
-                <div class="order-popup__label">Цена, кг</div>
-                <div class="order-popup__input" data-order-price></div>
-            </div>
-            <div class="order-popup__col">
-                <div class="order-popup__label">Сумма</div>
-                <div class="order-popup__input" data-order-total></div>
-            </div>
-        </div>
-        <div class="order-popup__action">
-            <button class="button button--primary button--popup"
-                    name="submit" aria-label="Добавить в корзину">
-                <span>Добавить в корзину</span>
-            </button>
-        </div>
-    </div>
-</form>
-
-<form class="order-popup popup" id="order_kilo_m2" action="{{ route('ajax.add-to-cart') }}"
-      style="display:none" onsubmit="addToCartProductPopup(this, event)">
-    <div class="order-popup__head">
-        <div class="order-popup__title" data-order-title></div>
-        <div class="p-status in-stock">
-            <span>В наличии</span>
-            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.6562 4.71875L6.09375 11.281L2.8125 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-
-        </div>
-    </div>
-    <div class="order-popup__body">
-        <div class="order-popup__grid">
-            <div class="order-popup__col">
-                <label class="order-popup__label">Количество, кг
-                    <input class="order-popup__input" type="number" step="0.001" name="weight"
-                           data-order-weight onkeyup="changeWeightPopup(this)">
-                </label>
-            </div>
-            <div class="order-popup__col">
-                <label class="order-popup__label">Количество, м2
-                    <input class="order-popup__input" type="number" step="0.001" name="size" data-order-size>
-                </label>
-            </div>
-            <div class="order-popup__col">
-                <div class="order-popup__label">Цена, кг</div>
-                <div class="order-popup__input" data-order-price></div>
-            </div>
-            <div class="order-popup__col">
-                <div class="order-popup__label">Сумма</div>
-                <div class="order-popup__input" data-order-total></div>
-            </div>
-        </div>
-        <div class="order-popup__action">
-            <button class="button button--primary button--popup"
-                    name="submit" aria-label="Добавить в корзину">
-                <span>Добавить в корзину</span>
-            </button>
-        </div>
-    </div>
-</form>
-
-<form class="order-popup popup" id="order_item" action="{{ route('ajax.add-to-cart-pi') }}"
+{{--<form class="order-popup popup" id="order_item" action="{{ route('ajax.add-to-cart-pi') }}"--}}
       style="display:none" onsubmit="addToCartProductItemPopup(this, event)">
     <div class="order-popup__head">
         <div class="order-popup__title" data-order-title></div>
@@ -277,43 +270,43 @@
     </div>
 </form>
 
-<form class="popup" id="callback" action="{{ route('ajax.callback') }}"
-      onclick="sendCallback(this,event)" style="display:none">
-    <div class="popup__container">
-        <div class="popup__title">Заказать звонок</div>
-        <div class="popup__subtitle">Введите данные для связи и наш менеджер свяжется с Вами в течении нескольких минут</div>
-        <div class="popup__fields">
-            <div class="field">
-                <input class="field__input" type="text" name="name" required>
-                <span class="field__highlight"></span>
-                <span class="field__bar"></span>
-                <label class="field__label">имя</label>
-            </div>
-            <div class="field">
-                <input class="field__input" type="tel" name="phone" required>
-                <span class="field__highlight"></span>
-                <span class="field__bar"></span>
-                <label class="field__label">телефон</label>
-            </div>
-        </div>
-        <div class="popup__policy">
-            <label class="checkbox">
-                <input class="checkbox__input" type="checkbox" checked required>
-                <span class="checkbox__box"></span>
-                <span class="checkbox__policy">Даю согласие на обработку персональных данных.
-							<a href="{{ route('policy') }}" target="_blank">Пользовательское соглашение</a>
-						</span>
-            </label>
-        </div>
-        <div class="popup__action">
-            <button class="popup__submit btn-reset" name="submit" aria-label="Отправить">
-                <span>Отправить</span>
-            </button>
-        </div>
-    </div>
-</form>
+{{--<form class="popup" id="callback" action="{{ route('ajax.callback') }}"--}}
+{{--      onclick="sendCallback(this,event)" style="display:none">--}}
+{{--    <div class="popup__container">--}}
+{{--        <div class="popup__title">Заказать звонок</div>--}}
+{{--        <div class="popup__subtitle">Введите данные для связи и наш менеджер свяжется с Вами в течении нескольких минут</div>--}}
+{{--        <div class="popup__fields">--}}
+{{--            <div class="field">--}}
+{{--                <input class="field__input" type="text" name="name" required>--}}
+{{--                <span class="field__highlight"></span>--}}
+{{--                <span class="field__bar"></span>--}}
+{{--                <label class="field__label">имя</label>--}}
+{{--            </div>--}}
+{{--            <div class="field">--}}
+{{--                <input class="field__input" type="tel" name="phone" required>--}}
+{{--                <span class="field__highlight"></span>--}}
+{{--                <span class="field__bar"></span>--}}
+{{--                <label class="field__label">телефон</label>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="popup__policy">--}}
+{{--            <label class="checkbox">--}}
+{{--                <input class="checkbox__input" type="checkbox" checked required>--}}
+{{--                <span class="checkbox__box"></span>--}}
+{{--                <span class="checkbox__policy">Даю согласие на обработку персональных данных.--}}
+{{--							<a href="{{ route('policy') }}" target="_blank">Пользовательское соглашение</a>--}}
+{{--						</span>--}}
+{{--            </label>--}}
+{{--        </div>--}}
+{{--        <div class="popup__action">--}}
+{{--            <button class="popup__submit btn-reset" name="submit" aria-label="Отправить">--}}
+{{--                <span>Отправить</span>--}}
+{{--            </button>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</form>--}}
 
-<form class="popup" id="question" action="{{ route('ajax.questions') }}" style="display:none"
+{{--<form class="popup" id="question" action="{{ route('ajax.questions') }}" style="display:none"--}}
       onsubmit="sendQuestion(this, event)">
     <div class="popup__container">
         <div class="popup__title">Задать вопрос</div>
@@ -356,7 +349,7 @@
                 <input class="checkbox__input" type="checkbox" checked required>
                 <span class="checkbox__box"></span>
                 <span class="checkbox__policy">Даю согласие на обработку персональных данных.
-							<a href="{{ route('policy') }}" target="_blank">Пользовательское соглашение</a>
+{{--							<a href="{{ route('policy') }}" target="_blank">Пользовательское соглашение</a>--}}
 						</span>
             </label>
             <button class="popup__submit btn-reset" name="submit" aria-label="Отправить">
@@ -365,4 +358,4 @@
         </div>
     </div>
 </form>
-
+-->

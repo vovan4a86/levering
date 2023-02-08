@@ -68,10 +68,6 @@ class Catalog extends Model {
 		'children_ids' => 'array',
 	];
 
-	public static $filter_type = [
-	    0 => [['name' => 'Марка', 'alias' => 'steel'], ['name' => 'Длина', 'alias' => 'length']],
-    ];
-
     const UPLOAD_URL = '/uploads/catalogs/';
 
 	public static $thumbs = [

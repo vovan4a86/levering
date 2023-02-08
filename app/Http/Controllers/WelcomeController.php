@@ -14,10 +14,6 @@ class WelcomeController extends Controller {
         $page->ogGenerate();
         $page->setSeo();
         $categories = Catalog::getTopOnMain();
-        $ekb = City::whereAlias('ekb')->first();
-        if(!session('city_alias')) {
-            session('city_alias', $ekb->alias);
-        }
 
         return response()->view('pages.index', [
             'page' => $page,

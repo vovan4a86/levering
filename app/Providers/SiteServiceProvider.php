@@ -22,19 +22,6 @@ class SiteServiceProvider extends ServiceProvider {
 	public function boot() {
 		// пререндер для шаблона
 		View::composer(['template'], function (\Illuminate\View\View $view) {
-            $overlayNavigationIcons = [
-                'Сортовой прокат' => '/static/images/common/ico_beam.svg',
-                'Трубный прокат' => '/static/images/common/ico_tubes.svg',
-                'Цветной прокат' => '/static/images/common/ico_ingot.svg',
-                'Нержавеющий прокат' => '/static/images/common/ico_steel.svg',
-                'Сантехарматура' => '/static/images/common/ico_pipeline.svg',
-                'Поковки' => '/static/images/common/ico_pipe.svg',
-                'Сварочные материалы' => '/static/images/common/ico_mask.svg',
-                'Асбестоцементные материалы' => '/static/images/common/ico_tube.svg',
-                'Листовой прокат' => '/static/images/common/ico_fraction.svg',
-                'Металлоизделия' => '/static/images/common/ico_metal.svg',
-                'Кровельные и фасадные материалы' => '/static/images/common/ico_material.svg',
-            ];
 		    $overlayNavigation = Catalog::getTopLevel();
 
 			$topMenu = Page::query()
@@ -55,11 +42,33 @@ class SiteServiceProvider extends ServiceProvider {
             $mainMenu = collect();
             $mainMenu = $mainMenu->merge($mainMenuPages)->merge($mainMenuCats);
 
+            $cities = City::query()->orderBy('name')
+                ->get(['id', 'alias', 'name', DB::raw('LEFT(name,1) as letter')]);
+
+            if($alias = session('city_alias')) {
+                $city = City::whereAlias($alias)->first();
+                $current_city = $city->name;
+            } else {
+                $current_city = null;
+            }
+
+			$view->with(compact(
+                'topMenu',
+                'mainMenu',
+                'cities',
+                'current_city',
+                'overlayNavigation',
+                'mainMenuCats'
+            ));
+		});
+
+        View::composer(['blocks.footer'], function ($view) {
             $footerCatalog = Catalog::public()
                 ->where('on_footer_menu', 1)
                 ->where('parent_id', 0)
                 ->orderBy('order')
                 ->get();
+
             $footerMenu = Page::query()
                 ->public()
                 ->where('parent_id', 1)
@@ -74,30 +83,12 @@ class SiteServiceProvider extends ServiceProvider {
                 ->orderBy('order')
                 ->get();
 
-            $cities = City::query()->orderBy('name')
-                ->get(['id', 'alias', 'name', DB::raw('LEFT(name,1) as letter')]);
-
-            if($alias = session('city_alias')) {
-                $city = City::whereAlias($alias)->first();
-                $current_city = $city->name;
-            } else {
-                $current_city = null;
-            }
-
-
-			$view->with(compact(
-                'topMenu',
-                'mainMenu',
+            $view->with(compact(
                 'footerMenu',
                 'footerCatalog',
-                'cities',
-                'current_city',
-                'overlayNavigation',
-                'overlayNavigationIcons',
-                'mobileMenu',
-                'mainMenuCats'
+                'mobileMenu'
             ));
-		});
+        });
 
         View::composer(['blocks.header_cart'], function ($view) {
             $items = Cart::all();
