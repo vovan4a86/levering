@@ -3,10 +3,11 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use Fanky\Admin\Models\CatalogTest;
-use Fanky\Admin\Models\CatalogParam;
-use Fanky\Admin\Models\Param;
-use Fanky\Admin\Models\ProductTest;
+use Fanky\Admin\Models\Catalog;
+use Fanky\Admin\Models\Char;
+use Fanky\Admin\Models\Product;
+use Fanky\Admin\Models\ProductCertificate;
+use Fanky\Admin\Models\ProductChar;
 use Fanky\Admin\Models\ProductImage;
 use Fanky\Admin\Text;
 use GuzzleHttp\Client;
@@ -33,22 +34,9 @@ class CableSystems extends Command
      */
     protected $signature = 'parse:cs';
     private $basePath = ProductImage::UPLOAD_URL . 'cable-systems/';
+    private $certificatesPath =  'uploads/certificates/';
     public $baseUrl = 'https://asd-e.ru';
     public $client;
-
-    public $chars = [
-        'Высота, мм' => 'height',
-        'Ширина, мм' => 'width',
-        'Длина, мм' => 'length',
-        'Масса, кг' => 'weight',
-        'Материал' => 'material',
-        'Толщина металла, мм' => 'depth'
-    ];
-
-    public $docs = [
-        'Сертификат соответствия' => 'certificate_image',
-        'ТУ' => 'tu_image'
-    ];
 
     /**
      * The console command description.
@@ -75,31 +63,26 @@ class CableSystems extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         foreach ($this->categoryList() as $categoryName => $categoryUrl) {
             $this->parseCategoryCableSystems($categoryName, $categoryUrl, 2);
         }
-//        $this->info($this->getDescriptionWithNewImage($data, '/upload/1.jpg'));
-//        $catalog = CatalogTest::find(17);
-//        $this->parseListProductTestsCableSystems($catalog, 'https://asd-e.ru/product/gem/lotki-lestnichnye-nl/lotki-lestnichnye-pryamye-nl/', null);
         $this->info('The command was successful!');
     }
 
     public function categoryList(): array
     {
         return [
-            'ГЭМ' => 'https://asd-e.ru/product/gem/',
-//            'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
+//            'ГЭМ' => 'https://asd-e.ru/product/gem/',
+            'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
 //            'PROMTRAY' => 'https://asd-e.ru/product/promtray/',
         ];
     }
 
-    public function parseCategoryCableSystems($categoryName, $categoryUrl, $parentId)
-    {
+    public function parseCategoryCableSystems($categoryName, $categoryUrl, $parentId) {
         $this->info($categoryName . ' => ' . $categoryUrl);
-        $catalog = $this->getCatalogTestByName($categoryName, $parentId);
-        $uploadPath = CatalogTest::UPLOAD_URL;
+        $catalog = $this->getCatalogByName($categoryName, $parentId);
+        $uploadPath = Catalog::UPLOAD_URL;
 
         try {
             $res = $this->client->get($categoryUrl);
@@ -143,9 +126,9 @@ class CableSystems extends Command
             } else {
                 //парсим товары
                 try {
-                $this->parseListProductTestsCableSystems($catalog, $categoryUrl);
+                $this->parseListProductCableSystems($catalog, $categoryUrl);
                 } catch (\Exception $e) {
-                    $this->error('Error Parse ProductTests from section: ' . $e->getMessage());
+                    $this->error('Error Parse Products from section: ' . $e->getMessage());
                     $this->error('See line: ' . $e->getLine());
                 }
             }
@@ -154,10 +137,8 @@ class CableSystems extends Command
         }
     }
 
-    public function parseListProductTestsCableSystems($catalog, $categoryUrl)
-    {
+    public function parseListProductCableSystems($catalog, $categoryUrl){
         $this->info('Parse products from: ' . $catalog->name);
-
         try {
             $res = $this->client->get($categoryUrl);
             $html = $res->getBody()->getContents();
@@ -168,9 +149,7 @@ class CableSystems extends Command
             if ($crawler->filter('.catalog.item-views.table.many')->count() != 0) {
                 $table = $crawler->filter('.catalog.item-views.table.many')->first(); //table of products
                 $table->filter('a.dark-color')
-                    ->reduce(function (Crawler $none, $i) {
-                        return ($i < 1); //по одному товару на странице
-                    })
+//                    ->reduce(function (Crawler $none, $i) {return ($i < 3);})
                     ->each(function (Crawler $node, $n) use ($catalog, $uploadPath) {
                         $data = [];
                         try {
@@ -182,7 +161,7 @@ class CableSystems extends Command
 
                             $this->info(++$n . ') ' . $data['name']);
 
-                            $product = ProductTest::whereParseUrl($url)->first();
+                            $product = Product::whereParseUrl($url)->first();
 
                             if (!$product) {
                                 $productPage = $this->client->get($url);
@@ -190,7 +169,7 @@ class CableSystems extends Command
                                 $productCrawler = new Crawler($productHtml); //product page
 
                                 $order = $catalog->products()->max('order') + 1;
-                                $newProd = ProductTest::create(array_merge([
+                                $newProd = Product::create(array_merge([
                                     'catalog_id' => $catalog->id,
                                     'parse_url' => $url,
                                     'published' => 1,
@@ -214,7 +193,7 @@ class CableSystems extends Command
                                                 }
 
                                                 $imgSrc[] = $this->encodeUrlFileName($find);
-                                                $newImgSrc[] = $fileName;
+                                                $newImgSrc[] = $uploadPath . $fileName;
                                             });
                                         $newProd->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
                                         $newProd->save();
@@ -225,33 +204,52 @@ class CableSystems extends Command
                                 }
 
                                 //характеристики
-                                if ($productCrawler->filter('#props tr.char')->count() != 0) {
+//                                if ($productCrawler->filter('#props tr.char')->count() != 0) {
 //                                    $chars = [];
-                                    $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use (&$chars) {
+//                                    $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use (&$chars) {
+//                                        $name = $char->filter('.char_name span')->text();
+//                                        $value = $char->filter('.char_value span')->text();
+//                                        $chars[$name] = $value;
+//                                    });
+//                                    $newProd->chars = $this->getTextFromCharArray($chars);
+//                                    $newProd->save();
+//                                }
+                                if ($productCrawler->filter('#props tr.char')->count() != 0) {
+                                    $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use ($newProd) {
                                         $name = $char->filter('.char_name span')->text();
                                         $value = $char->filter('.char_value span')->text();
-                                        $paramId = $this->addProductParamName($name);
 
+                                        $currentChar = Char::whereName($name)->first();
+                                        if(!$currentChar) {
+                                            $currentChar = Char::create([
+                                                'name' => trim($name)
+                                            ]);
+                                        }
 
-//                                        $chars[$this->chars[$name]] = $value;
+                                        ProductChar::create([
+                                            'product_id' => $newProd->id,
+                                            'char_id' => $currentChar->id,
+                                            'value' => $value,
+                                            'order' => ProductChar::where('product_id', $newProd->id)->max('order') + 1,
+                                        ]);
                                     });
-//                                    $newProd->update($chars);
-//                                    $newProd->save();
                                 }
 
                                 //сертификаты и ту
                                 if ($productCrawler->filter('#docs a')->count() != 0) {
-                                    $docs = [];
-                                    $productCrawler->filter('#docs a')->each(function (Crawler $img) use ($newProd, $uploadPath, &$docs) {
-                                        $name = $img->text();
+                                    $productCrawler->filter('#docs a')->each(function (Crawler $img, $n) use ($newProd, $uploadPath) {
                                         $url = $this->baseUrl . $img->attr('href');
                                         $ext = $this->getExtensionFromSrc($url);
-                                        $fileName = 'product_' . $newProd->id . '_' . $this->docs[$name] . $ext;
-                                        $this->downloadJpgFile($url, $uploadPath, $fileName);
-                                        $docs[$this->docs[$name]] = $uploadPath . $fileName;
+                                        $fileName = 'product_' . $newProd->id . '_' . $n . $ext;
+                                        $res = $this->downloadJpgFile($url, $this->certificatesPath, $fileName);
+                                        if($res) {
+                                            ProductCertificate::create([
+                                                'product_id' => $newProd->id,
+                                                'image' => $fileName,
+                                                'order' => ProductCertificate::where('product_id', $newProd->id)->max('order') + 1,
+                                            ]);
+                                        }
                                     });
-                                    $newProd->update($docs);
-                                    $newProd->save();
                                 }
 
                                 //сохраняем изображения товара
@@ -263,14 +261,38 @@ class CableSystems extends Command
                                     if ($res) {
                                         ProductImage::create([
                                             'product_id' => $newProd->id,
-                                            'image' => $fileName,
+                                            'image' => $uploadPath . $fileName,
                                             'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
                                         ]);
                                     }
                                 });
                             } else {
-                                $product->update($data);
-                                $product->save();
+//                                $productPage = $this->client->get($url);
+//                                $productHtml = $productPage->getBody()->getContents();
+//                                $productCrawler = new Crawler($productHtml); //product page
+//
+//                                if ($productCrawler->filter('#props tr.char')->count() != 0) {
+//                                    $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use ($product) {
+//                                        $name = $char->filter('.char_name span')->text();
+//                                        $value = $char->filter('.char_value span')->text();
+//
+//                                        $currentChar = Char::whereName($name)->first();
+//                                        if(!$currentChar) {
+//                                            $currentChar = Char::create([
+//                                                'name' => trim($name)
+//                                            ]);
+//                                        }
+//
+//                                        ProductChar::create([
+//                                            'product_id' => $product->id,
+//                                            'char_id' => $currentChar->id,
+//                                            'value' => $value,
+//                                            'order' => ProductChar::where('product_id', $product->id)->max('order') + 1,
+//                                        ]);
+//                                    });
+//                                }
+//                                $product->chars = null;
+//                                $product->save();
                             }
                         } catch (\Exception $e) {
                             $this->warn('error: ' . $e->getMessage());
@@ -279,18 +301,29 @@ class CableSystems extends Command
                         sleep(rand(0, 2));
                     });
             }
-
             //проход по страницам
             if ($crawler->filter('.next a')->count() != 0) {
                 $nextUrl = $crawler->filter('.next a');
                 $nextUrl = $this->baseUrl . $nextUrl->attr('href');
                 $this->info('parse next url: ' . $nextUrl);
-                $this->parseListProductTestsCableSystems($catalog, $nextUrl);
+                $this->parseListProductCableSystems($catalog, $nextUrl);
             }
+
         } catch (GuzzleException $e) {
-            $this->error('Error Parse ProductTest: ' . $e->getMessage());
+            $this->error('Error Parse Product: ' . $e->getMessage());
             $this->error('See: ' . $e->getLine());
         }
+    }
+
+    public function getTextFromCharArray(array $chars): ?string {
+        if(!count($chars)) return null;
+
+        $res = '<ul class="prod-char">';
+        foreach ($chars as $name => $value) {
+            $res .= "<li><span class='char-name'>$name</span> - <span class='char-value'>$value</span></li>";
+        }
+        $res .= '</ul>';
+        return $res;
     }
 
 }

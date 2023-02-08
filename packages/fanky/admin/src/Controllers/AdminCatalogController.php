@@ -9,7 +9,7 @@ use Fanky\Admin\Models\MenuAction;
 use Fanky\Admin\Models\Param;
 use Fanky\Admin\Models\ProductFilters;
 use Fanky\Admin\Models\ProductIcon;
-use Fanky\Admin\Models\ProductParam;
+use Fanky\Admin\Models\ProductChar;
 use Fanky\Admin\Models\ProductRelated;
 use Fanky\Admin\Pagination;
 use http\Params;

@@ -22,6 +22,7 @@
             <li class="active"><a href="#tab_1" data-toggle="tab">Параметры</a></li>
             <li><a href="#tab_2" data-toggle="tab">Текст</a></li>
             <li><a href="#tab_4" data-toggle="tab">Изображения</a></li>
+            <li><a href="#tab_sert" data-toggle="tab">Сертификаты и ТУ</a></li>
             <li><a href="#tab_5" data-toggle="tab">Похожие товары</a></li>
             <li class="pull-right">
                 <a href="{{ route('admin.catalog.products', [$product->catalog_id]) }}"
@@ -46,29 +47,30 @@
                 {!! Form::groupText('price', $product->price ?: 0, 'price') !!}
                 <hr>
                 <h4>Характеристики:</h4>
-                <div style="display: flex; flex-shrink: 1;">
-                    {!! Form::groupText('height', $product->height, 'Высота, мм') !!}
-                    {!! Form::groupText('width', $product->width, 'Ширина, мм') !!}
-                    {!! Form::groupText('length', $product->length, 'Длина, мм') !!}
-                    {!! Form::groupText('depth', $product->depth, 'Толщина металла, мм') !!}
-                </div>
+                @if($product->chars()->get())
+                    <ul>
+                        @foreach($product->chars()->get() as $ch)
+                            <li><strong>{{ $ch->name }}: </strong> {{ $ch->value }}</li>
+                        @endforeach
+                    </ul>
+                @endif
                 <hr>
-{{--                {!! Form::groupSelect('in_stock', [0 => 'Временно отсутствует', 1 => 'В наличии', 2 => 'Под заказ' ], $product->in_stock, 'Наличие') !!}--}}
+                {{--                {!! Form::groupSelect('in_stock', [0 => 'Временно отсутствует', 1 => 'В наличии', 2 => 'Под заказ' ], $product->in_stock, 'Наличие') !!}--}}
                 {!! Form::hidden('in_stock', 0) !!}
                 {!! Form::groupCheckbox('published', 1, $product->published, 'Показывать товар') !!}
                 {!! Form::groupCheckbox('in_stock', 1, $product->in_stock, 'В наличии') !!}
-{{--                {!! Form::groupCheckbox('on_main', 1, $product->on_main, 'Показывать на главной') !!}--}}
+                {{--                {!! Form::groupCheckbox('on_main', 1, $product->on_main, 'Показывать на главной') !!}--}}
 
-{{--                {!! Form::hidden('is_action', 0) !!}--}}
-{{--                {!! Form::groupCheckbox('is_action', 1, $product->is_action, 'Акция') !!}--}}
-{{--                {!! Form::hidden('is_popular', 0) !!}--}}
-{{--                {!! Form::groupCheckbox('is_popular', 1, $product->is_popular, 'Популярный товар') !!}--}}
+                {{--                {!! Form::hidden('is_action', 0) !!}--}}
+                {{--                {!! Form::groupCheckbox('is_action', 1, $product->is_action, 'Акция') !!}--}}
+                {{--                {!! Form::hidden('is_popular', 0) !!}--}}
+                {{--                {!! Form::groupCheckbox('is_popular', 1, $product->is_popular, 'Популярный товар') !!}--}}
 
             </div>
             <div class="tab-pane" id="tab_2">
-{{--                {!! Form::groupRichtext('announce_text', $product->announce_text, 'Краткое описание', ['rows' => 3]) !!}--}}
+                {{--                {!! Form::groupRichtext('announce_text', $product->announce_text, 'Краткое описание', ['rows' => 3]) !!}--}}
                 {!! Form::groupRichtext('text', $product->text, 'Текст', ['rows' => 3]) !!}
-{{--                {!! Form::groupRichtext('seo_text', $product->seo_text, 'SEO Текст', ['rows' => 3]) !!}--}}
+                {{--                {!! Form::groupRichtext('seo_text', $product->seo_text, 'SEO Текст', ['rows' => 3]) !!}--}}
             </div>
 
             <div class="tab-pane" id="tab_4">
@@ -91,6 +93,20 @@
                     </div>
                 @else
                     <p class="text-yellow">Изображения можно будет загрузить после сохранения товара!</p>
+                @endif
+            </div>
+
+            <div class="tab-pane" id="tab_sert">
+                @if(count($product->certificates()->get()))
+                    <div class="certificates" style="display: flex; column-gap: 20px;">
+                        @foreach($product->certificates()->get() as $cert)
+                            <img class="img-polaroid" style="cursor: zoom-in;"
+                                 src="{{ \Fanky\Admin\Models\Product::CERTIFICATE_PATH . $cert->image }}"
+                                 height="200"
+                                 data-image="{{ \Fanky\Admin\Models\Product::CERTIFICATE_PATH . $cert->image }}"
+                                 onclick="return popupImage($(this).data('image'))">
+                        @endforeach
+                    </div>
                 @endif
             </div>
 

@@ -13,19 +13,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $catalog_id
  * @property string $name
  * @property string $value
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductParam whereCatalogId($value)
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductParam whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductParam whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductParam whereProductId($value)
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductParam whereValue($value)
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductChar whereCatalogId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductChar whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductChar whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductChar whereProductId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductChar whereValue($value)
  */
-class ProductParam extends Model {
+class Char extends Model {
 	protected $guarded = ['id'];
 	public $timestamps = false;
 
 	public function product(){
 		return $this->belongsTo(Product::class);
 	}
+
 	public function catalog(){
 		return $this->belongsTo(Catalog::class);
 	}

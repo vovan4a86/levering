@@ -7,7 +7,7 @@ use Fanky\Admin\Models\Feedback;
 use Fanky\Admin\Models\Order as Order;
 use Fanky\Admin\Models\Page;
 use Fanky\Admin\Models\Product;
-use Fanky\Admin\Models\ProductParam;
+use Fanky\Admin\Models\ProductChar;
 use Fanky\Admin\Models\Setting;
 use Illuminate\Http\Request;
 use Mail;

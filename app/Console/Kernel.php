@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel {
 		'App\Console\Commands\Test',
         'App\Console\Commands\CableProducts',
         'App\Console\Commands\CableSystems',
+        'App\Console\Commands\Uteplitel',
 		Commands\ImportOld::class,
 	];
 

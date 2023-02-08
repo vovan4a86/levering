@@ -70,24 +70,6 @@ trait ParseFunctions
         $sectionCrawler = new Crawler($html); //section page from url
 
         var_dump($html);
-//        $this->info($sectionCrawler->filter('.bx_catalog_tile_category_title')->count());
-//        if($sectionCrawler->filter('ul.bx_catalog_tile_ul')->first()->count() != 0) {
-//            $sectionCrawler->filter('.bx_catalog_tile_ul li')->each(function (Crawler $inner) {
-//                $innerCatName = $inner->filter('.bx_catalog_tile_title a')->first()->text();
-//                $innerCatUrl = $inner->filter('.bx_catalog_tile_title a')->first()->attr('href');
-//                $this->info($innerCatName);
-//                $this->info($innerCatUrl);
-//                exit();
-//            });
-//        }
-
-
-        //парсим товары
-//        try {
-//            $this->parseListProducts($catalog, $categoryUrl, $categoryName);
-//        } catch (\Exception $e) {
-//            $this->warn('Error Parse From List: ' . $e->getMessage());
-//        }
     }
 
     //парсим товары
@@ -181,8 +163,7 @@ trait ParseFunctions
         return false;
     }
 
-    public function downloadJpgFile($url, $uploadPath, $fileName): bool
-    {
+    public function downloadJpgFile($url, $uploadPath, $fileName): bool {
         $safeUrl = str_replace(' ', '%20', $url);
         $this->info('downloadImageFile: ' . $safeUrl);
         $file = file_get_contents($safeUrl);

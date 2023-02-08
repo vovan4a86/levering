@@ -114,6 +114,7 @@ class Product extends Model {
 
     const UPLOAD_PATH = '/public/uploads/products/';
     const UPLOAD_URL = '/uploads/products/';
+    const CERTIFICATE_PATH = '/uploads/certificates/';
 
     const NO_IMAGE = "/adminlte/no_image.png";
 
@@ -123,6 +124,11 @@ class Product extends Model {
 
     public function images(): HasMany {
         return $this->hasMany(ProductImage::class, 'product_id')
+            ->orderBy('order');
+    }
+
+    public function certificates(): HasMany {
+        return $this->hasMany(ProductCertificate::class, 'product_id')
             ->orderBy('order');
     }
 
@@ -148,24 +154,15 @@ class Product extends Model {
         }
     }
 
-    public function params() {
-        return $this->hasMany(ProductParam::class);
+    public function chars() {
+        return $this->hasMany(ProductChar::class, 'product_id')->orderBy('order')
+            ->join('chars', 'chars.id', '=', 'product_chars.char_id');
     }
 
     //related
     public function related(): HasMany {
         return $this->hasMany(ProductRelated::class, 'product_id');
 //            ->join('products', 'product_related.related_id', '=', 'products.id');
-    }
-
-    public function params_on_list() {
-        return $this->params()
-            ->where('on_list', 1);
-    }
-
-    public function params_on_spec() {
-        return $this->params()
-            ->where('on_spec', 1);
     }
 
     public function scopePublic($query) {

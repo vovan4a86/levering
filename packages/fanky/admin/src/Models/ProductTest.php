@@ -150,7 +150,7 @@ class ProductTest extends Model {
     }
 
     public function params() {
-        return $this->hasMany(ProductParam::class);
+        return $this->hasMany(ProductChar::class);
     }
 
     //related
