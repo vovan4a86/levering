@@ -22,7 +22,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use SVG\SVG;
 use App\Traits\ParseFunctions;
 
-class Uteplitel extends Command {
+class Tubes extends Command {
 
     use ParseFunctions;
 
@@ -31,9 +31,9 @@ class Uteplitel extends Command {
      *
      * @var string
      */
-    protected $signature = 'parse:utep';
-    private $basePath = ProductImage::UPLOAD_URL . 'utepliteli/';
-    public $baseUrl = 'https://olympiya.su';
+    protected $signature = 'parse:tubes';
+    private $basePath = ProductImage::UPLOAD_URL . 'tubes/';
+    public $baseUrl = 'https://set-iset.ru/';
     public $client;
 
     /**
@@ -41,7 +41,7 @@ class Uteplitel extends Command {
      *
      * @var string
      */
-    protected $description = 'Парсим утеплители';
+    protected $description = 'Парсим Трубы для строительства инженерных систем';
 
     /**
      * Create a new command instance.
@@ -61,37 +61,96 @@ class Uteplitel extends Command {
      * @return mixed
      */
     public function handle() {
-//        $this->parseProduct();
+        $categoryUrl = 'https://set-iset.ru/shop/';
+        $res = $this->client->get($categoryUrl);
+        $html = $res->getBody()->getContents();
+        $catalogCrawler = new Crawler($html); //catalog page from url
 
-        foreach ($this->categoryList() as $categoryName => $categoryUrl) {
-            $this->parseCategoryUtepliteli($categoryName, $categoryUrl, 257);
-        }
+        $catalogCrawler->filter('.product-category.product-col')->each(function (Crawler $sub) {
+            $url = $this->baseUrl . $sub->filter('a')->first()->attr('href');
+            $name = trim($sub->filter('h4.m-t-md.m-b-none')->first()->text());
+            $catalog = $this->getCatalogByName($name, 6);
+
+            if (!$catalog->image && $sub->filter('.thumb-info-wrapper.tf-none img')->first()->count() != 0) {
+                $src = $this->baseUrl . $sub->filter('.thumb-info-wrapper.tf-none img')->first()->attr('src');
+                $uploadPath = Catalog::UPLOAD_URL;
+                $ext = $this->getExtensionFromSrc($src);
+                $fileName = $catalog->alias . $ext;
+                $res = $this->downloadJpgFile($src, $uploadPath, $fileName);
+                if ($res) $catalog->image = $fileName;
+            }
+
+            $this->parseCategoryTubes($name, $url, $catalog->id);
+        });
+
+//        foreach ($this->categoryList() as $categoryName => $categoryUrl) {
+//            $this->parseCategoryVodostok($categoryName, $categoryUrl, 4);
+//        }
         $this->info('The command was successful!');
     }
 
     public function categoryList(): array {
         return [
-//            'Базальтовая теплоизоляция' => 'https://olympiya.su/produkciya/utepliteli/bazaltovaya-teploizolyacziya/',
-//            'Минеральная теплоизоляция (кварц)' => 'https://olympiya.su/produkciya/utepliteli/mineralnaya-teploizolyacziya-kvarcz/',
-//            'Экструдированный пенополистирол' => 'https://olympiya.su/produkciya/utepliteli/ekstrudirovannyj-penopolistirol/',
-//            'Джут, пакля' => 'https://olympiya.su/produkciya/utepliteli/dzhut-paklya/',
-            'Вспененный полиэтилен' => 'https://olympiya.su/produkciya/utepliteli/vspenennyj-polietilen/',
+            'Grand Line 125/90' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/grand-line-125-90/',
+//            'Grand Line 150/100' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/grand-line-150-100/',
+//            'Optima круглый 125/90' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vodostok-optima-kruglyy-125-90/',
+//            'Optima круглый 150/100' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/optima-kruglyj-150100/',
+//            'Vortex прямоугольный' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vodostok-optima-pryamougolnyy/',
+//            'Vortex прямоугольный Matt' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-matt/',
+//            'Vortex Lite' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-lite/',
+//            'Vortex Lite Matt' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-lite-matt/',
+//            'Vortex Project' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-project/',
+//            'Vortex Mix' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-mix/',
         ];
     }
 
-    public function parseCategoryUtepliteli($categoryName, $categoryUrl, $parentId) {
+    public function parseCategoryTubes($categoryName, $categoryUrl, $parentId) {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
-        //парсим товары
+
         try {
-            $this->parseListProductUtepliteli($catalog, $categoryUrl);
-        } catch (\Exception $e) {
-            $this->error('Error Parse Products from section: ' . $e->getMessage());
-            $this->error('See line: ' . $e->getLine());
+            $res = $this->client->get($categoryUrl);
+            $html = $res->getBody()->getContents();
+            $sectionCrawler = new Crawler($html); //section page from url
+
+            if ($sectionCrawler->filter('.product-category.product-col')->count() != 0) {
+                $sectionCrawler->filter('.product-category.product-col')->each(function (Crawler $sectionInnerCrawler) use ($catalog) {
+                    $url = $this->baseUrl . $sectionInnerCrawler->filter('a')->first()->attr('href');
+                    $name = trim($sectionInnerCrawler->filter('h4.m-t-md.m-b-none')->first()->text());
+
+                    if (!$catalog->image && $sectionInnerCrawler->filter('.thumb-info-wrapper.tf-none img')->first()->count() != 0) {
+                        $src = $this->baseUrl . $sectionInnerCrawler->filter('.thumb-info-wrapper.tf-none img')->first()->attr('src');
+                        $uploadPath = Catalog::UPLOAD_URL;
+                        $ext = $this->getExtensionFromSrc($src);
+                        $fileName = $catalog->alias . $ext;
+                        $res = $this->downloadJpgFile($src, $uploadPath, $fileName);
+                        if ($res) {
+                            $catalog->image = $fileName;
+                            $catalog->save();
+                        }
+                    }
+
+                    $this->parseCategoryTubes($name, $url, $catalog->id);
+                });
+            } else {
+                //парсим товары
+                try {
+                    $this->parseListProductTubes($catalog, $categoryUrl);
+                } catch (\Exception $e) {
+                    $this->error('Error Parse Products from section: ' . $e->getMessage());
+                    $this->error('See line: ' . $e->getLine());
+                    exit();
+                }
+            }
+        } catch (GuzzleException $e) {
+            $this->error('Error Parse Sections: ' . $e->getMessage());
         }
     }
 
-    public function parseListProductUtepliteli($catalog, $categoryUrl) {
+    //соседи в дереве siblings()
+    //дочерних элементов $crawler->filter('.header_post_list')->children();
+
+    public function parseListProductTubes($catalog, $categoryUrl) {
         $this->info('Parse products from: ' . $catalog->name);
         try {
             $res = $this->client->get($categoryUrl);
@@ -99,28 +158,27 @@ class Uteplitel extends Command {
             $crawler = new Crawler($html); //products page from url
             $uploadPath = $this->basePath . $catalog->alias . '/';
 
-            $crawler->filter('.hill_wc_product_item')
+            //announce category
+            if($crawler->filter('.term-description')->count() != 0) {
+                $catalog->announce = $crawler->filter('.term-description')->html();
+                $catalog->save();
+            }
+
+            $crawler->filter('li.product-col')
 //                    ->reduce(function (Crawler $none, $i) {return ($i < 3);})
                 ->each(function (Crawler $node, $n) use ($catalog, $uploadPath) {
                     $data = [];
                     try {
-                        $url = $node->filter('.hill-wocommerce-row a')->first()->attr('href');
-                        $data['name'] = trim($node->filter('.woocommerce-loop-product__title')->first()->text());
-                        $rawPrice = $node->filter('.woocommerce-Price-amount.amount')->first()->text();
+                        $url = $this->baseUrl . $node->filter('a.product-loop-title')->first()->attr('href');
+                        $data['name'] = trim($node->filter('h3.woocommerce-loop-product__title')->first()->text());
+                        $rawPrice = $node->filter('span.woocommerce-Price-amount.amount')->first()->text();
                         $data['price'] = preg_replace("/[^,.0-9]/", null, $rawPrice);
-                        $data['price'] = $this->deleteCharFromEnd($data['price']); //убрать точку в конце цены
                         $data['in_stock'] = 1;
-                        if(!$data['price']) $data['in_stock'] = 0;
-                        $data['measure'] = $node->filter('.unitprice')->first()->text();
-                        $data['measure'] = substr($data['measure'], 1); //убрать / в начале
+                        if (!$data['price']) $data['in_stock'] = 0;
 
                         $this->info(++$n . ') ' . $data['name']);
                         $product = Product::whereParseUrl($url)->first();
                         if (!$product) {
-
-                            if($node->filter('.product_sub_cat a')->first()->count() != 0) {
-                                $data['manufacturer'] = $node->filter('.product_sub_cat a')->first()->text();
-                            }
                             $data['h1'] = $data['name'];
                             $data['title'] = $data['name'];
                             $data['alias'] = Text::translit($data['name']);
@@ -143,11 +201,14 @@ class Uteplitel extends Command {
                             ], $data));
 
                             //характеристики
-                            if ($productCrawler->filter('#tab-local_1 table')->first()->count() != 0) {
-                                $productCrawler->filter('#tab-local_1 table tr')->each(function (Crawler $char) use ($newProd) {
-                                    $name = $char->filter('td')->first()->text();
-                                    $name = $this->deleteCharFromEnd($name);
-                                    $value = $char->filter('td')->last()->text();
+                            if ($productCrawler->filter('table.woocommerce-product-attributes')->count() != 0) {
+                                $productCrawler->filter('.table.woocommerce-product-attributes tr')->each(function (Crawler $char) use ($newProd) {
+                                    $name = $char->filter('.woocommerce-product-attributes-item__label')->first()->text();
+                                    if ($char->filter('.woocommerce-product-attributes-item__value a')->count() != 0) {
+                                        $value = trim($char->filter('.woocommerce-product-attributes-item__value a')->first()->text());
+                                    } else {
+                                        $value = trim($char->filter('.woocommerce-product-attributes-item__value')->first()->text());
+                                    }
 
                                     $currentChar = Char::whereName($name)->first();
                                     if (!$currentChar) {
@@ -158,19 +219,20 @@ class Uteplitel extends Command {
                                     ProductChar::create([
                                         'product_id' => $newProd->id,
                                         'char_id' => $currentChar->id,
-                                        'value' => $value,
+                                        'value' => trim($value),
                                         'order' => ProductChar::where('product_id', $newProd->id)->max('order') + 1,
                                     ]);
                                 });
                             }
 
                             //сохраняем изображения товара
-                            if ($productCrawler->filter('img.iconic-woothumbs-images__image')->count() != 0) {
-                                $productCrawler->filter('img.iconic-woothumbs-images__image')->each(function ($img, $n) use ($newProd, $catalog, $uploadPath) {
-                                    if($n == 0) {
+                            if ($productCrawler->filter('.woocommerce-main-image img-responsive')->count() != 0) {
+                                $productCrawler->filter('.woocommerce-main-image img-responsive')->each(function ($img, $n) use ($newProd, $catalog, $uploadPath) {
+                                    //сохраняем 1 картинку
+                                    if($n = 0) {
                                         $imageSrc = $img->attr('src');
                                         $ext = $this->getExtensionFromSrc($imageSrc);
-                                        $fileName = md5(uniqid(rand(), true)) . '_' . time() . $ext;
+                                        $fileName = 'tube_' . $newProd->id  . $ext;
                                         $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
                                         if ($res) {
                                             ProductImage::create([
@@ -188,17 +250,17 @@ class Uteplitel extends Command {
                             $product->save();
                         }
                     } catch (\Exception $e) {
-                        $this->warn('error: ' . $e->getMessage());
+                        $this->warn('error parse product: ' . $e->getMessage());
                         $this->warn('see line: ' . $e->getLine());
                     }
                 });
 
             //проход по страницам
-            if ($crawler->filter('.next.page-numbers')->count() != 0) {
-                $nextUrl = $crawler->filter('.next.page-numbers')->attr('href');
-                $this->info('parse next url: ' . $nextUrl);
-                $this->parseListProductUtepliteli($catalog, $nextUrl);
-            }
+//            if ($crawler->filter('.next page-numbers')->count() != 0) {
+//                $nextUrl = $crawler->filter('.next.page-numbers')->attr('href');
+//                $this->info('parse next url: ' . $nextUrl);
+//                $this->parseListProductTubes($catalog, $nextUrl);
+//            }
 
         } catch (GuzzleException $e) {
             $this->error('Error Parse Product: ' . $e->getMessage());
@@ -207,14 +269,6 @@ class Uteplitel extends Command {
     }
 
     private $excludeChars = ['.', ':'];
-
-    public function deleteCharFromEnd(string $price) {
-        $n = strlen($price);
-        if (!in_array($price[$n - 1], $this->excludeChars)) return $price;
-
-        return substr($price, 0, $n - 1);
-    }
-
 
     public function parseProduct() {
         $url = 'https://olympiya.su/shop/utepliteli/bazaltovaya-teploizolyacziya/plity-teploizolyaczionnye-iz-mineralnoj-vaty-na-sinteticheskom-svyazuyushhem-izba-lajt-35kg-m3-1000h600h50h12-pl/';
@@ -230,13 +284,13 @@ class Uteplitel extends Command {
         //характеристики
         if ($productCrawler->filter('#tab-local_1 table')->first()->count() != 0) {
             $productCrawler->filter('#tab-local_1 table tr')->each(function (Crawler $char) use ($product) {
-                if(($char->filter('td')->first()->count() != 0)) {
+                if (($char->filter('td')->first()->count() != 0)) {
                     $name = $char->filter('td')->first()->text();
                     $name = $this->deleteCharFromEnd($name);
                     $value = $char->filter('td')->text();
                 }
 
-                if($name) {
+                if ($name) {
                     $currentChar = Char::whereName($name)->first();
                     if (!$currentChar) {
                         $currentChar = Char::create([
@@ -273,6 +327,13 @@ class Uteplitel extends Command {
 //            });
 //        }
 
+    }
+
+    public function extractMeasureFromPrice(string $price): ?string {
+        $f = strripos($price, '/');
+        if (!$f) return null;
+
+        return substr($price, $f + 1);
     }
 
 }

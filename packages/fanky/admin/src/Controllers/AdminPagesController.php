@@ -57,18 +57,11 @@ class AdminPagesController extends AdminController {
 
 		$pages = $this->getPageRecurse();
 
-        //id внутренних гост страниц для отображения вкладки
-        $p = Page::where('id', 14)->first(); //ГОСТы
-        $gostsIds = $p->getRecursePages($p->parent_id);
-        $gostsPages = $p->getPublicChildren();
-
 		return view('admin::pages.edit', [
             'page' => $page,
             'pages' => $pages,
             'setting_groups' => $setting_groups,
             'galleries' => $galleries,
-            'gostsIds' => $gostsIds,
-            'gostsPages' => $gostsPages,
         ]);
 	}
 
@@ -204,51 +197,4 @@ class AdminPagesController extends AdminController {
 	public function getImageManager() {
 		return view('admin::pages.imagemanager');
 	}
-
-    public function postAddGostFile($gostId) {
-        $page = Page::findOrFail($gostId);
-        $data = Request::only(['file_name', 'file_description']);
-        $file = Request::file('file');
-        $valid = Validator::make($data, [
-            'file_name' => 'required',
-        ]);
-
-        	// Загружаем изображение
-		if ($file) {
-            $file_name = GostFile::uploadFile($file);
-            $data['file'] = $file_name;
-        }
-
-        \Debugbar::log($data);
-
-        if ($valid->fails()) {
-            return ['errors' => $valid->messages()];
-        } else {
-            $data = array_map('trim', $data);
-            $data['gost_id'] = $gostId;
-            $data['order'] = $page->gostFiles()->max('order') + 1;
-            $gostFile = GostFile::create($data);
-            $row = view('admin::pages.tabs.file_row', ['file' => $gostFile])->render();
-
-            return ['row' => $row];
-        }
-    }
-
-    public function postDelGostFile($id) {
-        $file = GostFile::findOrFail($id);
-        $file->deleteSrcFile();
-        $file->delete();
-
-        return ['success' => true];
-    }
-
-    public function postUpdateGostFileOrder($id): array {
-        $order = Request::get('order');
-        GostFile::whereId($id)->update(['order' => $order]);
-
-        return ['success' => true, 'msg' => 'Порядок изменен'];
-    }
-
-
-
 }

@@ -267,32 +267,8 @@ class CableSystems extends Command
                                     }
                                 });
                             } else {
-//                                $productPage = $this->client->get($url);
-//                                $productHtml = $productPage->getBody()->getContents();
-//                                $productCrawler = new Crawler($productHtml); //product page
-//
-//                                if ($productCrawler->filter('#props tr.char')->count() != 0) {
-//                                    $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use ($product) {
-//                                        $name = $char->filter('.char_name span')->text();
-//                                        $value = $char->filter('.char_value span')->text();
-//
-//                                        $currentChar = Char::whereName($name)->first();
-//                                        if(!$currentChar) {
-//                                            $currentChar = Char::create([
-//                                                'name' => trim($name)
-//                                            ]);
-//                                        }
-//
-//                                        ProductChar::create([
-//                                            'product_id' => $product->id,
-//                                            'char_id' => $currentChar->id,
-//                                            'value' => $value,
-//                                            'order' => ProductChar::where('product_id', $product->id)->max('order') + 1,
-//                                        ]);
-//                                    });
-//                                }
-//                                $product->chars = null;
-//                                $product->save();
+                                $product->update($data);
+                                $product->save();
                             }
                         } catch (\Exception $e) {
                             $this->warn('error: ' . $e->getMessage());

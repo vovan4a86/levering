@@ -28,17 +28,17 @@ class AdminMenuMiddleware {
 			$menu->add('Региональность', ['route' => 'admin.cities', 'icon' => 'fa-globe'])
 				->active('/admin/cities/*');
 
-			$menu->add('Новости', ['route' => 'admin.news', 'icon' => 'fa-calendar'])
-				->active('/admin/news/*');
+//			$menu->add('Новости', ['route' => 'admin.news', 'icon' => 'fa-calendar'])
+//				->active('/admin/news/*');
 
-			$menu->add('Вакансии', ['route' => 'admin.vacancies', 'icon' => 'fa-user-circle'])
-				->active('/admin/vacancies/*');
+//			$menu->add('Вакансии', ['route' => 'admin.vacancies', 'icon' => 'fa-user-circle'])
+//				->active('/admin/vacancies/*');
 
-			$menu->add('Партнеры', ['route' => 'admin.partners', 'icon' => 'fa-handshake-o'])
-				->active('/admin/partners/*');
+//			$menu->add('Партнеры', ['route' => 'admin.partners', 'icon' => 'fa-handshake-o'])
+//				->active('/admin/partners/*');
 
-			$menu->add('Способы доставки', ['route' => 'admin.delivery', 'icon' => 'fa-truck'])
-				->active('/admin/delivery/*');
+//			$menu->add('Способы доставки', ['route' => 'admin.delivery', 'icon' => 'fa-truck'])
+//				->active('/admin/delivery/*');
 
             $menu->add('Контакты в городах', ['route' => 'admin.contacts', 'icon' => 'fa-id-card'])
                 ->active('/admin/contacts/*');

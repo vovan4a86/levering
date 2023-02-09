@@ -20,9 +20,6 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab_1" data-toggle="tab">Параметры</a></li>
-            @if(in_array($page->id, $gostsIds) && $page->id !== 15)
-                <li><a href="#files" data-toggle="tab">Файлы ({{ $page->gostFiles->count() }})</a></li>
-            @endif
             @if (count($setting_groups))
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true">Настройки <span
@@ -98,11 +95,6 @@
                 {!! Form::groupCheckbox('on_menu', 1, $page->on_menu, 'Показывать в главном меню') !!}
                 {!! Form::groupCheckbox('on_footer_menu', 1, $page->on_footer_menu, 'Показывать в футере') !!}
             </div>
-
-{{--            вкладка Файлы для ГОСТов--}}
-            @if(in_array($page->id, $gostsIds))
-                @include('admin::pages.tabs.gost_files')
-            @endif
 
             @foreach ($setting_groups as $item)
                 <div class="tab-pane" id="tab_setting_{{ $item->id }}">
