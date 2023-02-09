@@ -29,22 +29,14 @@
     <link href="/static/fonts/InterTight-Bold.woff2" rel="preload" as="font" type="font/woff2" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ mix('static/css/all.css') }}" media="all">
-    <!-- jQuery 3 -->
-    <script src="/adminlte/bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="/adminlte/bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <script src="/adminlte/plugins/iCheck/icheck.min.js"></script>
-    <script src="/adminlte/fancybox.umd.js"></script>
-    <script src="/adminlte/interface.js" type="text/javascript"></script>
-
     <script src="{{ mix('static/js/all.js') }}" defer></script>
-    <script src="/static/js/custom.js" defer></script>
 
     @if(isset($canonical))
         <link rel="canonical" href="{{ $canonical }}"/>
     @endif
 
-    @if(route('contacts'))
-        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+
+    @if(Route::is('contacts'))
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" defer></script>
     @endif
 </head>

@@ -1,4 +1,3 @@
-@php $innerPage = true; @endphp
 @extends('template')
 @section('content')
     <title>Политика конфиденциальности</title>

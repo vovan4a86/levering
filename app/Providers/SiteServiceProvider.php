@@ -22,7 +22,7 @@ class SiteServiceProvider extends ServiceProvider {
 	public function boot() {
 		// пререндер для шаблона
 		View::composer(['template'], function (\Illuminate\View\View $view) {
-		    $overlayNavigation = Catalog::getTopLevel();
+		    $catalogMenu = Catalog::getTopLevel();
 
 			$topMenu = Page::query()
                 ->public()
@@ -57,7 +57,7 @@ class SiteServiceProvider extends ServiceProvider {
                 'mainMenu',
                 'cities',
                 'current_city',
-                'overlayNavigation',
+                'catalogMenu',
                 'mainMenuCats'
             ));
 		});

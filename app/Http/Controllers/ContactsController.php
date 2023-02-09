@@ -3,13 +3,8 @@
 use App;
 use Fanky\Admin\Models\City;
 use Fanky\Admin\Models\Contact;
-use Fanky\Admin\Models\News;
-use Fanky\Admin\Models\NewsTag;
 use Fanky\Admin\Models\Page;
-//use Request;
-use Fanky\Admin\Models\Partner;
 use Illuminate\Http\Request;
-use Settings;
 use View;
 
 class ContactsController extends Controller {

@@ -46,6 +46,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
     Route::post('filter-apply', 'AjaxController@postFilterApply')
         ->name('filter-apply');
 });
+
 Route::group(['middleware' => ['redirects', 'regions']], function() {
     $cities = getCityAliases();
     $cities = implode('|', $cities);
