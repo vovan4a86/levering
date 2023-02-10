@@ -22,7 +22,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use SVG\SVG;
 use App\Traits\ParseFunctions;
 
-class Vodostok extends Command {
+class SnowHolder extends Command {
 
     use ParseFunctions;
 
@@ -31,8 +31,8 @@ class Vodostok extends Command {
      *
      * @var string
      */
-    protected $signature = 'parse:vodo';
-    private $basePath = ProductImage::UPLOAD_URL . 'vodostok/';
+    protected $signature = 'parse:snow';
+    private $basePath = ProductImage::UPLOAD_URL . 'snow_holder/';
     public $baseUrl = 'https://www.grandline.ru';
     public $client;
 
@@ -41,7 +41,7 @@ class Vodostok extends Command {
      *
      * @var string
      */
-    protected $description = 'Парсим водосток';
+    protected $description = 'Парсим снегозадержатели';
 
     /**
      * Create a new command instance.
@@ -62,27 +62,23 @@ class Vodostok extends Command {
      */
     public function handle() {
         foreach ($this->categoryList() as $categoryName => $categoryUrl) {
-            $this->parseCategoryVodostok($categoryName, $categoryUrl, 4);
+            $this->parseCategorySnowHolder($categoryName, $categoryUrl, 5);
         }
         $this->info('The command was successful!');
     }
 
     public function categoryList(): array {
         return [
-//            'Grand Line 125/90' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/grand-line-125-90/',
-//            'Grand Line 150/100' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/grand-line-150-100/',
-//            'Optima круглый 125/90' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vodostok-optima-kruglyy-125-90/',
-//            'Optima круглый 150/100' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/optima-kruglyj-150100/',
-//            'Vortex прямоугольный' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vodostok-optima-pryamougolnyy/',
-//            'Vortex прямоугольный Matt' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-matt/',
-//            'Vortex Lite' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-lite/',
-//            'Vortex Lite Matt' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-lite-matt/',
-            'Vortex Project' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-project/',
-            'Vortex Mix' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-mix/',
+//            'Снегозадержатель Grand Line 1м' => 'https://www.grandline.ru/katalog/ehlementi-krovli/elementy-bezopasnosti-krovli/elementy-bezopasnosti-krovli-grand-line/snegozaderzhatel-grand-line/snegozaderzhatel-grand-line-1m/',
+            'Снегозадержатель Grand Line 3м' => 'https://www.grandline.ru/katalog/ehlementi-krovli/elementy-bezopasnosti-krovli/elementy-bezopasnosti-krovli-grand-line/snegozaderzhatel-grand-line/snegozaderzhatel-grand-line-3m/',
+            'Снегозадержатель для фальцевой кровли Grand Line 1м' => 'https://www.grandline.ru/katalog/ehlementi-krovli/elementy-bezopasnosti-krovli/elementy-bezopasnosti-krovli-grand-line/snegozaderzhatel-grand-line/snegozaderzhatel-dlya-faltsevoy-krovli-grand-line-1m/',
+            'Снегозадержатель для фальцевой кровли Grand Line 3м' => 'https://www.grandline.ru/katalog/ehlementi-krovli/elementy-bezopasnosti-krovli/elementy-bezopasnosti-krovli-grand-line/snegozaderzhatel-grand-line/snegozaderzhatel-dlya-faltsevoy-krovli-grand-line-3m/',
+            'Снегозадержатель Snow Kit' => 'https://www.grandline.ru/katalog/ehlementi-krovli/elementy-bezopasnosti-krovli/elementy-bezopasnosti-krovli-grand-line/snegozaderzhatel-grand-line/snegozaderzhatel-snow-kit/',
+            'Комплектующие снегозадержателя Grand Line' => 'https://www.grandline.ru/katalog/ehlementi-krovli/elementy-bezopasnosti-krovli/elementy-bezopasnosti-krovli-grand-line/snegozaderzhatel-grand-line/komplektuyushchie-snegozaderzhatelya-grand-line/',
         ];
     }
 
-    public function parseCategoryVodostok($categoryName, $categoryUrl, $parentId) {
+    public function parseCategorySnowHolder($categoryName, $categoryUrl, $parentId) {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
 
@@ -95,12 +91,12 @@ class Vodostok extends Command {
                 $sectionCrawler->filter('ul.topics-list li')->each(function (Crawler $sectionInnerCrawler) use ($catalog) {
                     $url = $this->baseUrl . $sectionInnerCrawler->filter('a')->first()->attr('href');
                     $name = trim($sectionInnerCrawler->filter('.topic-item__title')->first()->text());
-                    $this->parseCategoryVodostok($name, $url, $catalog->id);
+                    $this->parseCategorySnowHolder($name, $url, $catalog->id);
                 });
             } else {
                 //парсим товары
                 try {
-                    $this->parseListProductVodostok($catalog, $categoryUrl);
+                    $this->parseListProductSnowHolder($catalog, $categoryUrl);
                 } catch (\Exception $e) {
                     $this->error('Error Parse Products from section: ' . $e->getMessage());
                     $this->error('See line: ' . $e->getLine());
@@ -112,7 +108,7 @@ class Vodostok extends Command {
         }
     }
 
-    public function parseListProductVodostok($catalog, $categoryUrl) {
+    public function parseListProductSnowHolder($catalog, $categoryUrl) {
         $this->info('Parse products from: ' . $catalog->name);
         try {
             $res = $this->client->get($categoryUrl);
@@ -213,7 +209,7 @@ class Vodostok extends Command {
 //            if ($crawler->filter('.next.page-numbers')->count() != 0) {
 //                $nextUrl = $crawler->filter('.next.page-numbers')->attr('href');
 //                $this->info('parse next url: ' . $nextUrl);
-//                $this->parseListProductVodostok($catalog, $nextUrl);
+//                $this->parseListProductSnowHolder($catalog, $nextUrl);
 //            }
 
         } catch (GuzzleException $e) {
@@ -221,8 +217,6 @@ class Vodostok extends Command {
             $this->error('See: ' . $e->getLine());
         }
     }
-
-    private $excludeChars = ['.', ':'];
 
     public function parseProduct() {
         $url = 'https://olympiya.su/shop/utepliteli/bazaltovaya-teploizolyacziya/plity-teploizolyaczionnye-iz-mineralnoj-vaty-na-sinteticheskom-svyazuyushhem-izba-lajt-35kg-m3-1000h600h50h12-pl/';

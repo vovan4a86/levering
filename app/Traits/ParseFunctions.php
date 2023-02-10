@@ -362,26 +362,7 @@ trait ParseFunctions
         if(count($imgArr) == 0) return $text;
         $res = str_replace($imgSrc, $imgArr, $text);
 
-//        $start = strpos($txt, '<img');
-//        $end = strpos($txt, '>', $start);
-//        for ($i = 0; $i < count($imgArr); $i++) {
-//            $searchString = substr($txt, $start, $end - $start + 1);
-//            $img = '<img src="' . $imgArr[$i] . '">';
-//            str_replace($searchString, $img, $txt);
-//
-//            $this->info('remove: ' . $searchString);
-//            $this->info('insert: ' . $img);
-//            $this->info('start: ' . $start . ' | end:' . $end);
-//
-//            $start = strpos($txt, '<img', $end);
-//            $end = strpos($txt, '>', $start);
-//        }
         return $res;
-//        $crawler = new Crawler($text);
-//        $crawler->filter('img')->each(function (Crawler $img) {
-//
-//        });
-
     }
 
     //чтобы найти название файла на русском для последующей замены
@@ -439,5 +420,13 @@ trait ParseFunctions
             ]);
         }
         return $param->id;
+    }
+
+    //заменить запятую в цене на точку, иначе не сохр. во FLOAT
+    public function replaceFloatValue(string $str) {
+        if(stripos($str, ',')) {
+            return str_replace(',', '.', $str);
+        }
+        return $str;
     }
 }

@@ -20,7 +20,9 @@ class Kernel extends ConsoleKernel {
         'App\Console\Commands\CableSystems',
         'App\Console\Commands\Uteplitel',
         'App\Console\Commands\Vodostok',
+        'App\Console\Commands\SnowHolder',
         'App\Console\Commands\Tubes',
+        'App\Console\Commands\Lights',
 		Commands\ImportOld::class,
 	];
 

@@ -66,42 +66,32 @@ class Tubes extends Command {
         $html = $res->getBody()->getContents();
         $catalogCrawler = new Crawler($html); //catalog page from url
 
-        $catalogCrawler->filter('.product-category.product-col')->each(function (Crawler $sub) {
-            $url = $this->baseUrl . $sub->filter('a')->first()->attr('href');
-            $name = trim($sub->filter('h4.m-t-md.m-b-none')->first()->text());
-            $catalog = $this->getCatalogByName($name, 6);
+        //4 - Трубы ПЭ 100 питьевые ГОСТ 18599-2001
+        $catalogCrawler->filter('.product-category.product-col')
+            ->reduce(function (Crawler $none, $i) {
+                return ($i == 11);
+            })
+            ->each(function (Crawler $sub) {
+                $url = $this->baseUrl . $sub->filter('a')->first()->attr('href');
+                $name = trim($sub->filter('h4.m-t-md.m-b-none')->first()->text());
+                $catalog = $this->getCatalogByName($name, 6);
 
-            if (!$catalog->image && $sub->filter('.thumb-info-wrapper.tf-none img')->first()->count() != 0) {
-                $src = $this->baseUrl . $sub->filter('.thumb-info-wrapper.tf-none img')->first()->attr('src');
-                $uploadPath = Catalog::UPLOAD_URL;
-                $ext = $this->getExtensionFromSrc($src);
-                $fileName = $catalog->alias . $ext;
-                $res = $this->downloadJpgFile($src, $uploadPath, $fileName);
-                if ($res) $catalog->image = $fileName;
-            }
+                if (!$catalog->image && $sub->filter('.thumb-info-wrapper.tf-none img')->first()->count() != 0) {
+                    $src = $sub->filter('.thumb-info-wrapper.tf-none img')->first()->attr('src');
+                    $uploadPath = Catalog::UPLOAD_URL;
+                    $ext = $this->getExtensionFromSrc($src);
+                    $fileName = $catalog->alias . $ext;
+                    $res = $this->downloadJpgFile($src, $uploadPath, $fileName);
+                    if ($res) {
+                        $catalog->image = $fileName;
+                        $catalog->save();
+                    }
+                }
 
-            $this->parseCategoryTubes($name, $url, $catalog->id);
-        });
+                $this->parseCategoryTubes($name, $url, $catalog->id);
+            });
 
-//        foreach ($this->categoryList() as $categoryName => $categoryUrl) {
-//            $this->parseCategoryVodostok($categoryName, $categoryUrl, 4);
-//        }
         $this->info('The command was successful!');
-    }
-
-    public function categoryList(): array {
-        return [
-            'Grand Line 125/90' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/grand-line-125-90/',
-//            'Grand Line 150/100' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/grand-line-150-100/',
-//            'Optima круглый 125/90' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vodostok-optima-kruglyy-125-90/',
-//            'Optima круглый 150/100' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/optima-kruglyj-150100/',
-//            'Vortex прямоугольный' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vodostok-optima-pryamougolnyy/',
-//            'Vortex прямоугольный Matt' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-matt/',
-//            'Vortex Lite' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-lite/',
-//            'Vortex Lite Matt' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-lite-matt/',
-//            'Vortex Project' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-project/',
-//            'Vortex Mix' => 'https://www.grandline.ru/katalog/vodostok/metallicheskie-vodostochnie-sistemi/vortex-mix/',
-        ];
     }
 
     public function parseCategoryTubes($categoryName, $categoryUrl, $parentId) {
@@ -112,6 +102,32 @@ class Tubes extends Command {
             $res = $this->client->get($categoryUrl);
             $html = $res->getBody()->getContents();
             $sectionCrawler = new Crawler($html); //section page from url
+
+            //текст раздела с картинками
+            if (!$catalog->text && $sectionCrawler->filter('#primary')->nextAll()->count() != 0) {
+                $text = '';
+                $imgSrc = [];
+                $imgArr = [];
+                $uploadPath = Catalog::UPLOAD_URL;
+                $sectionCrawler->filter('#primary')->nextAll()->each(function (Crawler $cr) use (&$text, &$imgArr, &$imgSrc, $uploadPath) {
+                    if ($cr->filter('img')->count() != 0) {
+                        $cr->filter('img')->each(function (Crawler $img) use (&$text, &$imgArr, &$imgSrc, $uploadPath) {
+                            $url = $img->attr('src');
+                            $ext = $this->getExtensionFromSrc($url);
+                            $fileName = md5(uniqid(rand())) . '_' . time() . $ext;
+                            $res = $this->downloadJpgFile($url, $uploadPath, $fileName);
+                            if ($res) {
+                                $imgSrc[] = $url;
+                                $imgArr[] = $uploadPath . $fileName;
+                            }
+                        });
+                    }
+                    $text .= $cr->html();
+                    $text .= '<br>';
+                });
+                $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $imgArr);
+                $catalog->save();
+            }
 
             if ($sectionCrawler->filter('.product-category.product-col')->count() != 0) {
                 $sectionCrawler->filter('.product-category.product-col')->each(function (Crawler $sectionInnerCrawler) use ($catalog) {
@@ -147,9 +163,6 @@ class Tubes extends Command {
         }
     }
 
-    //соседи в дереве siblings()
-    //дочерних элементов $crawler->filter('.header_post_list')->children();
-
     public function parseListProductTubes($catalog, $categoryUrl) {
         $this->info('Parse products from: ' . $catalog->name);
         try {
@@ -159,22 +172,28 @@ class Tubes extends Command {
             $uploadPath = $this->basePath . $catalog->alias . '/';
 
             //announce category
-            if($crawler->filter('.term-description')->count() != 0) {
+            if ($crawler->filter('.term-description')->count() != 0) {
                 $catalog->announce = $crawler->filter('.term-description')->html();
                 $catalog->save();
             }
 
             $crawler->filter('li.product-col')
-//                    ->reduce(function (Crawler $none, $i) {return ($i < 3);})
+//                    ->reduce(function (Crawler $none, $i) {return ($i < 1);})
                 ->each(function (Crawler $node, $n) use ($catalog, $uploadPath) {
                     $data = [];
                     try {
                         $url = $this->baseUrl . $node->filter('a.product-loop-title')->first()->attr('href');
                         $data['name'] = trim($node->filter('h3.woocommerce-loop-product__title')->first()->text());
-                        $rawPrice = $node->filter('span.woocommerce-Price-amount.amount')->first()->text();
-                        $data['price'] = preg_replace("/[^,.0-9]/", null, $rawPrice);
-                        $data['in_stock'] = 1;
-                        if (!$data['price']) $data['in_stock'] = 0;
+
+                        if ($node->filter('span.woocommerce-Price-amount.amount')->count() != 0) {
+                            $rawPrice = $node->filter('span.woocommerce-Price-amount.amount')->first()->text();
+                            $data['price'] = preg_replace("/[^,.0-9]/", null, $rawPrice);
+                            $data['price'] = $this->replaceFloatValue($data['price']);
+                            $data['in_stock'] = 1;
+                        } else {
+                            $data['price'] = null;
+                            $data['in_stock'] = 0;
+                        }
 
                         $this->info(++$n . ') ' . $data['name']);
                         $product = Product::whereParseUrl($url)->first();
@@ -192,12 +211,11 @@ class Tubes extends Command {
                                 $data['text'] = $productCrawler->filter('#tab-description')->first()->html();
                             }
 
-                            $order = $catalog->products()->max('order') + 1;
                             $newProd = Product::create(array_merge([
                                 'catalog_id' => $catalog->id,
                                 'parse_url' => $url,
                                 'published' => 1,
-                                'order' => $order,
+                                'order' => $catalog->products()->max('order') + 1,
                             ], $data));
 
                             //характеристики
@@ -226,20 +244,23 @@ class Tubes extends Command {
                             }
 
                             //сохраняем изображения товара
-                            if ($productCrawler->filter('.woocommerce-main-image img-responsive')->count() != 0) {
-                                $productCrawler->filter('.woocommerce-main-image img-responsive')->each(function ($img, $n) use ($newProd, $catalog, $uploadPath) {
+                            if ($productCrawler->filter('.woocommerce-main-image.img-responsive')->count() != 0) {
+                                $productCrawler->filter('.woocommerce-main-image.img-responsive')->each(function ($img, $n) use ($newProd, $catalog, $uploadPath) {
                                     //сохраняем 1 картинку
-                                    if($n = 0) {
+                                    if ($n == 0) {
                                         $imageSrc = $img->attr('src');
-                                        $ext = $this->getExtensionFromSrc($imageSrc);
-                                        $fileName = 'tube_' . $newProd->id  . $ext;
-                                        $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                                        if ($res) {
-                                            ProductImage::create([
-                                                'product_id' => $newProd->id,
-                                                'image' => $uploadPath . $fileName,
-                                                'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
-                                            ]);
+                                        //заглушка нет картинки
+                                        if ($imageSrc != 'https://set-iset.ru/wp-content/uploads/woocommerce-placeholder-700x700.png') {
+                                            $ext = $this->getExtensionFromSrc($imageSrc);
+                                            $fileName = 'tube_' . $newProd->id . $ext;
+                                            $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                            if ($res) {
+                                                ProductImage::create([
+                                                    'product_id' => $newProd->id,
+                                                    'image' => $uploadPath . $fileName,
+                                                    'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
+                                                ]);
+                                            }
                                         }
                                     }
                                 });
@@ -252,15 +273,16 @@ class Tubes extends Command {
                     } catch (\Exception $e) {
                         $this->warn('error parse product: ' . $e->getMessage());
                         $this->warn('see line: ' . $e->getLine());
+                        exit();
                     }
                 });
 
             //проход по страницам
-//            if ($crawler->filter('.next page-numbers')->count() != 0) {
-//                $nextUrl = $crawler->filter('.next.page-numbers')->attr('href');
-//                $this->info('parse next url: ' . $nextUrl);
-//                $this->parseListProductTubes($catalog, $nextUrl);
-//            }
+            if ($crawler->filter('.next.page-numbers')->count() != 0) {
+                $nextUrl = $crawler->filter('.next.page-numbers')->attr('href');
+                $this->info('parse next url: ' . $nextUrl);
+                $this->parseListProductTubes($catalog, $nextUrl);
+            }
 
         } catch (GuzzleException $e) {
             $this->error('Error Parse Product: ' . $e->getMessage());
@@ -334,6 +356,80 @@ class Tubes extends Command {
         if (!$f) return null;
 
         return substr($price, $f + 1);
+    }
+
+    public function test() {
+        $html = file_get_contents(public_path('/test/test-cat.html'));
+        $crawler = new Crawler($html); //products page from url
+
+
+        $txt = '';
+        $imgSrc = [];
+        $imgArr = [];
+        $crawler->filter('#primary')->nextAll()->each(function (Crawler $cr) use (&$txt, &$imgArr, &$imgSrc) {
+            if ($cr->filter('img')->count() != 0) {
+                $cr->filter('img')->each(function (Crawler $img) use (&$txt, &$imgArr, &$imgSrc) {
+                    $url = $img->attr('src');
+                    $this->info('download: ' . $url);
+                    $imgSrc[] = $url;
+                    $ext = $this->getExtensionFromSrc($url);
+                    $imgArr[] = Catalog::UPLOAD_URL . md5(uniqid(rand(), true)) . '_' . time() . $ext;;
+                });
+            }
+            $txt .= $cr->html();
+        });
+
+        $res = $this->getUpdatedTextWithNewImages($txt, $imgSrc, $imgArr);
+        print_r($res);
+
+        $crawler->filter('li.product-col')
+//                    ->reduce(function (Crawler $none, $i) {return ($i < 3);})
+            ->each(function (Crawler $node, $n) {
+                $data = [];
+                try {
+                    $url = $this->baseUrl . $node->filter('a.product-loop-title')->first()->attr('href');
+                    $data['name'] = trim($node->filter('h3.woocommerce-loop-product__title')->first()->text());
+                    $rawPrice = $node->filter('span.woocommerce-Price-amount.amount')->first()->text();
+                    $data['price'] = preg_replace("/[^,.0-9]/", null, $rawPrice);
+                    $data['price'] = $this->replaceFloatValue($data['price']);
+                    $data['in_stock'] = 1;
+                    if (!$data['price']) $data['in_stock'] = 0;
+
+                    $this->info(++$n . ') ' . $data['name']);
+                    $product = Product::whereParseUrl($url)->first();
+                    $data['h1'] = $data['name'];
+                    $data['title'] = $data['name'];
+                    $data['alias'] = Text::translit($data['name']);
+
+                    $productPage = $this->client->get($url);
+                    $productHtml = $productPage->getBody()->getContents();
+                    $productCrawler = new Crawler($productHtml); //product page
+
+                    //описание
+                    if ($productCrawler->filter('#tab-description')->first()->count() != 0) {
+                        $data['text'] = $productCrawler->filter('#tab-description')->first()->html();
+                    }
+
+                    //характеристики
+//                    if ($productCrawler->filter('table.woocommerce-product-attributes')->count() != 0) {
+//                        $productCrawler->filter('.table.woocommerce-product-attributes tr')->each(function (Crawler $char) {
+//                            $name = $char->filter('.woocommerce-product-attributes-item__label')->first()->text();
+//                            if ($char->filter('.woocommerce-product-attributes-item__value a')->count() != 0) {
+//                                $value = trim($char->filter('.woocommerce-product-attributes-item__value a')->first()->text());
+//                            } else {
+//                                $value = trim($char->filter('.woocommerce-product-attributes-item__value')->first()->text());
+//                            }
+//
+//                            $this->info($name . ' : ' . $value);
+//                        });
+//                    }
+
+                } catch (\Exception $e) {
+                    $this->warn('error parse product: ' . $e->getMessage());
+                    $this->warn('see line: ' . $e->getLine());
+                    exit();
+                }
+            });
     }
 
 }
