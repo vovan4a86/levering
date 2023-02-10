@@ -143,7 +143,7 @@ class City extends Model {
 
     public static function current($city_alias = null, $remember = true) {
         $detect_city = SxgeoCity::detect();
-        if(!$detect_city) $detect_city = City::whereAlias('ekb')->first();
+//        if(!$detect_city) $detect_city = City::whereAlias('ekb')->first();
 //        $first_visit = (Cookie::has('city_id')) ? false : true;
         $first_visit = !session('city_alias');
         $federal_link = !$city_alias;

@@ -22,25 +22,34 @@ class SiteServiceProvider extends ServiceProvider {
 	public function boot() {
 		// пререндер для шаблона
 		View::composer(['template'], function (\Illuminate\View\View $view) {
-		    $catalogMenu = Catalog::getTopLevel();
+		    $catalogMenu = Cache::get('catalog_menu', collect());
+            if(!count($catalogMenu)) {
+                $catalogMenu = Catalog::getTopLevel();
+                Cache::add('catalog_menu', $catalogMenu, now()->addMinutes(60));
+            }
 
-			$topMenu = Page::query()
-                ->public()
-                ->where('on_top_menu', 1)
-                ->orderBy('order')
-                ->get();
-			$mainMenuPages = Page::query()
-                ->public()
-                ->where('on_menu', 1)
-                ->orderBy('order')
-                ->get();
-            $mainMenuCats = Catalog::query()
-                ->public()
-                ->where('on_menu', 1)
-                ->orderBy('order')
-                ->get();
-            $mainMenu = collect();
-            $mainMenu = $mainMenu->merge($mainMenuPages)->merge($mainMenuCats);
+            $topMenu = Cache::get('top_menu', collect());
+            if(!count($topMenu)) {
+                $topMenu = Page::query()
+                    ->public()
+                    ->where('on_top_menu', 1)
+                    ->orderBy('order')
+                    ->get();
+                Cache::add('top_menu', $topMenu, now()->addMinutes(60));
+            }
+
+//			$mainMenuPages = Page::query()
+//                ->public()
+//                ->where('on_menu', 1)
+//                ->orderBy('order')
+//                ->get();
+//            $mainMenuCats = Catalog::query()
+//                ->public()
+//                ->where('on_menu', 1)
+//                ->orderBy('order')
+//                ->get();
+//            $mainMenu = collect();
+//            $mainMenu = $mainMenu->merge($mainMenuPages)->merge($mainMenuCats);
 
             $cities = City::query()->orderBy('name')
                 ->get(['id', 'alias', 'name', DB::raw('LEFT(name,1) as letter')]);
@@ -54,34 +63,44 @@ class SiteServiceProvider extends ServiceProvider {
 
 			$view->with(compact(
                 'topMenu',
-                'mainMenu',
                 'cities',
                 'current_city',
-                'catalogMenu',
-                'mainMenuCats'
+                'catalogMenu'
             ));
 		});
 
         View::composer(['blocks.footer'], function ($view) {
-            $footerCatalog = Catalog::public()
-                ->where('on_footer_menu', 1)
-                ->where('parent_id', 0)
-                ->orderBy('order')
-                ->get();
+            $footerCatalog = Cache::get('footer_catalog', collect());
+            if(!count($footerCatalog)) {
+                $footerCatalog = Catalog::public()
+                    ->where('on_footer_menu', 1)
+                    ->where('parent_id', 0)
+                    ->orderBy('order')
+                    ->get();
+                Cache::add('footer_catalog', $footerCatalog, now()->addMinutes(60));
+            }
 
-            $footerMenu = Page::query()
-                ->public()
-                ->where('parent_id', 1)
-                ->where('on_footer_menu', 1)
-                ->orderBy('order')
-                ->get();
+            $footerMenu = Cache::get('footer_menu', collect());
+            if(!count($footerMenu)) {
+                $footerMenu = Page::query()
+                    ->public()
+                    ->where('parent_id', 1)
+                    ->where('on_footer_menu', 1)
+                    ->orderBy('order')
+                    ->get();
+                Cache::add('footer_menu', $footerMenu, now()->addMinutes(60));
+            }
 
-            $mobileMenu = Page::query()
-                ->public()
-                ->where('parent_id', 1)
-                ->where('on_mobile_menu', 1)
-                ->orderBy('order')
-                ->get();
+            $mobileMenu = Cache::get('mobile_menu', collect());
+            if(!count($mobileMenu)) {
+                $mobileMenu = Page::query()
+                    ->public()
+                    ->where('parent_id', 1)
+                    ->where('on_mobile_menu', 1)
+                    ->orderBy('order')
+                    ->get();
+                Cache::add('mobile_menu', $mobileMenu, now()->addMinutes(60));
+            }
 
             $view->with(compact(
                 'footerMenu',
