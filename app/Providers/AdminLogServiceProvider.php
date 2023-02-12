@@ -5,7 +5,7 @@ use Fanky\Admin\Models\Athlete;
 use Fanky\Admin\Models\AthleteTeam;
 use Fanky\Admin\Models\Catalog;
 use Fanky\Admin\Models\Discipline;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Fanky\Admin\Models\NewsCategory;
 use Fanky\Admin\Models\Page;
 use Fanky\Admin\Models\Product;
@@ -22,15 +22,15 @@ class AdminLogServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 
-		News::created(function($obj){
+		Complex::created(function($obj){
 			AdminLog::add('Создана новая новость: ' . $obj->name);
 		});
 
-		News::updated(function($obj){
+		Complex::updated(function($obj){
 			AdminLog::add('Обновлена новость: ' . $obj->name);
 		});
 
-		News::deleting(function($obj){
+		Complex::deleting(function($obj){
 			AdminLog::add('Удалена новость: ' . $obj->name);
 		});
 

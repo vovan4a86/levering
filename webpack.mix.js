@@ -16,6 +16,23 @@ mix.browserSync({
 });
 mix.js([
     'resources/assets/js--sources/main.js',
+    'resources/assets/js/custom.js',
+], 'public/static/js/main.js')
+    // .extract(['@fancyapps/ui'])
+    .scripts([
+        'public/adminlte/bower_components/jquery/dist/jquery.js',
+        'public/adminlte/plugins/iCheck/icheck.js',
+        'public/adminlte/fancybox.umd.js',
+        'public/adminlte/interface.js',
+        'public/static/js/main.js',
+    ], 'public/static/js/all.js')
+    .styles([
+        'resources/assets/css/styles.css',
+    ], 'public/static/css/all.css')
+    .version();
+/*
+mix.js([
+    'resources/assets/js--sources/main.js',
     ], 'public/static/js/all.js')
     // .scripts([
         // 'resources/assets/js/main.js',
@@ -26,3 +43,4 @@ mix.js([
         'resources/assets/css/styles.css',
     ], 'public/static/css/all.css')
     .version();
+*/

@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Fanky\Admin\Models\NewsTag;
 use Fanky\Admin\Models\Page;
 //use Request;

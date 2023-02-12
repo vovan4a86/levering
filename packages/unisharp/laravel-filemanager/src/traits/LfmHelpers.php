@@ -30,7 +30,7 @@ trait LfmHelpers
     }
 
     /**
-     * Get real path of a file, image, or current working directory on the operating system.
+     * Get real path of a file, image, or current working delivery on the operating system.
      *
      * @param  string|null  $file_name  File name of image or file
      * @return string|null
@@ -67,7 +67,7 @@ trait LfmHelpers
     }
 
     /**
-     * Assemble needed config or input to form url or real path of a file, image, or current working directory.
+     * Assemble needed config or input to form url or real path of a file, image, or current working delivery.
      *
      * @param  string       $type       Url or dir
      * @param  bollean      $is_thumb   Image is a thumbnail or not
@@ -117,7 +117,7 @@ trait LfmHelpers
     }
 
     /**
-     * Get current or default working directory.
+     * Get current or default working delivery.
      *
      * @return string
      */
@@ -159,7 +159,7 @@ trait LfmHelpers
     }
 
     /**
-     * Get root working directory.
+     * Get root working delivery.
      *
      * @param  string  $type  User or share.
      * @return string
@@ -176,7 +176,7 @@ trait LfmHelpers
     }
 
     /**
-     * Get real path of root working directory on the operating system.
+     * Get real path of root working delivery on the operating system.
      *
      * @param  string|null  $type  User or share
      * @return string|null
@@ -203,7 +203,7 @@ trait LfmHelpers
     }
 
     /**
-     * Get url with only working directory and file name.
+     * Get url with only working delivery and file name.
      *
      * @param  string  $full_path  Real path of a file.
      * @return string
@@ -408,9 +408,9 @@ trait LfmHelpers
      ****************************/
 
     /**
-     * Get folders by the given directory.
+     * Get folders by the given delivery.
      *
-     * @param  string  $path  Real path of a directory.
+     * @param  string  $path  Real path of a delivery.
      * @return array of objects
      */
     public function getDirectories($path)
@@ -423,9 +423,9 @@ trait LfmHelpers
     }
 
     /**
-     * Get files by the given directory.
+     * Get files by the given delivery.
      *
-     * @param  string  $path  Real path of a directory.
+     * @param  string  $path  Real path of a delivery.
      * @return array of objects
      */
     public function getFilesWithInfo($path)
@@ -438,7 +438,7 @@ trait LfmHelpers
     /**
      * Format a file or folder to object.
      *
-     * @param  string  $item  Real path of a file or directory.
+     * @param  string  $item  Real path of a file or delivery.
      * @return object
      */
     public function objectPresenter($item)
@@ -487,7 +487,7 @@ trait LfmHelpers
     /**
      * Create folder if not exist.
      *
-     * @param  string  $path  Real path of a directory.
+     * @param  string  $path  Real path of a delivery.
      * @return null
      */
     public function createFolderByPath($path)
@@ -500,7 +500,7 @@ trait LfmHelpers
     /**
      * Check a folder and its subfolders is empty or not.
      *
-     * @param  string  $directory_path  Real path of a directory.
+     * @param  string  $directory_path  Real path of a delivery.
      * @return bool
      */
     public function directoryIsEmpty($directory_path)

@@ -69,7 +69,7 @@ class Tubes extends Command {
         //4 - Трубы ПЭ 100 питьевые ГОСТ 18599-2001
         $catalogCrawler->filter('.product-category.product-col')
             ->reduce(function (Crawler $none, $i) {
-                return ($i == 11);
+                return ($i > 17);
             })
             ->each(function (Crawler $sub) {
                 $url = $this->baseUrl . $sub->filter('a')->first()->attr('href');
@@ -135,7 +135,7 @@ class Tubes extends Command {
                     $name = trim($sectionInnerCrawler->filter('h4.m-t-md.m-b-none')->first()->text());
 
                     if (!$catalog->image && $sectionInnerCrawler->filter('.thumb-info-wrapper.tf-none img')->first()->count() != 0) {
-                        $src = $this->baseUrl . $sectionInnerCrawler->filter('.thumb-info-wrapper.tf-none img')->first()->attr('src');
+                        $src = $sectionInnerCrawler->filter('.thumb-info-wrapper.tf-none img')->first()->attr('src');
                         $uploadPath = Catalog::UPLOAD_URL;
                         $ext = $this->getExtensionFromSrc($src);
                         $fileName = $catalog->alias . $ext;
@@ -250,7 +250,8 @@ class Tubes extends Command {
                                     if ($n == 0) {
                                         $imageSrc = $img->attr('src');
                                         //заглушка нет картинки
-                                        if ($imageSrc != 'https://set-iset.ru/wp-content/uploads/woocommerce-placeholder-700x700.png') {
+                                        if ($imageSrc != 'https://set-iset.ru/wp-content/uploads/woocommerce-placeholder-700x700.png' ||
+                                            $imageSrc != 'https://set-iset.ru/wp-content/uploads/woocommerce-placeholder-500x500.png') {
                                             $ext = $this->getExtensionFromSrc($imageSrc);
                                             $fileName = 'tube_' . $newProd->id . $ext;
                                             $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
@@ -431,5 +432,4 @@ class Tubes extends Command {
                 }
             });
     }
-
 }

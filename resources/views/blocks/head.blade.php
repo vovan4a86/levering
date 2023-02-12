@@ -1,6 +1,3 @@
-
-
-
 <head>
     <meta charset="utf-8">
     {!! SEOMeta::generate() !!}
@@ -35,8 +32,7 @@
         <link rel="canonical" href="{{ $canonical }}"/>
     @endif
 
-
     @if(Route::is('contacts'))
-        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" defer></script>
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
     @endif
 </head>

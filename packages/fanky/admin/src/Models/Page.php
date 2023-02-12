@@ -65,14 +65,14 @@ class Page extends Model {
     private $_url;
 
     public static $excludePageText = ['about', 'partners'];
-    public static $excludePageImage = ['partners', 'directory'];
+    public static $excludePageImage = ['partners', 'delivery'];
 
     //страницы без региональности
     public static $excludeRegionAlias = [
 		'ajax',
 		'reviews',
         'about',
-        'news',
+        'complex',
 		'publications',
 		'policy',
 		'cart',
@@ -86,7 +86,7 @@ class Page extends Model {
         'vacancy',
         'suppliers',
         'gosts',
-        'directory',
+        'delivery',
         'answers',
         'faq',
         'kompleksnie-resheniya'

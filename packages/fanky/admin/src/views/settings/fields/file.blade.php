@@ -5,7 +5,6 @@
 	<input class="s-file-field-value" type="hidden" name="{{ $name ?? 'setting['.$setting->id.']' }}" value="{{ $value ?? $setting->value }}">
 	<div class="s-file-item">
 		@if (isset($value) && $value || (!isset($value) && $setting->value))
-		
 			@if (array_search(strtolower(pathinfo(base_path().$setting::UPLOAD_PATH.(isset($value) ? $value : $setting->value), PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'ico', 'svg']) !== false)
 				<span class="images_item">
 					<img class="img-polaroid" src="{{ $setting::UPLOAD_URL.(isset($value) ? $value : $setting->value) }}" style="cursor:pointer;" onclick="popupImage($(this).attr('src'))">

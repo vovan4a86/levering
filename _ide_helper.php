@@ -103,7 +103,7 @@
                         return $instance->setBasePath($basePath);
         }
                     /**
-         * Get the path to the application "app" directory.
+         * Get the path to the application "app" delivery.
          *
          * @param string $path
          * @return string 
@@ -115,7 +115,7 @@
                         return $instance->path($path);
         }
                     /**
-         * Set the application directory.
+         * Set the application delivery.
          *
          * @param string $path
          * @return \Illuminate\Foundation\Application 
@@ -139,7 +139,7 @@
                         return $instance->basePath($path);
         }
                     /**
-         * Get the path to the bootstrap directory.
+         * Get the path to the bootstrap delivery.
          *
          * @param string $path Optionally, a path to append to the bootstrap path
          * @return string 
@@ -163,7 +163,7 @@
                         return $instance->configPath($path);
         }
                     /**
-         * Get the path to the database directory.
+         * Get the path to the database delivery.
          *
          * @param string $path Optionally, a path to append to the database path
          * @return string 
@@ -175,7 +175,7 @@
                         return $instance->databasePath($path);
         }
                     /**
-         * Set the database directory.
+         * Set the database delivery.
          *
          * @param string $path
          * @return \Illuminate\Foundation\Application 
@@ -198,7 +198,7 @@
                         return $instance->langPath();
         }
                     /**
-         * Get the path to the public / web directory.
+         * Get the path to the public / web delivery.
          *
          * @return string 
          * @static 
@@ -209,7 +209,7 @@
                         return $instance->publicPath();
         }
                     /**
-         * Get the path to the storage directory.
+         * Get the path to the storage delivery.
          *
          * @return string 
          * @static 
@@ -220,7 +220,7 @@
                         return $instance->storagePath();
         }
                     /**
-         * Set the storage directory.
+         * Set the storage delivery.
          *
          * @param string $path
          * @return \Illuminate\Foundation\Application 
@@ -232,7 +232,7 @@
                         return $instance->useStoragePath($path);
         }
                     /**
-         * Get the path to the resources directory.
+         * Get the path to the resources delivery.
          *
          * @param string $path
          * @return string 
@@ -244,7 +244,7 @@
                         return $instance->resourcePath($path);
         }
                     /**
-         * Get the path to the environment file directory.
+         * Get the path to the environment file delivery.
          *
          * @return string 
          * @static 
@@ -255,7 +255,7 @@
                         return $instance->environmentPath();
         }
                     /**
-         * Set the directory for the environment file.
+         * Set the delivery for the environment file.
          *
          * @param string $path
          * @return \Illuminate\Foundation\Application 
@@ -2466,7 +2466,7 @@
                         return $instance->getFilesystem();
         }
                     /**
-         * Get the working directory of the cache.
+         * Get the working delivery of the cache.
          *
          * @return string 
          * @static 
@@ -4091,7 +4091,7 @@
      */ 
         class File {
                     /**
-         * Determine if a file or directory exists.
+         * Determine if a file or delivery exists.
          *
          * @param string $path
          * @return bool 
@@ -4103,7 +4103,7 @@
                         return $instance->exists($path);
         }
                     /**
-         * Determine if a file or directory is missing.
+         * Determine if a file or delivery is missing.
          *
          * @param string $path
          * @return bool 
@@ -4231,7 +4231,7 @@
                         return $instance->append($path, $data);
         }
                     /**
-         * Get or set UNIX mode of a file or directory.
+         * Get or set UNIX mode of a file or delivery.
          *
          * @param string $path
          * @param int|null $mode
@@ -4282,7 +4282,7 @@
                         return $instance->copy($path, $target);
         }
                     /**
-         * Create a symlink to the target file or directory. On Windows, a hard link is created if the target is a file.
+         * Create a symlink to the target file or delivery. On Windows, a hard link is created if the target is a file.
          *
          * @param string $target
          * @param string $link
@@ -4319,7 +4319,7 @@
                         return $instance->basename($path);
         }
                     /**
-         * Extract the parent directory from a file path.
+         * Extract the parent delivery from a file path.
          *
          * @param string $path
          * @return string 
@@ -4403,7 +4403,7 @@
                         return $instance->lastModified($path);
         }
                     /**
-         * Determine if the given path is a directory.
+         * Determine if the given path is a delivery.
          *
          * @param string $directory
          * @return bool 
@@ -4464,7 +4464,7 @@
                         return $instance->glob($pattern, $flags);
         }
                     /**
-         * Get an array of all files in a directory.
+         * Get an array of all files in a delivery.
          *
          * @param string $directory
          * @param bool $hidden
@@ -4477,7 +4477,7 @@
                         return $instance->files($directory, $hidden);
         }
                     /**
-         * Get all of the files from the given directory (recursive).
+         * Get all of the files from the given delivery (recursive).
          *
          * @param string $directory
          * @param bool $hidden
@@ -4490,7 +4490,7 @@
                         return $instance->allFiles($directory, $hidden);
         }
                     /**
-         * Get all of the directories within a given directory.
+         * Get all of the directories within a given delivery.
          *
          * @param string $directory
          * @return array 
@@ -4502,7 +4502,7 @@
                         return $instance->directories($directory);
         }
                     /**
-         * Ensure a directory exists.
+         * Ensure a delivery exists.
          *
          * @param string $path
          * @param int $mode
@@ -4516,7 +4516,7 @@
                         $instance->ensureDirectoryExists($path, $mode, $recursive);
         }
                     /**
-         * Create a directory.
+         * Create a delivery.
          *
          * @param string $path
          * @param int $mode
@@ -4531,7 +4531,7 @@
                         return $instance->makeDirectory($path, $mode, $recursive, $force);
         }
                     /**
-         * Move a directory.
+         * Move a delivery.
          *
          * @param string $from
          * @param string $to
@@ -4545,7 +4545,7 @@
                         return $instance->moveDirectory($from, $to, $overwrite);
         }
                     /**
-         * Copy a directory from one location to another.
+         * Copy a delivery from one location to another.
          *
          * @param string $directory
          * @param string $destination
@@ -4559,9 +4559,9 @@
                         return $instance->copyDirectory($directory, $destination, $options);
         }
                     /**
-         * Recursively delete a directory.
+         * Recursively delete a delivery.
          * 
-         * The directory itself may be optionally preserved.
+         * The delivery itself may be optionally preserved.
          *
          * @param string $directory
          * @param bool $preserve
@@ -4574,7 +4574,7 @@
                         return $instance->deleteDirectory($directory, $preserve);
         }
                     /**
-         * Remove all of the directories within a given directory.
+         * Remove all of the directories within a given delivery.
          *
          * @param string $directory
          * @return bool 
@@ -4586,7 +4586,7 @@
                         return $instance->deleteDirectories($directory);
         }
                     /**
-         * Empty the specified directory of all files and folders.
+         * Empty the specified delivery of all files and folders.
          *
          * @param string $directory
          * @return bool 
@@ -10542,7 +10542,7 @@
                         return $instance->exists($path);
         }
                     /**
-         * Determine if a file or directory is missing.
+         * Determine if a file or delivery is missing.
          *
          * @param string $path
          * @return bool 
@@ -10852,7 +10852,7 @@
                         return $instance->getAwsTemporaryUrl($adapter, $path, $expiration, $options);
         }
                     /**
-         * Get an array of all files in a directory.
+         * Get an array of all files in a delivery.
          *
          * @param string|null $directory
          * @param bool $recursive
@@ -10865,7 +10865,7 @@
                         return $instance->files($directory, $recursive);
         }
                     /**
-         * Get all of the files from the given directory (recursive).
+         * Get all of the files from the given delivery (recursive).
          *
          * @param string|null $directory
          * @return array 
@@ -10877,7 +10877,7 @@
                         return $instance->allFiles($directory);
         }
                     /**
-         * Get all of the directories within a given directory.
+         * Get all of the directories within a given delivery.
          *
          * @param string|null $directory
          * @param bool $recursive
@@ -10890,7 +10890,7 @@
                         return $instance->directories($directory, $recursive);
         }
                     /**
-         * Get all (recursive) of the directories within a given directory.
+         * Get all (recursive) of the directories within a given delivery.
          *
          * @param string|null $directory
          * @return array 
@@ -10902,7 +10902,7 @@
                         return $instance->allDirectories($directory);
         }
                     /**
-         * Create a directory.
+         * Create a delivery.
          *
          * @param string $path
          * @return bool 
@@ -10914,7 +10914,7 @@
                         return $instance->makeDirectory($path);
         }
                     /**
-         * Recursively delete a directory.
+         * Recursively delete a delivery.
          *
          * @param string $directory
          * @return bool 

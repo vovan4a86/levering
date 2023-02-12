@@ -71,9 +71,8 @@ class Catalog extends Model {
     const UPLOAD_URL = '/uploads/catalogs/';
 
 	public static $thumbs = [
-		1 => '257x168|fit', //admin
-		2 => '166x121', //main page big
-		3 => '194x137', //main page small
+		1 => '100x100|fit', //admin
+		2 => '220x210', //main page category
 	];
 	public static function boot() {
 		parent::boot();
@@ -409,8 +408,8 @@ class Catalog extends Model {
         }
     }
 
-    public function getImageUrl(): string {
-	    return  self::UPLOAD_URL . $this->image;
+    public function getUrlImage(): string {
+        return self::UPLOAD_URL . $this->image;
     }
 
     public function getActionImage(): string {

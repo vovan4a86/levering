@@ -1,6 +1,5 @@
 <?php namespace Fanky\Admin\Controllers;
 
-use Fanky\Admin\Models\NewsTag;
 use Fanky\Admin\Settings;
 use Illuminate\Support\Str;
 use Request;
@@ -8,30 +7,30 @@ use Validator;
 use Text;
 use Thumb;
 use Image;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 
-class AdminNewsController extends AdminController {
+class AdminComplexController extends AdminController {
 
 	public function getIndex() {
-		$news = News::orderBy('date', 'desc')->paginate(100);
+		$complex = Complex::orderBy('date', 'desc')->paginate(100);
 
-		return view('admin::news.main', ['news' => $news]);
+		return view('admin::complex.main', ['complex' => $complex]);
 	}
 
 	public function getEdit($id = null) {
-		if (!$id || !($article = News::find($id))) {
-			$article = new News;
+		if (!$id || !($article = Complex::find($id))) {
+			$article = new Complex;
 			$article->date = date('Y-m-d');
 			$article->published = 1;
 		}
 
-		return view('admin::news.edit', ['article' => $article]);
+		return view('admin::complex.edit', ['article' => $article]);
 	}
 
 	public function postSave() {
 		$id = Request::input('id');
-		$data = Request::only(['date', 'name', 'announce', 'text', 'published', 'alias', 'title', 'keywords', 'description', 'on_main_slider']);
-//		$tags = Request::get('tags', []);
+		$data = Request::only(['date', 'name', 'announce', 'text', 'published',
+                                'alias', 'title', 'keywords', 'description', 'city', 'square']);
 		$image = Request::file('image');
 
 		if (!array_get($data, 'alias')) $data['alias'] = Text::translit($data['name']);
@@ -50,15 +49,15 @@ class AdminNewsController extends AdminController {
 
 		// Загружаем изображение
 		if ($image) {
-			$file_name = News::uploadImage($image);
+			$file_name = Complex::uploadImage($image);
 			$data['image'] = $file_name;
 		}
 
 		// сохраняем страницу
-		$article = News::find($id);
+		$article = Complex::find($id);
 		$redirect = false;
 		if (!$article) {
-			$article = News::create($data);
+			$article = Complex::create($data);
 			$redirect = true;
 		} else {
 			if ($article->image && isset($data['image'])) {
@@ -69,7 +68,7 @@ class AdminNewsController extends AdminController {
 //		$article->tags()->sync($tags);
 
 		if($redirect){
-			return ['redirect' => route('admin.news.edit', [$article->id])];
+			return ['redirect' => route('admin.complex.edit', [$article->id])];
 		} else {
 			return ['msg' => 'Изменения сохранены.'];
 		}
@@ -77,35 +76,14 @@ class AdminNewsController extends AdminController {
 	}
 
 	public function postDelete($id) {
-		$article = News::find($id);
+		$article = Complex::find($id);
 		$article->delete();
 
 		return ['success' => true];
 	}
 
-	public function getGetTags() {
-		$q = Request::get('tag_name');
-		$result = NewsTag::where('tag', 'LIKE', '%'. $q . '%')
-			->limit(10)
-			->get()
-			->transform(function($item){
-				return ['id' => $item->id, 'name' => $item->tag];
-			});
-
-		return ['data' => $result];
-	}
-
-	public function postAddTag() {
-		$tag = Request::get('tag');
-		$tag = Str::ucfirst($tag);
-		$item = NewsTag::firstOrCreate(['tag' => $tag]);
-		$row = view('admin::news.tag_row', ['tag' => $item])->render();
-
-		return ['row' => $row];
-	}
-
 	public function postDeleteImage($id) {
-		$news = News::find($id);
+		$news = Complex::find($id);
 		if(!$news) return ['error' => 'news_not_found'];
 
 		$news->deleteImage();

@@ -17,7 +17,7 @@ use Fanky\Admin\Models\Deal;
 use Fanky\Admin\Models\Page;
 use Fanky\Admin\Models\Redirect;
 use Fanky\Admin\Models\Product;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use App\Sitemap as Sitemap;
 use Fanky\Admin\Models\SearchIndex;
 use Fanky\Admin\Models\Action1;
@@ -196,7 +196,7 @@ class SiteHelper {
 		self::recurseAddCatalog($map);
 
 		//новости
-		$items = News::wherePublished(1)->get();
+		$items = Complex::wherePublished(1)->get();
 		foreach ($items as $item) {
 			$map->add_url($item->url);
 		}

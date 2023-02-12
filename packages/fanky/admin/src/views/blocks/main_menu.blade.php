@@ -4,7 +4,7 @@
                 <span class="hidden visible-lg-inline visible-xs-inline">Структура сайта</span></a></li>
         <li><a href="{{ route('admin.pages') }}"><i class="fa fa-fw fa-list"></i>
                 <span class="hidden visible-lg-inline visible-xs-inline">Каталог</span></a></li>
-        <li><a href="{{ route('admin.news') }}"><i class="fa fa-fw fa-calendar"></i>
+        <li><a href="{{ route('admin.complex') }}"><i class="fa fa-fw fa-calendar"></i>
                 <span class="hidden visible-lg-inline visible-xs-inline">Новости</span></a></li>
         <li><a href="{{ route('admin.gallery') }}"><i class="fa fa-fw fa-image"></i>
                 <span class="hidden visible-lg-inline visible-xs-inline">Галереи</span></a></li>

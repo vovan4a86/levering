@@ -9,7 +9,7 @@ use Auth;
 
 use Fanky\Admin\Models\Participant;
 use Fanky\Admin\Models\GalleryItem;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Fanky\Admin\Models\Sponsor;
 use Fanky\Admin\Models\Specialist;
 use Image;

@@ -32,12 +32,16 @@
                             aria-label="Перезвоните мне">Перезвоните мне
                     </button>
                     <div class="header__msg">
-                        <a class="header__msg-icon lazy" href="javascript:void(0)"
-                           data-bg="/static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
-                        <a class="header__msg-icon lazy" href="javascript:void(0)"
-                           data-bg="/static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
+                        @if(Settings::get('header_telegram'))
+                            <a class="header__msg-icon lazy" href="https://t.me/{{ Settings::get('header_telegram') }}" data-bg="static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
+                        @endif
+                        @if(Settings::get('header_whatsapp'))
+                            <a class="header__msg-icon lazy" href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('header_whatsapp')) }}" data-bg="static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
+                        @endif
                     </div>
-                    <a class="header__phone" href="tel:+78000000000" title="Позвонить нам">+7 (800) 000 00 00</a>
+                    @if(Settings::get('header_phone'))
+                        <a class="header__phone" href="tel:{{ preg_replace('/[^\d+]/', '', Settings::get('header_phone')) }}" title="Позвонить нам">{{ Settings::get('header_phone') }}</a>
+                    @endif
                     <button class="header__burger btn-reset" type="button" aria-label="Открыть меню">
                         <span class="iconify" data-icon="charm:menu-hamburger" data-width="40"></span>
                     </button>

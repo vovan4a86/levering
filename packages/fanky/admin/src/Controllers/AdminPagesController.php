@@ -1,7 +1,7 @@
 <?php namespace Fanky\Admin\Controllers;
 
 use Fanky\Admin\Models\GostFile;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Fanky\Admin\Models\Product;
 use Fanky\Admin\Models\ProductRelated;
 use Fanky\Admin\Models\SearchIndex;

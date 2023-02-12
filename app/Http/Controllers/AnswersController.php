@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Fanky\Admin\Models\NewsTag;
 use Fanky\Admin\Models\Page;
 //use Request;
@@ -30,7 +30,7 @@ class AnswersController extends Controller {
         if (!$page)
 			abort(404, 'Страница не найдена');
 		$bread = $this->bread;
-//        $items = News::orderBy('date', 'desc')
+//        $items = Complex::orderBy('date', 'desc')
 //            ->public()->paginate(Settings::get('news_per_page'));
         $items = null;
 
@@ -39,7 +39,7 @@ class AnswersController extends Controller {
 //            $view_items = [];
 //            foreach ($items as $item) {
 //                //добавляем новые элементы
-//                $view_items[] = view('news.list_item', [
+//                $view_items[] = view('complex.list_item', [
 //                    'item' => $item,
 //                ])->render();
 //            }

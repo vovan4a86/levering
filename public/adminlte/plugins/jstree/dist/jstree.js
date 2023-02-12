@@ -4460,7 +4460,7 @@
 		 * changes the theme
 		 * @name set_theme(theme_name [, theme_url])
 		 * @param {String} theme_name the name of the new theme to apply
-		 * @param {mixed} theme_url  the location of the CSS file for this theme. Omit or set to `false` if you manually included the file. Set to `true` to autoload from the `core.themes.dir` directory.
+		 * @param {mixed} theme_url  the location of the CSS file for this theme. Omit or set to `false` if you manually included the file. Set to `true` to autoload from the `core.themes.dir` delivery.
 		 * @trigger set_theme.jstree
 		 */
 		set_theme : function (theme_name, theme_url) {
@@ -4563,7 +4563,7 @@
 		 * set the node icon for a node
 		 * @name set_icon(obj, icon)
 		 * @param {mixed} obj
-		 * @param {String} icon the new icon - can be a path to an icon or a className, if using an image that is in the current directory use a `./` prefix, otherwise it will be detected as a class
+		 * @param {String} icon the new icon - can be a path to an icon or a className, if using an image that is in the current delivery use a `./` prefix, otherwise it will be detected as a class
 		 */
 		set_icon : function (obj, icon) {
 			var t1, t2, dom, old;
@@ -5672,7 +5672,7 @@
 		 * * `label` - a string - the name of the action (could be a function returning a string)
 		 * * `title` - a string - an optional tooltip for the item
 		 * * `action` - a function to be executed if this item is chosen, the function will receive 
-		 * * `icon` - a string, can be a path to an icon or a className, if using an image that is in the current directory use a `./` prefix, otherwise it will be detected as a class
+		 * * `icon` - a string, can be a path to an icon or a className, if using an image that is in the current delivery use a `./` prefix, otherwise it will be detected as a class
 		 * * `shortcut` - keyCode which will trigger the action if the menu is open (for example `113` for rename, which equals F2)
 		 * * `shortcut_label` - shortcut label (like for example `F2` for rename)
 		 * * `submenu` - an object with the same structure as $.jstree.defaults.contextmenu.items which can be used to create a submenu - each key will be rendered as a separate option in a submenu that will appear once the current item is hovered
@@ -7615,7 +7615,7 @@
 	 * * `max_children` the maximum number of immediate children this node type can have. Do not specify or set to `-1` for unlimited.
 	 * * `max_depth` the maximum number of nesting this node type can have. A value of `1` would mean that the node can have children, but no grandchildren. Do not specify or set to `-1` for unlimited.
 	 * * `valid_children` an array of node type strings, that nodes of this type can have as children. Do not specify or set to `-1` for no limits.
-	 * * `icon` a string - can be a path to an icon or a className, if using an image that is in the current directory use a `./` prefix, otherwise it will be detected as a class. Omit to use the default icon from your theme.
+	 * * `icon` a string - can be a path to an icon or a className, if using an image that is in the current delivery use a `./` prefix, otherwise it will be detected as a class. Omit to use the default icon from your theme.
 	 * * `li_attr` an object of values which will be used to add HTML attributes on the resulting LI DOM node (merged with the node's own data)
 	 * * `a_attr` an object of values which will be used to add HTML attributes on the resulting A DOM node (merged with the node's own data)
 	 *

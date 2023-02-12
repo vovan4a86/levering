@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use Cache;
 use Fanky\Admin\Models\Catalog;
 use Fanky\Admin\Models\City;
 use Fanky\Admin\Models\Filter;
@@ -9,31 +10,37 @@ use Fanky\Admin\Settings;
 use Session;
 use Request;
 
-class CatalogController extends Controller
-{
+class CatalogController extends Controller {
 
-    public function region_index($city)
-    {
+    public function region_index($city) {
         $this->city = City::current($city);
 
         return $this->index();
     }
 
-    public function region_view($city_alias, $alias)
-    {
+    public function region_view($city_alias, $alias) {
         $this->city = City::current($city_alias);
 
         return $this->view($alias);
     }
 
-    public function index()
-    {
+    public function index() {
         $page = Page::getByPath(['catalog']);
         if (!$page) return abort(404);
         $bread = $page->getBread();
         $page->h1 = $page->getH1();
         $page = $this->add_region_seo($page);
         $page->setSeo();
+
+        $catalog = Cache::get('catalog_index', collect());
+        if(!count($catalog)) {
+            $catalog = Catalog::public()
+                ->where('parent_id', 0)
+                ->orderBy('order')
+                ->get();
+            Cache::add('catalog_index', $catalog, now()->addMinutes(60));
+        }
+
         $categories = Catalog::getTopLevelOnList();
         $updated = Catalog::getUpdatedAt()->updated_at;
 
@@ -48,8 +55,7 @@ class CatalogController extends Controller
         ]);
     }
 
-    public function view($alias)
-    {
+    public function view($alias) {
         $path = explode('/', $alias);
         /* проверка на продукт в категории */
         $product = null;
@@ -244,7 +250,7 @@ class CatalogController extends Controller
             $image = $prodImage->image;
         } else {
             $image = Catalog::whereId($product->catalog_id)->first()->section_image;
-            if(!$image) $image = Catalog::UPLOAD_URL . Catalog::whereId($product->catalog_id)->first()->image;
+            if (!$image) $image = Catalog::UPLOAD_URL . Catalog::whereId($product->catalog_id)->first()->image;
         }
 
         if (!$product->text) {

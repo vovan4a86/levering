@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Fanky\Admin\Models\NewsTag;
 use Fanky\Admin\Models\Page;
 //use Request;
@@ -9,36 +9,36 @@ use Illuminate\Http\Request;
 use Settings;
 use View;
 
-class NewsController extends Controller {
+class ComplexController extends Controller {
 	public $bread = [];
-	protected $news_page;
+	protected $complex_page;
 
 	public function __construct() {
-		$this->news_page = Page::whereAlias('news')
+		$this->complex_page = Page::whereAlias('kompleksnie-resheniya')
 			->get()
 			->first();
 		$this->bread[] = [
-			'url'  => '/'.$this->news_page['alias'],
-			'name' => $this->news_page['name']
+			'url'  => '/'.$this->complex_page['alias'],
+			'name' => $this->complex_page['name']
 		];
 	}
 
 	public function index(Request $request) {
-		$page = $this->news_page;
+		$page = $this->complex_page;
 		if (!$page)
 			abort(404, 'Страница не найдена');
 		$bread = $this->bread;
         $page->ogGenerate();
         $page->setSeo();
-        $items = News::orderBy('date', 'desc')
-            ->public()->paginate(Settings::get('news_per_page'));
+        $items = Complex::orderBy('date', 'desc')
+            ->public()->paginate(Settings::get('complex_per_page'));
 
         //обработка ajax-обращений, в routes добавить POST метод(!)
         if ($request->ajax()) {
             $view_items = [];
             foreach ($items as $item) {
                 //добавляем новые элементы
-                $view_items[] = view('news.list_item', [
+                $view_items[] = view('complex.list_item', [
                     'item' => $item,
                 ])->render();
             }
@@ -50,21 +50,20 @@ class NewsController extends Controller {
         }
 
         if (count($request->query())) {
-            View::share('canonical', $this->news_page->alias);
+            View::share('canonical', $this->complex_page->alias);
         }
 
-        return view('news.index', [
+        return view('complex.index', [
             'title' => $page->title,
             'text' => $page->text,
             'h1'    => $page->getH1(),
             'bread' => $bread,
             'items' => $items,
-            'headerIsBlack' => true,
         ]);
 	}
 
 	public function item($alias) {
-		$item = News::whereAlias($alias)->public()->first();
+		$item = Complex::whereAlias($alias)->public()->first();
 		if (!$item) abort(404);
 		$bread = $this->bread;
 
@@ -73,7 +72,7 @@ class NewsController extends Controller {
 			'name' => $item->name
 		];
 
-		return view('news.item', [
+		return view('complex.item', [
 			'item'        => $item,
             'date'        => $item->dateFormat('d F Y'),
 			'h1'          => $item->name,

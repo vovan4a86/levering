@@ -8,7 +8,7 @@ use Thumb;
 use Carbon\Carbon;
 
 /**
- * Fanky\Admin\Models\News
+ * Fanky\Admin\Models\Complex
  *
  * @property int                 $id
  * @property int                 $published
@@ -27,36 +27,36 @@ use Carbon\Carbon;
  * @property string|null         $deleted_at
  * @property-read mixed          $url
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\News onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News public ()
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\Complex onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex public ()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereAlias($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereAnnounce($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereKeywords($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News wherePublished($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\News withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\News withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereAlias($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereAnnounce($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex wherePublished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\Complex withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\Complex withoutTrashed()
  * @mixin \Eloquent
  * @property string $h1
  * @property string|null $og_title
  * @property string|null $og_description
  * @property-read \Illuminate\Database\Eloquent\Collection|\Fanky\Admin\Models\NewsTag[] $tags
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News query()
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereH1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereOgDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\News whereOgTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereH1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereOgDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Fanky\Admin\Models\Complex whereOgTitle($value)
  */
 class Vacancy extends Model {
 
@@ -75,7 +75,7 @@ class Vacancy extends Model {
 	}
 
 	public function getUrlAttribute($value) {
-		return route('news.item', ['alias' => $this->alias]);
+		return route('complex.item', ['alias' => $this->alias]);
 	}
 
 	public function dateFormat($format = 'd.m.Y') {

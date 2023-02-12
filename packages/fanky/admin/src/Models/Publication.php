@@ -64,7 +64,7 @@ class Publication extends Model {
 	public static $thumbs = [
 		1 => '100x50', //admin
 		2 => '400x190|fit', //news_list
-		3 => '715x408', //news page
+		3 => '715x408', //complex page
 		4 => '211x199|fit', //index page
 	];
 

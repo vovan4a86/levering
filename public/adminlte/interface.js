@@ -336,19 +336,20 @@ function debounce(func, wait, immediate) {
 	};
 }
 
-function moreNews(el) {
-	var url = $(el).data('url');
-	var $more_lnk = $('.section__loader button');
+function moreNews(el, e) {
+	e.preventDefault();
+	var url = $(el).attr('href');
+	var $more_lnk = $('.s-objects__action');
 	sendAjax(url, {}, function (json) {
 		if (typeof json.paginate !== 'undefined') {
 			//передаем обновленное значение "Загрузить еще"
-			$('.section__loader').html(json.paginate);
+			$('.s-objects__action').html(json.paginate);
 		}
 		if (typeof json.items !== 'undefined') {
-			$('.newses__list').append(json.items);
+			$('.s-objects__grid').append(json.items);
 		}
 		if (typeof json.next_news_count !== 'undefined' && json.next_count > 0) {
-			$more_lnk.data('url', json.next_page);
+			$more_lnk.attr('href', json.next_page);
 		}
 	});
 }

@@ -137,93 +137,8 @@ Route::group(['namespace' => 'Fanky\Admin\Controllers', 'prefix' => 'admin', 'as
         ]);
 	});
 
-    Route::group(['as' => '.product-icons', 'prefix' => 'product-icons'], function () {
-        $controller = 'AdminProductIconsController@';
-        Route::get('/', $controller . 'getIndex');
-
-        Route::get('edit/{id?}', $controller . 'getEdit')
-            ->name('.edit');
-
-        Route::post('save', $controller . 'postSave')
-            ->name('.save');
-
-        Route::post('delete/{id}', $controller . 'postDelete')
-            ->name('.delete');
-
-        Route::post('delete-image/{id}', $controller . 'postDeleteImage')
-            ->name('.delete-image');
-    });
-
-    Route::group(['as' => '.actions', 'prefix' => 'actions'], function () {
-        $controller  = 'AdminActionController@';
-        Route::get('/', [AdminActionController::class, 'getIndex']);
-
-        Route::get('products/{id?}', $controller . 'getProducts')
-            ->name('.products');
-
-        Route::post('action-edit/{id?}', $controller . 'postActionEdit')
-            ->name('.actionEdit');
-
-        Route::get('action-edit/{id?}', $controller . 'getActionEdit')
-            ->name('.catalogEdit');
-
-        Route::post('action-save', $controller . 'postActionSave')
-            ->name('.actionSave');
-
-        Route::post('action-reorder', $controller . 'postActionReorder')
-            ->name('.actionReorder');
-
-        Route::post('action-delete/{id}', $controller . 'postActionDelete')
-            ->name('.actionDel');
-
-        Route::get('get-actions/{id?}', $controller . 'getGetActions')
-            ->name('.getActions');
-
-        Route::get('product-edit/{id?}', $controller . 'getProductEdit')
-            ->name('.productEdit');
-
-        Route::post('product-save', $controller . 'postProductSave')
-            ->name('.productSave');
-
-        Route::post('product-reorder', $controller . 'postProductReorder')
-            ->name('.productReorder');
-
-        Route::post('update-order/{id}', $controller . 'postUpdateOrder')
-            ->name('.update-order');
-
-        Route::post('product-delete/{id}', $controller . 'postProductDelete')
-            ->name('.productDel');
-
-        Route::post('product-image-upload/{id}', $controller . 'postProductImageUpload')
-            ->name('.productImageUpload');
-
-        Route::post('product-image-delete/{id}', $controller . 'postProductImageDelete')
-            ->name('.productImageDel');
-
-        Route::post('product-image-order', $controller . 'postProductImageOrder')
-            ->name('.productImageOrder');
-
-
-        Route::post('add-action-product/{id}', [
-            'as'   => '.add_action_product',
-            'uses' => $controller . 'postAddActionProduct'
-        ]);
-        Route::post('del-action-product/{id}', [
-            'as'   => '.del_action_product',
-            'uses' => $controller . 'postDelActionProduct'
-        ]);
-        Route::post('edit-action-product/{id}', [
-            'as'   => '.edit_action_product',
-            'uses' => $controller . 'postEditActionProduct'
-        ]);
-        Route::post('save-action-product/{id}', [
-            'as'   => '.save_action_product',
-            'uses' => $controller . 'postSaveActionProduct'
-        ]);
-    });
-
-	Route::group(['as' => '.news', 'prefix' => 'news'], function () {
-		$controller = 'AdminNewsController@';
+	Route::group(['as' => '.complex', 'prefix' => 'complex'], function () {
+		$controller = 'AdminComplexController@';
 		Route::get('/', $controller . 'getIndex');
 
 		Route::get('edit/{id?}', $controller . 'getEdit')
@@ -238,49 +153,6 @@ Route::group(['namespace' => 'Fanky\Admin\Controllers', 'prefix' => 'admin', 'as
 		Route::post('delete-image/{id}', $controller . 'postDeleteImage')
 			->name('.delete-image');
 	});
-
-    Route::group(['as' => '.vacancies', 'prefix' => 'vacancies'], function () {
-        $controller = 'AdminVacanciesController@';
-        Route::get('/', $controller . 'getIndex');
-
-        Route::get('edit/{id?}', $controller . 'getEdit')
-            ->name('.edit');
-
-        Route::post('save', $controller . 'postSave')
-            ->name('.save');
-
-        Route::post('delete/{id}', $controller . 'postDelete')
-            ->name('.delete');
-
-        Route::post('delete-image/{id}', $controller . 'postDeleteImage')
-            ->name('.delete-image');
-    });
-
-    Route::group(['as' => '.partners', 'prefix' => 'partners'], function () {
-        $controller = 'AdminPartnersController@';
-        Route::get('/', $controller . 'getIndex');
-
-        Route::get('edit/{id?}', $controller . 'getEdit')
-            ->name('.edit');
-
-        Route::post('save', $controller . 'postSave')
-            ->name('.save');
-
-        Route::post('delete/{id}', $controller . 'postDelete')
-            ->name('.delete');
-
-        Route::post('delete-image/{id}', $controller . 'postDeleteImage')
-            ->name('.delete-image');
-
-        Route::post('update-order/{id}', $controller . 'postUpdateOrder')
-            ->name('.update-order');
-
-        Route::post('update-width/{id}', $controller . 'postUpdateImageWidth')
-            ->name('.update-width');
-
-        Route::post('update-height/{id}', $controller . 'postUpdateImageHeight')
-            ->name('.update-height');
-    });
 
     Route::group(['as' => '.contacts', 'prefix' => 'contacts'], function () {
         $controller = 'AdminContactsController@';
@@ -301,6 +173,23 @@ Route::group(['namespace' => 'Fanky\Admin\Controllers', 'prefix' => 'admin', 'as
 
     Route::group(['as' => '.delivery', 'prefix' => 'delivery'], function () {
         $controller = 'AdminDeliveryController@';
+        Route::get('/', $controller . 'getIndex');
+
+        Route::get('edit/{id?}', $controller . 'getEdit')
+            ->name('.edit');
+
+        Route::post('save', $controller . 'postSave')
+            ->name('.save');
+
+        Route::post('delete/{id}', $controller . 'postDelete')
+            ->name('.delete');
+
+        Route::post('update-order/{id}', $controller . 'postUpdateOrder')
+            ->name('.update-order');
+    });
+
+    Route::group(['as' => '.payment', 'prefix' => 'payment'], function () {
+        $controller = 'AdminPaymentController@';
         Route::get('/', $controller . 'getIndex');
 
         Route::get('edit/{id?}', $controller . 'getEdit')

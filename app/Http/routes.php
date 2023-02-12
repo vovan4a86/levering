@@ -69,8 +69,12 @@ Route::group(['middleware' => ['redirects', 'regions']], function() {
 
     Route::get('/', ['as' => 'main', 'uses' => 'WelcomeController@index']);
 
-    Route::any('news', ['as' => 'news', 'uses' => 'NewsController@index']);
-    Route::get('news/{alias}', ['as' => 'news.item', 'uses' => 'NewsController@item']);
+    Route::get('/about', ['as' => 'about', 'uses' => 'AboutController@index']);
+
+    Route::any('/kompleksnie-resheniya', ['as' => 'kompleksnie-resheniya', 'uses' => 'ComplexController@index']);
+    Route::get('/kompleksnie-resheniya/{alias}', ['as' => 'complex.item', 'uses' => 'ComplexController@item']);
+
+    Route::any('/delivery-pay', ['as' => 'delivery-pay', 'uses' => 'DeliveryController@index']);
 
     Route::any('services', ['as' => 'services', 'uses' => 'ServiceController@index']);
     Route::get('services/{alias}', ['as' => 'services.item', 'uses' => 'ServiceController@view'])
@@ -91,8 +95,6 @@ Route::group(['middleware' => ['redirects', 'regions']], function() {
     Route::any('contacts', ['as' => 'contacts', 'uses' => 'ContactsController@index']);
 
     Route::any('suppliers', ['as' => 'suppliers', 'uses' => 'SuppliersController@index']);
-
-    Route::any('directory', ['as' => 'directory', 'uses' => 'DirectoryController@index']);
 
     Route::any('gosts', ['as' => 'gosts', 'uses' => 'GostsController@index']);
 

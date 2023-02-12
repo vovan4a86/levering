@@ -23,7 +23,7 @@ class RedirectController extends LfmController
     }
 
     /**
-     * Get image from custom directory by route.
+     * Get image from custom delivery by route.
      *
      * @param string $image_path
      * @return string
@@ -34,7 +34,7 @@ class RedirectController extends LfmController
     }
 
     /**
-     * Get file from custom directory by route.
+     * Get file from custom delivery by route.
      *
      * @param string $file_name
      * @return string

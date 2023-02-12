@@ -20,7 +20,6 @@
 @section('content')
 	<div class="box box-solid">
 		<div class="box-body">
-			<h5 style="margin-left: 10px; font-style: italic">Отображение Оплаты и доставки в разделе Каталог производится отдельно в Настройках > Каталог: Оплата и доставка</h5>
 			@if (count($items))
 				<table class="table table-striped">
 					<thead>

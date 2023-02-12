@@ -25,11 +25,20 @@ class AdminMenuMiddleware {
 			$menu->add('Заказы', ['route' => 'admin.orders', 'icon' => 'fa-dollar'])
 				->active('/admin/orders/*');
 
+			$menu->add('Комплексные решения', ['route' => 'admin.complex', 'icon' => 'fa-calendar'])
+				->active('/admin/complex/*');
+
 			$menu->add('Региональность', ['route' => 'admin.cities', 'icon' => 'fa-globe'])
 				->active('/admin/cities/*');
 
-//			$menu->add('Новости', ['route' => 'admin.news', 'icon' => 'fa-calendar'])
-//				->active('/admin/news/*');
+			$menu->add('Способы доставки', ['route' => 'admin.delivery', 'icon' => 'fa-truck'])
+				->active('/admin/delivery/*');
+
+			$menu->add('Способы оплаты', ['route' => 'admin.payment', 'icon' => 'fa-handshake-o'])
+				->active('/admin/payment/*');
+
+//			$menu->add('Новости', ['route' => 'admin.complex', 'icon' => 'fa-calendar'])
+//				->active('/admin/complex/*');
 
 //			$menu->add('Вакансии', ['route' => 'admin.vacancies', 'icon' => 'fa-user-circle'])
 //				->active('/admin/vacancies/*');
@@ -37,11 +46,8 @@ class AdminMenuMiddleware {
 //			$menu->add('Партнеры', ['route' => 'admin.partners', 'icon' => 'fa-handshake-o'])
 //				->active('/admin/partners/*');
 
-//			$menu->add('Способы доставки', ['route' => 'admin.delivery', 'icon' => 'fa-truck'])
-//				->active('/admin/delivery/*');
-
-            $menu->add('Контакты в городах', ['route' => 'admin.contacts', 'icon' => 'fa-id-card'])
-                ->active('/admin/contacts/*');
+//            $menu->add('Контакты в городах', ['route' => 'admin.contacts', 'icon' => 'fa-id-card'])
+//                ->active('/admin/contacts/*');
 
 //			$menu->add('Акции', ['route' => 'admin.actions', 'icon' => 'fa-percent'])
 //				->active('/admin/actions/*');
@@ -54,9 +60,6 @@ class AdminMenuMiddleware {
 
 //			$menu->add('Отзывы', ['route' => 'admin.reviews', 'icon' => 'fa-star'])
 //				->active('/admin/reviews/*');
-
-//			$menu->add('Статьи', ['route' => 'admin.publications', 'icon' => 'fa-calendar'])
-//				->active('/admin/publications/*');
 
 			$menu->add('Настройки', ['icon' => 'fa-cogs'])
 				->nickname('settings');

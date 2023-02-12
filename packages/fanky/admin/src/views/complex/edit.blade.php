@@ -8,7 +8,7 @@
 
 @section('page_name')
     <h1>
-        Новости
+        Комплексные решения
         <small>{{ $article->id ? 'Редактировать' : 'Новая' }}</small>
     </h1>
 @stop
@@ -16,13 +16,13 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Главная</a></li>
-        <li><a href="{{ route('admin.news') }}">Новости</a></li>
+        <li><a href="{{ route('admin.complex') }}">Комплексные решения</a></li>
         <li class="active">{{ $article->id ? 'Редактировать' : 'Новая' }}</li>
     </ol>
 @stop
 
 @section('content')
-    <form action="{{ route('admin.news.save') }}" onsubmit="return newsSave(this, event)">
+    <form action="{{ route('admin.complex.save') }}" onsubmit="return newsSave(this, event)">
         <input type="hidden" name="id" value="{{ $article->id }}">
 
         <div class="nav-tabs-custom">
@@ -31,7 +31,7 @@
                 <li><a href="#tab_2" data-toggle="tab">Текст</a></li>
                 @if($article->id)
                     <li class="pull-right">
-                        <a href="{{ route('news.item', [$article->alias]) }}" target="_blank">Посмотреть</a>
+                        <a href="{{ route('complex.item', [$article->alias]) }}" target="_blank">Посмотреть</a>
                     </li>
                 @endif
             </ul>
@@ -56,7 +56,7 @@
                                 <img class="img-polaroid" src="{{ $article->thumb(1) }}" height="100"
                                      data-image="{{ $article->image_src }}"
                                      onclick="return popupImage($(this).data('image'))">
-                                <a class="images_del" href="{{ route('admin.news.delete-image', [$article->id]) }}" onclick="return newsImageDel(this, event)">
+                                <a class="images_del" href="{{ route('admin.complex.delete-image', [$article->id]) }}" onclick="return newsImageDel(this, event)">
                                     <span class="glyphicon glyphicon-trash text-red"></span></a>
                             @else
                                 <p class="text-yellow">Изображение не загружено.</p>
@@ -64,11 +64,12 @@
                         </div>
                     </div>
 
-                    {!! Form::groupCheckbox('published', 1, $article->published, 'Показывать новость') !!}
-                    {!! Form::groupCheckbox('on_main_slider', 1, $article->on_main_slider, 'Новость в слайдере на главной') !!}
+                    {!! Form::groupCheckbox('published', 1, $article->published, 'Показывать решение') !!}
                 </div>
 
                 <div class="tab-pane" id="tab_2">
+                    {!! Form::groupText('city', $article->city, 'Город, дата') !!}
+                    {!! Form::groupText('square', $article->square, 'Площадь') !!}
                     {!! Form::groupTextarea('announce', $article->announce, 'Краткое описание', ['rows' => 3]) !!}
                     {!! Form::groupRichtext('text', $article->text, 'Текст', ['rows' => 3]) !!}
                 </div>

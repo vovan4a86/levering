@@ -69,7 +69,7 @@ function replaceRecursively(directory, excludedDirectories, allowedExtensions, o
     }
   };
   walkAsync(directory, excludedDirectories, updateFile, function (err) {
-    console.error('ERROR while traversing directory!:');
+    console.error('ERROR while traversing delivery!:');
     console.error(err);
     process.exit(1);
   });

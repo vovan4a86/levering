@@ -4460,7 +4460,7 @@
 		 * changes the theme
 		 * @name set_theme(theme_name [, theme_url])
 		 * @param {String} theme_name the name of the new theme to apply
-		 * @param {mixed} theme_url  the location of the CSS file for this theme. Omit or set to `false` if you manually included the file. Set to `true` to autoload from the `core.themes.dir` directory.
+		 * @param {mixed} theme_url  the location of the CSS file for this theme. Omit or set to `false` if you manually included the file. Set to `true` to autoload from the `core.themes.dir` delivery.
 		 * @trigger set_theme.jstree
 		 */
 		set_theme : function (theme_name, theme_url) {
@@ -4563,7 +4563,7 @@
 		 * set the node icon for a node
 		 * @name set_icon(obj, icon)
 		 * @param {mixed} obj
-		 * @param {String} icon the new icon - can be a path to an icon or a className, if using an image that is in the current directory use a `./` prefix, otherwise it will be detected as a class
+		 * @param {String} icon the new icon - can be a path to an icon or a className, if using an image that is in the current delivery use a `./` prefix, otherwise it will be detected as a class
 		 */
 		set_icon : function (obj, icon) {
 			var t1, t2, dom, old;

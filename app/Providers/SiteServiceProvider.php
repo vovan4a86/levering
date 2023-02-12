@@ -6,7 +6,7 @@ use Fanky\Admin\Models\City;
 use Request;
 use Cache;
 use DB;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Illuminate\Support\ServiceProvider;
 use View;
 use Cart;
@@ -37,19 +37,6 @@ class SiteServiceProvider extends ServiceProvider {
                     ->get();
                 Cache::add('top_menu', $topMenu, now()->addMinutes(60));
             }
-
-//			$mainMenuPages = Page::query()
-//                ->public()
-//                ->where('on_menu', 1)
-//                ->orderBy('order')
-//                ->get();
-//            $mainMenuCats = Catalog::query()
-//                ->public()
-//                ->where('on_menu', 1)
-//                ->orderBy('order')
-//                ->get();
-//            $mainMenu = collect();
-//            $mainMenu = $mainMenu->merge($mainMenuPages)->merge($mainMenuCats);
 
             $cities = City::query()->orderBy('name')
                 ->get(['id', 'alias', 'name', DB::raw('LEFT(name,1) as letter')]);
@@ -102,10 +89,32 @@ class SiteServiceProvider extends ServiceProvider {
                 Cache::add('mobile_menu', $mobileMenu, now()->addMinutes(60));
             }
 
+            $catalogMenu = Cache::get('catalog_menu', collect());
+            if(!count($catalogMenu)) {
+                $catalogMenu = Catalog::getTopLevel();
+                Cache::add('catalog_menu', $catalogMenu, now()->addMinutes(60));
+            }
+
             $view->with(compact(
                 'footerMenu',
                 'footerCatalog',
-                'mobileMenu'
+                'mobileMenu',
+                'catalogMenu'
+            ));
+        });
+
+        View::composer(['catalog.index'], function ($view) {
+            $catalog = Cache::get('catalog_index', collect());
+            if(!count($catalog)) {
+                $catalog = Catalog::public()
+                    ->where('parent_id', 0)
+                    ->orderBy('order')
+                    ->get();
+                Cache::add('catalog_index', $catalog, now()->addMinutes(60));
+            }
+
+            $view->with(compact(
+         'catalog'
             ));
         });
 

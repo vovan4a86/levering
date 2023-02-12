@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use SiteHelper;
 use Carbon\Carbon;
 use Fanky\Admin\Models\Catalog;
-use Fanky\Admin\Models\News;
+use Fanky\Admin\Models\Complex;
 use Fanky\Admin\Models\Product;
 use Fanky\Admin\Models\ProductImage;
 use Illuminate\Console\Command;
@@ -97,10 +97,10 @@ class ImportOld extends Command {
 	}
 
 	private function importNews() {
-		$olds = DB::connection('old')->table('news')->get();
+		$olds = DB::connection('old')->table('complex')->get();
 		foreach ($olds as $old) {
-			$news = News::whereOldId($old->id)->first();
-			if (!$news) $news = new News();
+			$news = Complex::whereOldId($old->id)->first();
+			if (!$news) $news = new Complex();
 
 			$data = [
 				'old_id'      => $old->id,
@@ -116,8 +116,8 @@ class ImportOld extends Command {
 			];
 
 			if ($old->image && !$news->image) {
-				$url = 'http://begriff.ru/uploads/news/' . $old->image;
-				$image = SiteHelper::uploadImage($url, 'news');
+				$url = 'http://begriff.ru/uploads/complex/' . $old->image;
+				$image = SiteHelper::uploadImage($url, 'complex');
 				if ($image) $data['image'] = $image;
 			}
 
