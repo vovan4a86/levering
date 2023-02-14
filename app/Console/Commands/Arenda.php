@@ -22,7 +22,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use SVG\SVG;
 use App\Traits\ParseFunctions;
 
-class Lights extends Command {
+class Arenda extends Command {
 
     use ParseFunctions;
 
@@ -31,9 +31,9 @@ class Lights extends Command {
      *
      * @var string
      */
-    protected $signature = 'parse:lights';
-    private $basePath = ProductImage::UPLOAD_URL . 'lights/';
-    public $baseUrl = 'https://deledzavod.ru/';
+    protected $signature = 'parse:arenda';
+    private $basePath = ProductImage::UPLOAD_URL . 'arenda/';
+    public $baseUrl = 'https://xn--80ac5aetf.xn--p1ai/';
     public $client;
 
     /**
@@ -41,7 +41,7 @@ class Lights extends Command {
      *
      * @var string
      */
-    protected $description = 'Парсим освещение';
+    protected $description = 'Парсим аренду спецтехники';
 
     /**
      * Create a new command instance.
@@ -61,22 +61,22 @@ class Lights extends Command {
      * @return mixed
      */
     public function handle() {
-        $categoryUrl = 'https://deledzavod.ru/katalog/';
+        $categoryUrl = 'https://xn--80ac5aetf.xn--p1ai/arenda-tehniki/';
         $res = $this->client->get($categoryUrl);
         $html = $res->getBody()->getContents();
         $catalogCrawler = new Crawler($html); //catalog page from url
 
-        $catalogCrawler->filter('.catalog__item.catalog__item-full')
-//            ->reduce(function (Crawler $none, $i) {
-//                return ($i < 1);
-//            })
+        $catalogCrawler->filter('.c_item')
+            ->reduce(function (Crawler $none, $i) {
+                return ($i == 5); //max 14
+            })
             ->each(function (Crawler $sub) {
-                $url = $sub->attr('href');
-                $name = trim($sub->filter('.catalog__text')->first()->text());
-                $catalog = $this->getCatalogByName($name, 3);
+                $url = $sub->filter('.c_item_title')->first()->attr('href');
+                $name = trim($sub->filter('.c_item_title')->first()->text());
+                $catalog = $this->getCatalogByName($name, 7);
 
-                if (!$catalog->image && $sub->filter('img')->first()->count() != 0) {
-                    $src = $sub->filter('img')->first()->attr('data-src');
+                if (!$catalog->image && $sub->filter('.c_item_img img')->first()->count() != 0) {
+                    $src = $sub->filter('.c_item_img img')->first()->attr('src');
                     $uploadPath = Catalog::UPLOAD_URL;
                     $ext = $this->getExtensionFromSrc($src);
                     $fileName = $catalog->alias . $ext;
@@ -86,16 +86,20 @@ class Lights extends Command {
                         $catalog->save();
                     }
                 }
-
-                $this->parseCategoryLights($name, $url, $catalog->id);
+                //парсим товары
+                try {
+                    $this->parseListProductArenda($catalog, $url);
+                } catch (\Exception $e) {
+                    $this->error('Error Parse Products from section: ' . $e->getMessage());
+                    $this->error('See line: ' . $e->getLine());
+                    exit();
+                }
             });
 
         $this->info('The command was successful!');
     }
 
-    //СВЕТИЛЬНИК ДЛЯ ЖКХ FLAT-3 not found
-
-    public function parseCategoryLights($categoryName, $categoryUrl, $parentId) {
+    public function parseCategoryArenda($categoryName, $categoryUrl, $parentId) {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
 
@@ -104,29 +108,30 @@ class Lights extends Command {
             $html = $res->getBody()->getContents();
             $sectionCrawler = new Crawler($html); //section page from url
 
-            if ($sectionCrawler->filter('.catalog__item.catalog__item-full')->count() != 0) {
-                $sectionCrawler->filter('.catalog__item.catalog__item-full')->each(function (Crawler $sectionInnerCrawler) use ($catalog) {
-                    $url = $sectionInnerCrawler->attr('href');
-                    $name = trim($sectionInnerCrawler->filter('.catalog__text')->first()->text());
+            if ($sectionCrawler->filter('.c_item')->count() != 0) {
+                $sectionCrawler->filter('.c_item')
+                    ->each(function (Crawler $sectionInnerCrawler) use ($catalog) {
+                        $url = $sectionInnerCrawler->filter('.c_item_title')->first()->attr('href');
+                        $name = trim($sectionInnerCrawler->filter('.c_item_title')->first()->text());
 
-                    if (!$catalog->image && $sectionInnerCrawler->filter('img')->first()->count() != 0) {
-                        $src = $sectionInnerCrawler->filter('img')->first()->attr('data-src');
-                        $uploadPath = Catalog::UPLOAD_URL;
-                        $ext = $this->getExtensionFromSrc($src);
-                        $fileName = $catalog->alias . $ext;
-                        $res = $this->downloadJpgFile($src, $uploadPath, $fileName);
-                        if ($res) {
-                            $catalog->image = $fileName;
-                            $catalog->save();
+                        if (!$catalog->image && $sectionInnerCrawler->filter('img')->first()->count() != 0) {
+                            $src = $sectionInnerCrawler->filter('img')->first()->attr('data-src');
+                            $uploadPath = Catalog::UPLOAD_URL;
+                            $ext = $this->getExtensionFromSrc($src);
+                            $fileName = $catalog->alias . $ext;
+                            $res = $this->downloadJpgFile($src, $uploadPath, $fileName);
+                            if ($res) {
+                                $catalog->image = $fileName;
+                                $catalog->save();
+                            }
                         }
-                    }
 
-                    $this->parseCategoryLights($name, $url, $catalog->id);
-                });
+                        $this->parseCategoryLights($name, $url, $catalog->id);
+                    });
             } else {
                 //парсим товары
                 try {
-                    $this->parseListProductLights($catalog, $categoryUrl);
+                    $this->parseListProductArenda($catalog, $categoryUrl);
                 } catch (\Exception $e) {
                     $this->error('Error Parse Products from section: ' . $e->getMessage());
                     $this->error('See line: ' . $e->getLine());
@@ -138,7 +143,7 @@ class Lights extends Command {
         }
     }
 
-    public function parseListProductLights($catalog, $categoryUrl) {
+    public function parseListProductArenda($catalog, $categoryUrl) {
         $this->info('Parse products from: ' . $catalog->name);
         try {
             $res = $this->client->get($categoryUrl);
@@ -146,24 +151,38 @@ class Lights extends Command {
             $crawler = new Crawler($html); //products page from url
             $uploadPath = $this->basePath . $catalog->alias . '/';
 
+            if (!$catalog->description && $crawler->filter('.cols_page_right span')->first()->count() != 0) {
+                $catalog->description = $crawler->filter('.cols_page_right span')->first()->text();
+                $catalog->save();
+            }
 
-            $crawler->filter('a.product')
+            $crawler->filter('.category_item')
 //                    ->reduce(function (Crawler $none, $i) {return ($i < 1);})
                 ->each(function (Crawler $node, $n) use ($catalog, $uploadPath) {
                     $data = [];
                     try {
-                        $url = $node->attr('href');
-                        $data['name'] = trim($node->filter('.product__name')->first()->text());
+                        $url = $node->filter('link')->first()->attr('href');
+                        $data['name'] = trim($node->filter('.category_item_img img')
+                            ->first()->attr('title')); //имя из title картинки, потому что кривая верстка для h3.category_item_title
 
-                        if ($node->filter('span.woocommerce-Price-amount.amount')->count() != 0) {
-                            $rawPrice = $node->filter('span.woocommerce-Price-amount.amount')->first()->text();
-                            $data['price'] = preg_replace("/[^,.0-9]/", null, $rawPrice);
-//                            $data['price'] = $this->replaceFloatValue($data['price']);
-                            $data['in_stock'] = 1;
+                        if ($node->filter('.cost_field')
+                                ->children('p')->first()
+                                ->children('span')->count() == 2) {
+                            $data['price'] = $node->filter('.cost_field')
+                                ->children('p')->first()
+                                ->children('span')->first()->text();
+                            $data['price'] = str_replace(' ', null, $data['price']);
+
                         } else {
-                            $data['price'] = null;
-                            $data['in_stock'] = 0;
+                            $rawStr = $node->filter('.cost_field')
+                                ->children('p')->first()
+                                ->children('span')->first()->text();
+                            $data['price'] = preg_replace("/[^,.0-9]/", null, $rawStr);
+                            $rawMeasure = explode('/', $rawStr);
+                            $data['measure'] = $rawMeasure[1];
                         }
+
+                        $data['in_stock'] = 1;
 
                         $this->info(++$n . ') ' . $data['name']);
                         $product = Product::whereParseUrl($url)->first();
@@ -172,12 +191,32 @@ class Lights extends Command {
                             $data['title'] = $data['name'];
                             $data['alias'] = Text::translit($data['name']);
 
+                            if ($node->filter('.cost_field')
+                                    ->children('p')->first()
+                                    ->children('span')->count() == 2) {
+                                $rawMeasure = $node->filter('.cost_field')
+                                    ->children('p')->first()
+                                    ->children('span')->last()->text();
+                                $rawMeasure = explode('/', $rawMeasure);
+                                $data['measure'] = $rawMeasure[1];
+                            } else {
+                                $rawStr = $node->filter('.cost_field')
+                                    ->children('p')->first()
+                                    ->children('span')->first()->text();
+                                $rawMeasure = explode('/', $rawStr);
+                                $data['measure'] = $rawMeasure[1];
+                            }
+
+                            $rowMinTime = $node->filter('.cost_field')
+                                ->children('p')->first()->text();
+                            $data['min_hours'] = $this->extractMinHours($rowMinTime);
+
                             $productPage = $this->client->get($url);
                             $productHtml = $productPage->getBody()->getContents();
                             $productCrawler = new Crawler($productHtml); //product page
 
                             //описание
-                            $data['text'] = $productCrawler->filter('.catalog_in__content-tab')->first()->html();
+                            $data['text'] = $productCrawler->filter('.description_field')->first()->html();
 
                             $newProd = Product::create(array_merge([
                                 'catalog_id' => $catalog->id,
@@ -187,40 +226,53 @@ class Lights extends Command {
                             ], $data));
 
                             //характеристики
-                            $productCrawler->filter('.table-params__item')->each(function (Crawler $char) use ($newProd) {
-                                $name = $char->children('div')->first()->text();
-                                $value = $char->filter('div')->last()->filter('p')->first()->text();
+                            $rawChars = $productCrawler->filter('.teh_chars_content')->first()->html();
+                            $chars = $this->extractChars($rawChars);
 
+                            foreach ($chars as $char) {
+                                [$name, $value] = $char;
                                 $currentChar = Char::whereName($name)->first();
                                 if (!$currentChar) {
                                     $currentChar = Char::create([
-                                        'name' => trim($name)
+                                        'name' => $name
                                     ]);
                                 }
                                 ProductChar::create([
                                     'product_id' => $newProd->id,
                                     'char_id' => $currentChar->id,
-                                    'value' => trim($value),
+                                    'value' => $value,
                                     'order' => ProductChar::where('product_id', $newProd->id)->max('order') + 1,
                                 ]);
-                            });
+                            }
 
-                            //сохраняем изображения товара
-                            if ($productCrawler->filter('.catalog_in__gallery a')->count() != 0) {
-                                $productCrawler->filter('.catalog_in__gallery a')
-                                    ->each(function ($img, $n) use ($newProd, $catalog, $uploadPath) {
-                                        $imageSrc = $img->attr('href');
-                                        $ext = $this->getExtensionFromSrc($imageSrc);
-                                        $fileName = 'lights_' . $newProd->id . '_' . $n . $ext;
-                                        $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                                        if ($res) {
-                                            ProductImage::create([
-                                                'product_id' => $newProd->id,
-                                                'image' => $uploadPath . $fileName,
-                                                'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
-                                            ]);
-                                        }
-                                    });
+                            //сохраняем 1 изображения товара
+                            if ($productCrawler->filter('.cp_photo_main img')->first()->count() != 0) {
+                                $imageSrc = $productCrawler->filter('.cp_photo_main img')->first()->attr('src');
+                                $ext = $this->getExtensionFromSrc($imageSrc);
+                                $fileName = 'arenda_' . $newProd->id . $ext;
+                                $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                if ($res) {
+                                    ProductImage::create([
+                                        'product_id' => $newProd->id,
+                                        'image' => $uploadPath . $fileName,
+                                        'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
+                                    ]);
+                                }
+                            }
+
+                            //сохраняем 2 изображения товара
+                            if ($productCrawler->filter('.cp_gallery .gallery-icon img')->first()->count() != 0) {
+                                $imageSrc = $productCrawler->filter('.cp_gallery .gallery-icon img')->first()->attr('src');
+                                $ext = $this->getExtensionFromSrc($imageSrc);
+                                $fileName = 'arenda_' . $newProd->id . '_2' . $ext;
+                                $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                if ($res) {
+                                    ProductImage::create([
+                                        'product_id' => $newProd->id,
+                                        'image' => $uploadPath . $fileName,
+                                        'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
+                                    ]);
+                                }
                             }
                             sleep(rand(0, 2));
                         } else {
@@ -230,23 +282,22 @@ class Lights extends Command {
                     } catch (\Exception $e) {
                         $this->warn('error parse product: ' . $e->getMessage());
                         $this->warn('see line: ' . $e->getLine());
+                        exit();
                     }
                 });
 
             //проход по страницам
-            if ($crawler->filter('.facetwp-page.next')->count() != 0) {
-                $nextUrl = $crawler->filter('.facetwp-page.next')->attr('href');
-                $this->info('parse next url: ' . $nextUrl);
-                $this->parseListProductLights($catalog, $nextUrl);
-            }
+//            if ($crawler->filter('.facetwp-page.next')->count() != 0) {
+//                $nextUrl = $crawler->filter('.facetwp-page.next')->attr('href');
+//                $this->info('parse next url: ' . $nextUrl);
+//                $this->parseListProductArenda($catalog, $nextUrl);
+//            }
 
         } catch (GuzzleException $e) {
             $this->error('Error Parse Product: ' . $e->getMessage());
             $this->error('See: ' . $e->getLine());
         }
     }
-
-    private $excludeChars = ['.', ':'];
 
     public function parseProduct() {
         $url = 'https://olympiya.su/shop/utepliteli/bazaltovaya-teploizolyacziya/plity-teploizolyaczionnye-iz-mineralnoj-vaty-na-sinteticheskom-svyazuyushhem-izba-lajt-35kg-m3-1000h600h50h12-pl/';
@@ -307,17 +358,33 @@ class Lights extends Command {
 
     }
 
-    public function extractMeasureFromPrice(string $price): ?string {
-        $f = strripos($price, '/');
+    public function extractMinHours(string $str): ?string {
+        $f = mb_strripos($str, 'Минимальное время заказа:');
         if (!$f) return null;
 
-        return substr($price, $f + 1);
+        $substr = mb_substr($str, $f + 26, 3);
+
+        return preg_replace("/[^0-9]/", null, $substr);
+    }
+
+    public function extractChars(string $str): array {
+        $newStr = str_replace(['<p>', '</p>'], null, $str);
+        $arr = explode('<br>', $newStr);
+
+        $chars = [];
+        foreach ($arr as $row) {
+            if (stripos($row, ':')) {
+                $chars[] = array_map('trim', explode(':', $row));
+            } else {
+                $chars[] = [trim($row), ''];
+            }
+        }
+        return $chars;
     }
 
     public function test() {
         $html = file_get_contents(public_path('/test/test-cat.html'));
         $crawler = new Crawler($html); //products page from url
-
 
         $txt = '';
         $imgSrc = [];

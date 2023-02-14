@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
 use Fanky\Admin\Models\Catalog;
 use Fanky\Admin\Models\Char;
 use Fanky\Admin\Models\Product;
@@ -14,16 +13,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Intervention\Image\ImageManagerStatic;
-use SiteHelper;
 use Symfony\Component\DomCrawler\Crawler;
-use SVG\SVG;
 use App\Traits\ParseFunctions;
 
-class CableSystems extends Command
-{
+class CableSystems extends Command {
 
     use ParseFunctions;
 
@@ -34,8 +27,9 @@ class CableSystems extends Command
      */
     protected $signature = 'parse:cs';
     private $basePath = ProductImage::UPLOAD_URL . 'cable-systems/';
-    private $certificatesPath =  'uploads/certificates/';
+    private $certificatesPath = 'uploads/certificates/';
     public $baseUrl = 'https://asd-e.ru';
+    public $isPROMTRAY = false;
     public $client;
 
     /**
@@ -50,8 +44,7 @@ class CableSystems extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->client = new Client([
             'headers' => ['User-Agent' => Arr::random($this->userAgents)],
@@ -65,22 +58,23 @@ class CableSystems extends Command
      */
     public function handle() {
         foreach ($this->categoryList() as $categoryName => $categoryUrl) {
+            if ($categoryName == 'PROMTRAY') $this->isPROMTRAY = true;
             $this->parseCategoryCableSystems($categoryName, $categoryUrl, 2);
         }
         $this->info('The command was successful!');
     }
 
-    public function categoryList(): array
-    {
+    public function categoryList(): array {
         return [
 //            'ГЭМ' => 'https://asd-e.ru/product/gem/',
-            'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
-//            'PROMTRAY' => 'https://asd-e.ru/product/promtray/',
+//            'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
+            'PROMTRAY' => 'https://asd-e.ru/product/promtray/',
         ];
     }
 
     public function parseCategoryCableSystems($categoryName, $categoryUrl, $parentId) {
         $this->info($categoryName . ' => ' . $categoryUrl);
+        if ($this->isPROMTRAY && $categoryName != 'PROMTRAY') $categoryName .= ' PROMTRAY';
         $catalog = $this->getCatalogByName($categoryName, $parentId);
         $uploadPath = Catalog::UPLOAD_URL;
 
@@ -98,16 +92,16 @@ class CableSystems extends Command
                         $newImgSrc = [];
                         $sectionCrawler->filter('.text_after_items img')
                             ->each(function (Crawler $img, $n) use (&$newImgSrc, &$imgSrc, $catalog, $uploadPath) {
-                            $imageSrc = $this->baseUrl . $img->attr('src');
-                            $find = $img->attr('src');
-                            $ext = $this->getExtensionFromSrc($imageSrc);
-                            $fileName = 'section_' . $catalog->id . '_text_img_' . $n . $ext;
-                            if(!file_exists(public_path($uploadPath . $fileName))) {
-                                $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                            }
-                            $imgSrc[] = $this->encodeUrlFileName($find);
-                            $newImgSrc[] = $fileName;
-                        });
+                                $imageSrc = $this->baseUrl . $img->attr('src');
+                                $find = $img->attr('src');
+                                $ext = $this->getExtensionFromSrc($imageSrc);
+                                $fileName = 'section_' . $catalog->id . '_text_img_' . $n . $ext;
+                                if (!file_exists(public_path($uploadPath . $fileName))) {
+                                    $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                }
+                                $imgSrc[] = $this->encodeUrlFileName($find);
+                                $newImgSrc[] = $fileName;
+                            });
                         $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
                         $catalog->save();
                     }
@@ -118,15 +112,16 @@ class CableSystems extends Command
             }
 
             if ($sectionCrawler->filter('.item-views.catalog.sections .title a.dark-color')->count() != 0) {
-                $sectionCrawler->filter('.item-views.catalog.sections .title a.dark-color')->each(function (Crawler $sectionInnerCrawler) use ($catalog) {
-                    $name = trim($sectionInnerCrawler->text());
-                    $url = $this->baseUrl . $sectionInnerCrawler->attr('href');
-                    $this->parseCategoryCableSystems($name, $url, $catalog->id);
-                });
+                $sectionCrawler->filter('.item-views.catalog.sections .title a.dark-color')
+                    ->each(function (Crawler $sectionInnerCrawler) use ($catalog) {
+                        $name = trim($sectionInnerCrawler->text());
+                        $url = $this->baseUrl . $sectionInnerCrawler->attr('href');
+                        $this->parseCategoryCableSystems($name, $url, $catalog->id);
+                    });
             } else {
                 //парсим товары
                 try {
-                $this->parseListProductCableSystems($catalog, $categoryUrl);
+                    $this->parseListProductCableSystems($catalog, $categoryUrl);
                 } catch (\Exception $e) {
                     $this->error('Error Parse Products from section: ' . $e->getMessage());
                     $this->error('See line: ' . $e->getLine());
@@ -137,7 +132,7 @@ class CableSystems extends Command
         }
     }
 
-    public function parseListProductCableSystems($catalog, $categoryUrl){
+    public function parseListProductCableSystems($catalog, $categoryUrl) {
         $this->info('Parse products from: ' . $catalog->name);
         try {
             $res = $this->client->get($categoryUrl);
@@ -188,7 +183,7 @@ class CableSystems extends Command
                                                 $find = $img->attr('src');
                                                 $ext = $this->getExtensionFromSrc($imageSrc);
                                                 $fileName = 'product_' . $newProd->id . '_text_img' . $ext;
-                                                if(!file_exists(public_path($uploadPath . $fileName))) {
+                                                if (!file_exists(public_path($uploadPath . $fileName))) {
                                                     $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
                                                 }
 
@@ -220,7 +215,7 @@ class CableSystems extends Command
                                         $value = $char->filter('.char_value span')->text();
 
                                         $currentChar = Char::whereName($name)->first();
-                                        if(!$currentChar) {
+                                        if (!$currentChar) {
                                             $currentChar = Char::create([
                                                 'name' => trim($name)
                                             ]);
@@ -242,7 +237,7 @@ class CableSystems extends Command
                                         $ext = $this->getExtensionFromSrc($url);
                                         $fileName = 'product_' . $newProd->id . '_' . $n . $ext;
                                         $res = $this->downloadJpgFile($url, $this->certificatesPath, $fileName);
-                                        if($res) {
+                                        if ($res) {
                                             ProductCertificate::create([
                                                 'product_id' => $newProd->id,
                                                 'image' => $fileName,
@@ -292,7 +287,7 @@ class CableSystems extends Command
     }
 
     public function getTextFromCharArray(array $chars): ?string {
-        if(!count($chars)) return null;
+        if (!count($chars)) return null;
 
         $res = '<ul class="prod-char">';
         foreach ($chars as $name => $value) {

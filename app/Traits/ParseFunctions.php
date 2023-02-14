@@ -247,7 +247,7 @@ trait ParseFunctions
      * @param int $parentId
      * @return Catalog
      */
-    private function getCatalogByName(string $categoryName, int $parentId, string $catFilters = null): Catalog
+    private function getCatalogByName(string $categoryName, int $parentId): Catalog
     {
         $catalog = Catalog::whereName($categoryName)->first();
         if (!$catalog) {
@@ -256,15 +256,12 @@ trait ParseFunctions
                 'title' => $categoryName,
                 'h1' => $categoryName,
                 'parent_id' => $parentId,
-                'filters' => $catFilters,
                 'alias' => Text::translit($categoryName),
                 'slug' => Text::translit($categoryName),
                 'order' => Catalog::whereParentId($parentId)->max('order') + 1,
                 'published' => 1,
             ]);
-        } else {
-            $catalog->filters = $catFilters;
-            $catalog->save();
+            $this->info('+++ ' . ' Новый раздел: ' . $categoryName);
         }
         return $catalog;
     }

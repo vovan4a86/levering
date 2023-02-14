@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel {
         'App\Console\Commands\SnowHolder',
         'App\Console\Commands\Tubes',
         'App\Console\Commands\Lights',
+        'App\Console\Commands\Arenda',
 		Commands\ImportOld::class,
 	];
 
