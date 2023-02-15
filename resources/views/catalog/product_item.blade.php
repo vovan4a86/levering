@@ -1,51 +1,38 @@
-<div class="t-catalog__grid t-catalog__grid--body">
-    <div class="t-catalog__col t-catalog__col--wide" data-caption="Наименование">
-        <a class="t-catalog__link" href="{{ $item->url }}">{{ $item->name }}</a>
-    </div>
-    <div class="t-catalog__col" data-caption="Размер">
-        <div class="t-catalog__value">{{ $item->size }}</div>
-    </div>
-    <div class="t-catalog__col t-catalog__col--wide" data-caption="{{ $filters[0]['name'] }}">
-        @php $alias = $filters[0]['alias'] @endphp
-        <div class="t-catalog__value">{{ $item->$alias }}</div>
-    </div>
-    <div class="t-catalog__col" data-caption="{{ $filters[1]['name'] }}">
-        @php $alias = $filters[1]['alias'] @endphp
-        <div class="t-catalog__value">{{ $item->$alias }}</div>
-    </div>
-    <div class="t-catalog__col t-catalog__col--wide" data-caption="Цена, руб">
-        <div class="t-catalog__row">
-            @if($item->getMeasurePrice())
-                <div class="t-catalog__value">{{ number_format($item->getMeasurePrice(), 2, ',', ' ') }} ₽</div>
-            @else
-                <div class="t-catalog__value">Под заказ</div>
-            @endif
-            <div class="t-catalog__cart">
-                @if($item->measure == 'т')
-                    <button class="cart-btn btn-reset {{ $item->getMeasurePrice() ? null : 'disabled'}}" type="button"
-                            onclick="addToCart({{$item->id}})"
-                            aria-label="Добавить в корзину">
-                        <svg class="svg-sprite-icon icon-cart">
-                            <use xlink:href="/static/images/sprite/symbol/sprite.svg#cart"></use>
-                        </svg>
-                    </button>
-{{--                @elseif($item->measure == 'шт')--}}
-{{--                    <button class="cart-btn btn-reset {{ $item->getMeasurePrice() ? null : 'disabled'}}" type="button"--}}
-{{--                            onclick="addToCartPerItem({{$item->id}})"--}}
-{{--                            aria-label="Добавить в корзину">--}}
-{{--                        <svg class="svg-sprite-icon icon-cart">--}}
-{{--                            <use xlink:href="/static/images/sprite/symbol/sprite.svg#cart"></use>--}}
-{{--                        </svg>--}}
-{{--                    </button>--}}
-                @else
-                    <button class="cart-btn btn-reset {{ $item->getMeasurePrice() ? null : 'disabled'}}" type="button"
-                            onclick="addToCartPerItem({{$item->id}})"
-                            aria-label="Добавить в корзину">
-                        <svg class="svg-sprite-icon icon-cart">
-                            <use xlink:href="/static/images/sprite/symbol/sprite.svg#cart"></use>
-                        </svg>
-                    </button>
+<div class="b-cards__item">
+    <div class="p-card">
+        @if($item->price && $item->getRecourseDiscountAmount())
+            <div class="p-card__badge badge">Лучшая цена</div>
+        @endif
+        <div class="p-card__preview">
+            <img class="p-card__img lazy" src="/"
+                 data-src="{{ $item->image()->first() ? $item->image()->first()->image : $item->showAnyImage() }}"
+                 width="227" height="162" alt="{{ $item->name }}"/>
+        </div>
+        <div class="p-card__code">Код: {{ $item->id }}</div>
+        <div class="p-card__body">{{ $item->name }}</div>
+        <div class="p-card__bottom">
+            <div class="p-card__pricing">
+                @if($item->price)
+                    @if($item->getRecourseDiscountAmount())
+                        <div class="p-card__discounts">
+                            <span data-end="₽/{{ $item->measure ?: 'шт' }}">{{ round($item->getPriceWithDiscount()) }}</span>
+                            <div class="p-card__value">
+                                -{{ $item->getRecourseDiscountAmount() }}%
+                            </div>
+                        </div>
+                    @endif
+                    <div class="p-card__current"
+                         data-end="/ {{ $item->measure ?: 'шт' }}">{{ $item->price }}
+                        ₽
+                    </div>
                 @endif
+            </div>
+            <div class="p-card__action">
+                <button class="btn btn--primary btn--small btn-reset"
+                        type="button"
+                        aria-label="Заказать">
+                    <span>Заказать</span>
+                </button>
             </div>
         </div>
     </div>

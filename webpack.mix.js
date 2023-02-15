@@ -12,11 +12,10 @@ let mix = require('laravel-mix');
  */
 mix.sourcemaps = false;
 mix.browserSync({
-    proxy: 'bms.test'
+    proxy: 'levering.test'
 });
 mix.js([
     'resources/assets/js--sources/main.js',
-    'resources/assets/js/custom.js',
 ], 'public/static/js/main.js')
     // .extract(['@fancyapps/ui'])
     .scripts([
@@ -25,6 +24,7 @@ mix.js([
         'public/adminlte/fancybox.umd.js',
         'public/adminlte/interface.js',
         'public/static/js/main.js',
+        'resources/assets/js/custom.js',
     ], 'public/static/js/all.js')
     .styles([
         'resources/assets/css/styles.css',

@@ -20,8 +20,7 @@ use Settings;
 use SiteHelper;
 use Validator;
 
-class AjaxController extends Controller
-{
+class AjaxController extends Controller {
     private $fromMail = 'info@bms.ru';
     private $fromName = 'БМС';
 
@@ -38,12 +37,12 @@ class AjaxController extends Controller
             $product_item['current_price'] = $product->getMeasurePrice();
             $product_item['count'] = $size;
             $product_item['round_k'] = $product->round_k;
-            if(!$weight) {
-                $product_item['weight'] = $product_item['count'] *  $product_item['round_k'];
+            if (!$weight) {
+                $product_item['weight'] = $product_item['count'] * $product_item['round_k'];
             } else {
                 $product_item['weight'] = $weight;
             }
-            if($product_item['measure'] == 'м') {
+            if ($product_item['measure'] == 'м') {
                 $product_item['weight'] = $size;
                 $product_item['count'] = $weight;
             }
@@ -129,11 +128,11 @@ class AjaxController extends Controller
         $product_item = $product->toArray();
         $product_item['url'] = $product->url;
 
-        if($product_item['measure'] == 'т') {
+        if ($product_item['measure'] == 'т') {
             $product_item['weight'] = $count;
-        } elseif($product_item['measure'] == 'кг') {
+        } elseif ($product_item['measure'] == 'кг') {
             $product_item['weight'] = $count;
-        } elseif($product_item['measure'] == 'м') {
+        } elseif ($product_item['measure'] == 'м') {
             $product_item['count'] = $count;
         } else {
             $product_item['count'] = $count;
@@ -150,8 +149,7 @@ class AjaxController extends Controller
         ];
     }
 
-    public function postRemoveFromCart(Request $request)
-    {
+    public function postRemoveFromCart(Request $request) {
         $id = $request->get('id');
         Cart::remove($id);
 
@@ -179,8 +177,7 @@ class AjaxController extends Controller
     }
 
     //заявка в свободной форме
-    public function postRequest(Request $request)
-    {
+    public function postRequest(Request $request) {
         $data = $request->only(['name', 'phone', 'email', 'text']);
         $valid = Validator::make($data, [
             'name' => 'required',
@@ -212,8 +209,7 @@ class AjaxController extends Controller
     }
 
     //написать нам
-    public function postWriteback(Request $request)
-    {
+    public function postWriteback(Request $request) {
         $data = $request->only(['name', 'phone', 'text']);
         $valid = Validator::make($data, [
             'name' => 'required',
@@ -243,8 +239,7 @@ class AjaxController extends Controller
     }
 
     //заказать звонок
-    public function postCallback(Request $request)
-    {
+    public function postCallback(Request $request) {
         $data = $request->only(['name', 'phone']);
         $valid = Validator::make($data, [
             'name' => 'required',
@@ -274,8 +269,7 @@ class AjaxController extends Controller
     }
 
     //быстрый заказ
-    public function postFastRequest(Request $request)
-    {
+    public function postFastRequest(Request $request) {
         $data = $request->only(['name', 'phone']);
         $valid = Validator::make($data, [
             'name' => 'required',
@@ -305,8 +299,7 @@ class AjaxController extends Controller
     }
 
     //задать вопрос
-    public function postQuestions(Request $request)
-    {
+    public function postQuestions(Request $request) {
         $data = $request->only(['name', 'phone', 'question']);
         $file = $request->file('file');
         $valid = Validator::make($data, [
@@ -346,8 +339,7 @@ class AjaxController extends Controller
     }
 
     //свяжитесь с нами
-    public function postContactUs(Request $request)
-    {
+    public function postContactUs(Request $request) {
         $data = $request->only(['name', 'phone', 'text']);
         $valid = Validator::make($data, [
             'name' => 'required',
@@ -422,9 +414,9 @@ class AjaxController extends Controller
         $items = Cart::all();
 
         foreach ($items as $item) {
-            if($item['weight'] == 0) {
+            if ($item['weight'] == 0) {
                 $itemPrice = $item['count'] * $item['current_price'];
-            } elseif($item['measure'] == 'кг') {
+            } elseif ($item['measure'] == 'кг') {
                 $itemPrice = $item['weight'] * $item['current_price'];
                 $item['weight'] = $item['weight'] / 1000;
             } else {
@@ -496,8 +488,7 @@ class AjaxController extends Controller
         return ['success' => false, 'msg' => 'Город не найден'];
     }
 
-    public function postGetCorrectRegionLink()
-    {
+    public function postGetCorrectRegionLink() {
         $city_id = Request::get('city_id');
         $city = City::find($city_id);
         $cur_url = Request::get('cur_url');
@@ -531,8 +522,7 @@ class AjaxController extends Controller
         return ['redirect' => $url];
     }
 
-    public function showCitiesPopup()
-    {
+    public function showCitiesPopup() {
         $cities = City::query()->orderBy('name')
             ->get(['id', 'alias', 'name', DB::raw('LEFT(name,1) as letter')]);
         $citiesArr = [];
@@ -563,7 +553,7 @@ class AjaxController extends Controller
     public function setCity() {
         $id = Request::get('id');
         $city = City::findOrFail($id);
-        if($city) {
+        if ($city) {
             session(['current_city' => $city]);
         } else {
             session(['current_city' => null]);
@@ -583,8 +573,7 @@ class AjaxController extends Controller
         return ['success' => true];
     }
 
-    public function search(Request $request)
-    {
+    public function search(Request $request) {
         $data = $request->only(['search']);
 
         $items = null;
@@ -608,8 +597,7 @@ class AjaxController extends Controller
 
     }
 
-    public function changeProductsPerPage(Request $request)
-    {
+    public function changeProductsPerPage(Request $request) {
         $count = $request->only('num');
 
         $setting = Setting::find(9);
@@ -622,16 +610,14 @@ class AjaxController extends Controller
         }
     }
 
-    public function postSetView($view)
-    {
+    public function postSetView($view) {
         $view = $view == 'list' ? 'list' : 'grid';
         session(['catalog_view' => $view]);
 
         return ['success' => true];
     }
 
-    public function postUpdateFilter(Request $request)
-    {
+    public function postUpdateFilter(Request $request) {
         $column1 = $request->get('column1');
         $column2 = $request->get('column2');
         $category_id = $request->get('category_id');
@@ -652,7 +638,7 @@ class AjaxController extends Controller
             $root = $category;
         }
 
-        if(!$column1 && !$column2) {
+        if (!$column1 && !$column2) {
             if ($category->parent_id == 0) {
                 $ids = $category->getRecurseChildrenIds();
                 $items = Product::public()->whereIn('catalog_id', $ids)
@@ -715,6 +701,28 @@ class AjaxController extends Controller
         }
 
         return ['success' => true, 'list' => $list, 'paginate' => $paginate];
+
+    }
+
+    public function fetchData(Request $request, $id) {
+        if ($request->ajax()) {
+            $category = Catalog::whereId($id)->first();
+            $items = $category->getRecurseProducts()->paginate(Settings::get('product_per_page') ?: 9);
+            $view_items = [];
+            foreach ($items as $item) {
+                $view_items[] = view('catalog.product_item', [
+                    'item' => $item,
+                    'category' => $category,
+                ])->render();
+            }
+
+            return response()->json([
+                'list' => $view_items,
+                'paginate' => view('catalog.section_pagination', [
+                    'paginator' => $items,
+                ])->render(),
+            ]);
+        }
 
     }
 

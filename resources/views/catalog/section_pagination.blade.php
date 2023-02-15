@@ -75,7 +75,8 @@
                            data-pagination-link>{{ $paginator->lastPage() }}</a>
                     @endif
                     @if ($paginator->currentPage() < $paginator->lastPage())
-                        <a class="pagination__link pagination__link--next" href="{{ $paginator->nextPageUrl() }}">
+                        <a class="pagination__link pagination__link--next" href="{{ $paginator->nextPageUrl() }}"
+                        onclick="ajaxRequest(this, event, {{ $category->id }})">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2"

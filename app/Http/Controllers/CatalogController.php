@@ -76,7 +76,7 @@ class CatalogController extends Controller {
             $root = $root->findRootCategory($root->parent_id);
         }
 
-        $per_page = Settings::get('product_per_page') ?? 9;
+        $per_page = Settings::get('product_per_page') ?: 9;
         $data['per_page'] = $per_page;
 
         $items = $category->getRecurseProducts()->paginate($per_page);
@@ -99,7 +99,7 @@ class CatalogController extends Controller {
             }
 
             return response()->json([
-                'list' => $view_items,
+                'items' => $view_items,
                 'paginate' => view('paginations.with_pages', [
                     'paginator' => $items,
                 ])->render(),

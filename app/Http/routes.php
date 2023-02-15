@@ -39,12 +39,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
         ->name('show-popup-cities');
 //    Route::get('search', [AjaxController::class, 'showCitiesPopup'])
 //        ->name('search');
-    Route::post('set-view/{view}', 'AjaxController@postSetView')
-        ->name('set-view');
-    Route::post('update-filter', 'AjaxController@postUpdateFilter')
-        ->name('update-filter');
-    Route::post('filter-apply', 'AjaxController@postFilterApply')
-        ->name('filter-apply');
+    Route::get('pagination/fetch_data', 'AjaxController@fetchData');
 });
 
 Route::group(['middleware' => ['redirects', 'regions']], function() {
