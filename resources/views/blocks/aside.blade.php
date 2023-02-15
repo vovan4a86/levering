@@ -7,7 +7,7 @@
                         <div class="aside-nav__head" data-aside-head>
                             <div class="aside-nav__title">{{ $item->name }}</div>
                             <div class="aside-nav__icon lazy"
-                                 data-bg="//static/images/common/ico_aside.svg"></div>
+                                 data-bg="/static/images/common/ico_aside.svg"></div>
                         </div>
                         @if($item->children)
                             <div class="aside-nav__body" data-aside-body>

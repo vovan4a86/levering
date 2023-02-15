@@ -45,6 +45,8 @@
                 {!! Form::groupText('keywords', $product->keywords, 'keywords') !!}
                 {!! Form::groupText('description', $product->description, 'description') !!}
                 {!! Form::groupText('price', $product->price ?: 0, 'price') !!}
+
+                {!! Form::groupText('discount', $product->discont, 'Скидка на товар (приоритет перед скидкой во всем разделе)') !!}
                 <hr>
                 <h4>Характеристики:</h4>
                 @if($product->chars()->get())

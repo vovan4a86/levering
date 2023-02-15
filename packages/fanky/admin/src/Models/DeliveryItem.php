@@ -23,12 +23,15 @@ use Thumb;
  */
 class DeliveryItem extends Model {
 
+    use HasImage;
+
     protected $guarded = ['id'];
+
+    const UPLOAD_URL = '/uploads/icons/';
 
 	public $timestamps = false;
 
 	public function order() {
 	    $this->hasMany(Order::class, 'delivery_item_id');
     }
-
 }

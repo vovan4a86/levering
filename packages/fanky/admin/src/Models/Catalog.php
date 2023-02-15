@@ -276,10 +276,8 @@ class Catalog extends Model {
 
     public function getRecurseChildrenIdsInner(self $parent = null) {
         if (!$parent) $parent = $this;
-        $ids = self::query()->where('slug', 'like', $parent->slug)
+        return self::query()->where('slug', 'like', $parent->slug)
             ->pluck('id')->all();
-
-        return $ids;
     }
 
 	public function getRecurseProductsCount() {
@@ -399,21 +397,16 @@ class Catalog extends Model {
     }
 
     public function getRecurseProducts() {
-        if($this->parent_id == 0) {
+//        if($this->parent_id == 0) {
             $ids = self::getRecurseChildrenIds();
             return Product::public()->whereIn('catalog_id', $ids)
-                ->orderBy('name', 'asc');
-        } else {
-            return $this->products();
-        }
+                ->orderBy('name');
+//        } else {
+//            return $this->products();
+//        }
     }
 
     public function getUrlImage(): string {
         return self::UPLOAD_URL . $this->image;
     }
-
-    public function getActionImage(): string {
-	    return  self::UPLOAD_URL . $this->action_image;
-    }
-
 }

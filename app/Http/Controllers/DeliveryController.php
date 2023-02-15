@@ -2,6 +2,7 @@
 
 use App;
 use Fanky\Admin\Models\Complex;
+use Fanky\Admin\Models\DeliveryItem;
 use Fanky\Admin\Models\NewsTag;
 use Fanky\Admin\Models\Page;
 //use Request;
@@ -35,6 +36,8 @@ class DeliveryController extends Controller {
             View::share('canonical', $this->delivery_page->alias);
         }
 
+        $deliveries = DeliveryItem::all()->sortBy('order');
+
         $payments = PaymentItem::all()->sortBy('order');
         if(count($payments) > 2) $payments = $payments->chunk(2);
 
@@ -43,6 +46,7 @@ class DeliveryController extends Controller {
             'h1' => $page->h1,
             'title' => $page->title,
             'text' => $page->text,
+            'deliveries' => $deliveries,
             'payments' => $payments,
         ]);
 	}

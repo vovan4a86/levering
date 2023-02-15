@@ -33,10 +33,10 @@
                     </button>
                     <div class="header__msg">
                         @if(Settings::get('header_telegram'))
-                            <a class="header__msg-icon lazy" href="https://t.me/{{ Settings::get('header_telegram') }}" data-bg="static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
+                            <a class="header__msg-icon lazy" href="https://t.me/{{ Settings::get('header_telegram') }}" data-bg="/static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
                         @endif
                         @if(Settings::get('header_whatsapp'))
-                            <a class="header__msg-icon lazy" href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('header_whatsapp')) }}" data-bg="static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
+                            <a class="header__msg-icon lazy" href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('header_whatsapp')) }}" data-bg="/static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
                         @endif
                     </div>
                     @if(Settings::get('header_phone'))

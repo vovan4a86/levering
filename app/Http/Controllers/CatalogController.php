@@ -32,17 +32,7 @@ class CatalogController extends Controller {
         $page = $this->add_region_seo($page);
         $page->setSeo();
 
-        $catalog = Cache::get('catalog_index', collect());
-        if(!count($catalog)) {
-            $catalog = Catalog::public()
-                ->where('parent_id', 0)
-                ->orderBy('order')
-                ->get();
-            Cache::add('catalog_index', $catalog, now()->addMinutes(60));
-        }
-
         $categories = Catalog::getTopLevelOnList();
-        $updated = Catalog::getUpdatedAt()->updated_at;
 
         return view('catalog.index', [
             'h1' => $page->h1,
@@ -50,8 +40,6 @@ class CatalogController extends Controller {
             'title' => $page->title,
             'bread' => $bread,
             'categories' => $categories,
-            'headerIsWhite' => true,
-            'updated' => date_format($updated, 'd.m.Y'),
         ]);
     }
 
@@ -83,123 +71,29 @@ class CatalogController extends Controller {
         $category = $this->add_region_seo($category);
         $category->setSeo();
 
-        $children = $category->public_children;
-        $categories = Catalog::getTopLevelOnList();
-
         $root = $category;
         while ($root->parent_id !== 0) {
             $root = $root->findRootCategory($root->parent_id);
         }
 
-        $per_page = Settings::get('product_per_page') ?? 10;
+        $per_page = Settings::get('product_per_page') ?? 9;
         $data['per_page'] = $per_page;
 
-        if (count($children)) {
-            $ids = $category->getRecurseChildrenIds();
-        } else {
-            $ids = $category->getRecurseChildrenIdsInner();
-        }
-
-        $filterNames = Product::public()->whereIn('catalog_id', $ids)->distinct()->pluck('name')->all();
-        $filterSizes = Product::public()->whereIn('catalog_id', $ids)->distinct()->orderBy('size')->pluck('size')->all();
-
-        if ($category->filters) {
-            [$filter1, $filter2] = explode('/', $category->filters);
-            if (isset($filter1) && isset($filter2)) {
-                foreach ([$filter1, $filter2] as $i => $filter) {
-                    $filters[$i]['alias'] = $filter;
-                    $filters[$i]['name'] = Filter::whereAlias($filter)->first()->name ?? 'noname';
-                }
-            }
-        } else {
-            $filters = [
-                ['alias' => 'steel', 'name' => 'Марка'],
-                ['alias' => 'length', 'name' => 'Длина']
-            ];
-        }
-
-        $items = Product::public()->whereIn('catalog_id', $ids)
-            ->orderBy('name')->paginate($per_page);
+        $items = $category->getRecurseProducts()->paginate($per_page);
 
         $data = [
             'bread' => $bread,
             'category' => $category,
-            'categories' => $categories,
-            'children' => $children,
             'h1' => $category->getH1(),
-            'updatedDate' => date_format($category->updated_at, 'd.m.Y'),
-            'items' => $items,
-            'filterSizes' => $filterSizes,
-            'filterNames' => $filterNames,
-            'filters' => $filters ?? null,
-            'root' => $root ?? null,
-            'headerIsWhite' => true,
+            'items' => $items
         ];
 
         if (Request::ajax()) {
-            $filter_name = Request::only('name'); //only = array
-            $filter_size = Request::only('size');
-            $searchCatalog = Request::get('search-catalog'); //get = string
-
-            $queries = [];
-            if (count($filter_name)) {
-                foreach ($filter_name as $name => $values) {
-                    foreach ($values as $value) {
-                        $queries['name'][] = [$value];
-                    }
-                }
-            }
-
-            if (count($filter_size)) {
-                foreach ($filter_size as $name => $values) {
-                    foreach ($values as $value) {
-                        $queries['size'][] = $value;
-                    }
-                }
-            }
-
-            if (count($queries)) {
-                $prods_id = []; //все найденные id продуктов
-                foreach ($queries as $name => $values) {
-                    foreach ($values as $value) {
-                        $prods_id[] = Product::whereIn('catalog_id', $ids)
-                            ->where($name, $value)->pluck('id');
-                    }
-                }
-
-                $products_ids = [];//более удобный массив
-                foreach ($prods_id as $items) {
-                    foreach ($items as $item) {
-                        $products_ids[] = $item;
-                    }
-                }
-
-                if (isset($searchCatalog)) {
-                    $items = Product::whereIn('id', $products_ids)
-                        ->where('name', 'like', '%' . $searchCatalog . '%')
-                        ->orderBy('name')->paginate($per_page);
-                } else {
-                    $items = Product::whereIn('id', $products_ids)
-                        ->orderBy('name')->paginate($per_page);
-                }
-            } else {
-                if (isset($searchCatalog)) {
-                    $items = Product::whereIn('catalog_id', $ids)
-                        ->where('name', 'like', '%' . $searchCatalog . '%')
-                        ->orderBy('name')->paginate($per_page);
-                } else {
-                    $items = Product::whereIn('catalog_id', $ids)
-                        ->orderBy('name')->paginate($per_page);
-                }
-            }
-
             $view_items = [];
             foreach ($items as $item) {
                 $view_items[] = view('catalog.product_item', [
                     'item' => $item,
                     'category' => $category,
-                    'filters' => $filters ?? null,
-                    'root' => $root,
                     'per_page' => $per_page
                 ])->render();
             }

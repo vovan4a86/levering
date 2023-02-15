@@ -33,9 +33,23 @@
                 <div class="tab-pane active" id="tab_1">
                     {!! Form::groupText('name', $item->name, 'Название') !!}
                     {!! Form::groupText('description', $item->description, 'Описание') !!}
-                    {!! Form::groupText('text', $item->text, 'Текст') !!}
-                    {!! Form::groupText('price', $item->price, 'Стоимость доставки') !!}
-                    {!! Form::groupText('free', $item->free, 'Бесплатно при заказе, от') !!}
+                    {!! Form::groupText('address', $item->address, 'Адрес') !!}
+                    <div class="form-group">
+                        <label for="article-image">Иконка (46х46)</label>
+                        <input id="article-image" type="file" name="icon" value=""
+                               onchange="return iconAttache(this, event)">
+                        <div id="article-image-block">
+                            @if ($item->icon)
+                                <img class="img-polaroid" src="{{ \Fanky\Admin\Models\DeliveryItem::UPLOAD_URL . $item->icon }}" height="100"
+                                     data-image="{{ \Fanky\Admin\Models\DeliveryItem::UPLOAD_URL . $item->icon }}"
+                                     onclick="return popupImage($(this).data('image'))">
+                            @else
+                                <p class="text-yellow">Изображение не загружено.</p>
+                            @endif
+                        </div>
+                    </div>
+                    {!! Form::groupText('header_text', $item->header_text, 'Заголовок текста') !!}
+                    {!! Form::groupRichtext('text', $item->text, 'Текст (<ul class="b-delivery__list list-reset">)') !!}
                 </div>
             </div>
 

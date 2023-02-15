@@ -68,7 +68,7 @@ class Arenda extends Command {
 
         $catalogCrawler->filter('.c_item')
             ->reduce(function (Crawler $none, $i) {
-                return ($i == 5); //max 14
+                return ($i == 14); //max 14
             })
             ->each(function (Crawler $sub) {
                 $url = $sub->filter('.c_item_title')->first()->attr('href');
@@ -362,15 +362,20 @@ class Arenda extends Command {
         $f = mb_strripos($str, 'Минимальное время заказа:');
         if (!$f) return null;
 
-        $substr = mb_substr($str, $f + 26, 3);
+        $substr = mb_substr($str, $f + 26, 9);
 
         return preg_replace("/[^0-9]/", null, $substr);
     }
 
-    public function extractChars(string $str): array {
-        $newStr = str_replace(['<p>', '</p>'], null, $str);
-        $arr = explode('<br>', $newStr);
 
+    public function extractChars(string $str): array {
+        if(str_contains($str,'<ul>')) {
+            $newStr = str_replace(['<ul>', '</ul>', '<li>'], null, $str);
+            $arr =  array_map('trim', explode('</li>', $newStr));
+        } else {
+            $newStr = str_replace(['<p>', '</p>'], null, $str);
+            $arr = array_map('trim', explode('<br>', $newStr));
+        }
         $chars = [];
         foreach ($arr as $row) {
             if (stripos($row, ':')) {

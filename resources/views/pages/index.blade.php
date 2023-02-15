@@ -10,11 +10,18 @@
                         <div class="s-catalog__title">Каталог продукции</div>
                         <div class="s-catalog__grid">
                             @foreach($categories as $item)
+                                @php
+                                    if($item->size_main) {
+                                        [$w, $h] = array_map('trim', explode(',', $item->size_main));
+                                    } else {
+                                        $w = $h = 200;
+                                    }
+                                @endphp
                                 <div class="s-catalog__col {{ $loop->iteration <= 3 ? 's-catalog__col--wide' : null }}">
                                     <a class="catalog-card {{ $loop->iteration <= 3 ? 'catalog-card--wide' : null }}" href="{{ $item->url }}" title="{{ $item->name }}">
                                         <span class="catalog-card__title">{{ $item->title }}</span>
                                         <img class="catalog-card__pic lazy" src="/" data-src="{{ $item->thumb(2) }}"
-                                             width="{{ $loop->iteration <= 3 ? '220' : '172'}}" height="{{ $loop->iteration <= 3 ? '210' : '175'}}" alt=""/>
+                                             width="{{ $w }}" height="{{ $h ?: 200 }}" alt="{{ $item->title }}"/>
                                     </a>
                                 </div>
                             @endforeach

@@ -41,20 +41,30 @@
                 {!! Form::groupText('keywords', $catalog->keywords, 'keywords') !!}
                 {!! Form::groupText('description', $catalog->description, 'description') !!}
 
+                {!! Form::groupText('discount', $catalog->discont, 'Скидка на все товары категории') !!}
 
-                <div class="form-group">
-                    <label for="article-image">Изображение</label>
-                    <input id="article-image" type="file" name="image" value=""
-                           onchange="return newsImageAttache(this, event)">
-                    <div id="article-image-block">
-                        @if ($catalog->image)
-                            <img class="img-polaroid" src="{{ \Fanky\Admin\Models\Catalog::UPLOAD_URL . $catalog->image }}" height="100"
-                                 data-image="{{ \Fanky\Admin\Models\Catalog::UPLOAD_URL . $catalog->image }}"
-                                 onclick="return popupImage($(this).data('image'))">
-                        @else
-                            <p class="text-yellow">Изображение не загружено.</p>
-                        @endif
+                <div class="form-group" style="display: flex; column-gap: 30px;">
+                    <div>
+                        <label for="article-image">Изображение</label>
+                        <input id="article-image" type="file" name="image" value=""
+                               onchange="return newsImageAttache(this, event)">
+                        <div id="article-image-block">
+                            @if ($catalog->image)
+                                <img class="img-polaroid"
+                                     src="{{ \Fanky\Admin\Models\Catalog::UPLOAD_URL . $catalog->image }}" height="100"
+                                     data-image="{{ \Fanky\Admin\Models\Catalog::UPLOAD_URL . $catalog->image }}"
+                                     onclick="return popupImage($(this).data('image'))">
+                            @else
+                                <p class="text-yellow">Изображение не загружено.</p>
+                            @endif
+                        </div>
                     </div>
+                    @if($catalog->parent_id == 0)
+                        <div style="align-self: center; ">
+                            {!! Form::groupText('size_main', $catalog->size_main, 'Размер иконки на главной (w,h)') !!}
+                            {!! Form::groupText('size_cat', $catalog->size_cat, 'Размер иконки в разделе каталог (w,h)') !!}
+                        </div>
+                    @endif
                 </div>
                 {!! Form::hidden('published', 0) !!}
                 {!! Form::groupCheckbox('published', 1, $catalog->published, 'Показывать раздел') !!}

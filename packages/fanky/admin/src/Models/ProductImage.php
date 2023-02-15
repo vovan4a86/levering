@@ -39,4 +39,8 @@ class ProductImage extends Model {
 		2 => '112x61', //list_row
 		3 => '586x386', //product_page
 	];
+
+    public function product() {
+        return $this->belongsTo(Product::class);
+    }
 }

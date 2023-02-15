@@ -3,7 +3,7 @@
         <div class="footer__grid">
             <div class="footer__info">
                 <!-- homepage ? block : link-->
-                <div class="footer__logo lazy" data-bg="static/images/common/logo--black.svg"></div>
+                <div class="footer__logo lazy" data-bg="/static/images/common/logo--black.svg"></div>
                 <div class="footer__brand">© 2022. Levering Ural. Все права защищены</div>
                 <a class="footer__policy" href="{{ route('policy') }}">Политика конфиденциальности</a>
             </div>
@@ -41,10 +41,10 @@
                 <div class="footer__calls">
                     <div class="footer__msg">
                         @if(Settings::get('footer_telegram'))
-                            <a class="footer__msg-icon lazy" href="https://t.me/{{ Settings::get('footer_telegram') }}" data-bg="static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
+                            <a class="footer__msg-icon lazy" href="https://t.me/{{ Settings::get('footer_telegram') }}" data-bg="/static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
                         @endif
                         @if(Settings::get('footer_whatsapp'))
-                            <a class="footer__msg-icon lazy" href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('footer_whatsapp')) }}" data-bg="static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
+                            <a class="footer__msg-icon lazy" href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('footer_whatsapp')) }}" data-bg="/static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
                         @endif
                     </div>
                     @if(Settings::get('footer_phone'))

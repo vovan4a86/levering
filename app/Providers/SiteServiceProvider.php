@@ -103,18 +103,18 @@ class SiteServiceProvider extends ServiceProvider {
             ));
         });
 
-        View::composer(['catalog.index'], function ($view) {
-            $catalog = Cache::get('catalog_index', collect());
-            if(!count($catalog)) {
-                $catalog = Catalog::public()
+        View::composer(['catalog.blocks.layout_aside'], function ($view) {
+            $categories = Cache::get('categories', collect());
+            if(!count($categories)) {
+                $categories = Catalog::public()
                     ->where('parent_id', 0)
                     ->orderBy('order')
                     ->get();
-                Cache::add('catalog_index', $catalog, now()->addMinutes(60));
+                Cache::add('catalog_index', $categories, now()->addMinutes(60));
             }
 
             $view->with(compact(
-         'catalog'
+         'categories'
             ));
         });
 

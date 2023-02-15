@@ -1,3 +1,21 @@
+var icon = null;
+function iconAttache(elem, e){
+    $.each(e.target.files, function(key, file)
+    {
+        if(file['size'] > max_file_size){
+            alert('Слишком большой размер файла. Максимальный размер 2Мб');
+        } else {
+            icon = file;
+            renderImage(file, function (imgSrc) {
+                var item = '<img class="img-polaroid" src="' + imgSrc + '" height="100" data-image="' + imgSrc + '" ' +
+                    'onclick="return popupImage($(this).data(\'image\'))">';
+                $('#article-image-block').html(item);
+            });
+        }
+    });
+    $(elem).val('');
+}
+
 function updateOrder(form, e) {
     e.preventDefault();
     var button = $(form).find('[type="submit"]');
@@ -16,6 +34,9 @@ function deliveryItemSave(form, e){
     $.each($(form).serializeArray(), function(key, value){
         data.append(value.name, value.value);
     });
+    if (icon) {
+        data.append('icon', icon);
+    }
 
     sendFiles(url, data, function(json){
         if (typeof json.errors != 'undefined') {
@@ -26,6 +47,7 @@ function deliveryItemSave(form, e){
         }
         if (typeof json.redirect != 'undefined') document.location.href = urldecode(json.redirect);
         if (typeof json.msg != 'undefined') $(form).find('[type=submit]').after(autoHideMsg('green', urldecode(json.msg)));
+        icon = null;
     });
 
     return false;

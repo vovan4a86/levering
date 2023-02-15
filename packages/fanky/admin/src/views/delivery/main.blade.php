@@ -24,23 +24,23 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="200">Название</th>
+							<th width="50">Иконка</th>
+							<th>Название</th>
 							<th>Описание</th>
-							<th>Доп. текст</th>
-							<th>Стоимость доставки</th>
-							<th>Бесплатно при заказе, от</th>
-							<th width="120">Сортировка</th>
+							<th>Адрес</th>
+							<th width="100">Сортировка</th>
 							<th width="50"></th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach ($items as $item)
 							<tr>
+								<td class="text-center"><a href="{{ route('admin.delivery.edit', [$item->id]) }}">
+										<img src="{{ \Fanky\Admin\Models\DeliveryItem::UPLOAD_URL . $item->icon }}"></a>
+								</td>
 								<td><a href="{{ route('admin.delivery.edit', [$item->id]) }}">{{ $item->name }}</a></td>
 								<td><a href="{{ route('admin.delivery.edit', [$item->id]) }}">{{ $item->description }}</a></td>
-								<td><a href="{{ route('admin.delivery.edit', [$item->id]) }}">{{ $item->text }}</a></td>
-								<td><a href="{{ route('admin.delivery.edit', [$item->id]) }}">{{ $item->price }}</a></td>
-								<td><a href="{{ route('admin.delivery.edit', [$item->id]) }}">{{ $item->free }}</a></td>
+								<td><a href="{{ route('admin.delivery.edit', [$item->id]) }}">{{ $item->address }}</a></td>
 								<td>
 									<form class="input-group input-group-sm"
 										  action="{{ route('admin.delivery.update-order', [$item->id]) }}"

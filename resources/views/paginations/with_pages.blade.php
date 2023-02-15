@@ -47,6 +47,7 @@
                     @endif
                 @endif
             @endfor
+
             @if($to < $paginator->lastPage())
                 <a class="pagination__link" href="{{ $paginator->url($paginator->lastPage()) }}"
                    title="Последняя страница">

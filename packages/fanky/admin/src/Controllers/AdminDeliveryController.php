@@ -20,8 +20,10 @@ class AdminDeliveryController extends AdminController {
 
 	public function postSave() {
 		$id = Request::input('id');
-		$data = Request::only(['name', 'description', 'text', 'price', 'free', 'order']);
+		$data = Request::only(['name', 'description', 'address', 'header_text', 'text', 'order']);
 //        if(!array_get($data, 'order')) $data['order'] = 0;
+        $icon = Request::file('icon');
+        \Debugbar::log($icon);
 
         // валидация данных
 		$validator = Validator::make($data, [
@@ -31,12 +33,17 @@ class AdminDeliveryController extends AdminController {
 			return ['errors' => $validator->messages()];
 		}
 
+		if($icon) {
+            $file_name = DeliveryItem::uploadIcon($icon);
+            $data['icon'] = $file_name;
+        }
+
         // сохраняем страницу
 		$item = DeliveryItem::find($id);
 		$redirect = false;
 		if (!$item) {
             $data['order'] = DeliveryItem::all()->max('order') + 1;
-            $article = DeliveryItem::create($data);
+            DeliveryItem::create($data);
 			$redirect = true;
 		} else {
             $item->update($data);

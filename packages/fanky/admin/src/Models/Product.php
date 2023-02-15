@@ -159,7 +159,6 @@ class Product extends Model {
             ->join('chars', 'chars.id', '=', 'product_chars.char_id');
     }
 
-    //related
     public function related(): HasMany {
         return $this->hasMany(ProductRelated::class, 'product_id');
 //            ->join('products', 'product_related.related_id', '=', 'products.id');
@@ -289,10 +288,11 @@ class Product extends Model {
         }
     }
 
-    public function showAnyImage() {
-        $is_item_images = $this->images()->get();
+    public function showAnyImage(): string {
+//        $is_item_images = $this->images()->get();
+        $cat_image = Catalog::whereId($this->catalog_id)->first();
         $root_image = $this->getRootImage() ?: self::NO_IMAGE;
-        return count($is_item_images) ? ProductImage::UPLOAD_URL . $is_item_images[0]->image :
+        return $cat_image->image ? Catalog::UPLOAD_URL . $cat_image->image :
             $root_image;
     }
 
@@ -328,7 +328,7 @@ class Product extends Model {
         return self::$defaultTitleTemplate;
     }
 
-    public static $defaultTitleTemplate = '{name} купить - БИЗНЕС-МС';
+    public static $defaultTitleTemplate = '{name} купить - LEVERING URAL';
 
     public function generateTitle() {
         if (!($template = $this->getTitleTemplate())) {
@@ -365,7 +365,7 @@ class Product extends Model {
         return null;
     }
 
-    public static $defaultDescriptionTemplate = '{name} купить по цене от {price} руб. | БИЗНЕС-МС';
+    public static $defaultDescriptionTemplate = '{name} купить по цене от {price} руб. | LEVERING URAL';
 
     public function generateDescription() {
         if (!($template = $this->getDescriptionTemplate())) {
@@ -402,27 +402,6 @@ class Product extends Model {
         return number_format($this->price, 0, '', ' ');
     }
 
-    public function getRoundKAttribute() {
-        if ($this->k) {
-            $pr = 0;
-            if ($this->k < 1)
-                $pr = 1000;
-            else if ($this->k < 10)
-                $pr = 100;
-            else if ($this->k < 100)
-                $pr = 10;
-            else if ($this->k < 1000)
-                $pr = 1;
-            else
-                $pr = 0.1;
-
-            $k = ceil($this->k * $pr);
-            return $k / $pr;
-        } else {
-            return null;
-        }
-    }
-
     public function getMeasurePrice(): ?string {
         if ($this->measure == 'т') {
             return $this->price;
@@ -452,6 +431,24 @@ class Product extends Model {
 //            return number_format($this->price_per_m2, '0', '',' ');
         } else {
             return 'catalog.blocks.product_order_other';
+        }
+    }
+
+    public function getRecourseDiscountAmount($id = null) {
+        if($this->discount) return $this->discount;
+
+        if(!$id) $category = Catalog::find($this->catalog_id);
+        else $category = Catalog::find($id);
+
+        if($category->discount) return $category->discount;
+        elseif($category->parent_id == 0) return 0;
+        else $this->getRecourseDiscountAmount($category->parent_id);
+    }
+
+    public function getPriceWithDiscount() {
+        if($discount = $this->getRecourseDiscountAmount()) {
+            $amount = $this->price * $discount / 100;
+            return $this->price + $amount;
         }
     }
 
