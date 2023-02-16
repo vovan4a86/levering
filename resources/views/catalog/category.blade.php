@@ -36,7 +36,9 @@
                                     @endforeach
                                 </div>
                             </div>
-                            @include('catalog.section_pagination', ['paginator' => $items])
+                            <div class="section__pagination">
+                                @include('catalog.section_pagination', ['paginator' => $items])
+                            </div>
                         @endif
                         @include('blocks.send_detail_count')
                         @if($category->text)

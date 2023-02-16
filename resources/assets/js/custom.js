@@ -82,24 +82,20 @@ function addToCart(id) {
     }.bind(this));
 }
 
-function ajaxRequest(elem, e, id) {
+function ajaxRequest(elem, e) {
     e.preventDefault();
 
     const url = $(elem).attr('href');
-    const page = $(elem).attr('href').split('page=')[1];
 
     $.ajax({
-        url: "/pagination/fetch_data?page=" + page,
-        data: {id},
-        success: function (data) {
-            // $('#table_data').html(data);
+        url: url,
+        success: function (json) {
             if (typeof json.items !== 'undefined') {
-                console.log(json.items)
-                // $('.catalog-list__products').html(json.items);
+                $('.b-cards__grid').html(json.items);
             }
-            // if (typeof json.paginate !== 'undefined') {
-                // $('.pagination').html(json.paginate);
-            // }
+            if (typeof json.paginate !== 'undefined') {
+                $('.section__pagination').html(json.paginate);
+            }
         }
     });
 }

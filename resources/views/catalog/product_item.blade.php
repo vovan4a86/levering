@@ -4,7 +4,7 @@
             <div class="p-card__badge badge">Лучшая цена</div>
         @endif
         <div class="p-card__preview">
-            <img class="p-card__img lazy" src="/"
+            <img class="p-card__img" src="{{ $item->image()->first() ? $item->image()->first()->image : $item->showAnyImage() }}"
                  data-src="{{ $item->image()->first() ? $item->image()->first()->image : $item->showAnyImage() }}"
                  width="227" height="162" alt="{{ $item->name }}"/>
         </div>

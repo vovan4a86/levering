@@ -22,7 +22,7 @@ use Validator;
 
 class AjaxController extends Controller {
     private $fromMail = 'info@bms.ru';
-    private $fromName = 'БМС';
+    private $fromName = 'LEVERING';
 
     //РАБОТА С КОРЗИНОЙ
     public function postAddToCart(Request $request): array {
@@ -47,49 +47,6 @@ class AjaxController extends Controller {
                 $product_item['count'] = $weight;
             }
 
-            $product_item['url'] = $product->url;
-            Cart::add($product_item);
-        }
-        $header_cart = view('blocks.header_cart')->render();
-
-        return [
-            'header_cart' => $header_cart,
-        ];
-    }
-
-    public function postAddToCartPerItem(Request $request): array {
-        $id = $request->get('id');
-        $count = $request->get('size', 0);
-
-        $product = Product::find($id);
-        if ($product) {
-            $product_item = $product->toArray();
-            $product_item['current_price'] = $product->getMeasurePrice();
-            $product_item['count'] = $count;
-            $product_item['round_k'] = $product->round_k;
-            $product_item['weight'] = 0;
-            $product_item['url'] = $product->url;
-            Cart::add($product_item);
-        }
-        $header_cart = view('blocks.header_cart')->render();
-
-        return [
-            'header_cart' => $header_cart,
-        ];
-    }
-
-    public function postAddToCartPerKilo(Request $request): array {
-        $id = $request->get('id');
-        $weight = $request->get('weight', 0);
-
-        /** @var Product $product */
-        $product = Product::find($id);
-        if ($product) {
-            $product_item = $product->toArray();
-            $product_item['current_price'] = $product->getMeasurePrice();
-            $product_item['count'] = 0;
-            $product_item['round_k'] = $product->round_k;
-            $product_item['weight'] = 0;
             $product_item['url'] = $product->url;
             Cart::add($product_item);
         }
@@ -198,7 +155,7 @@ class AjaxController extends Controller {
             ];
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Заявка в свободной форме | БМС';
+                $title = $feedback->id . ' | Заявка в свободной форме | LEVERING';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);
@@ -228,7 +185,7 @@ class AjaxController extends Controller {
             ];
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Написать нам | БМС';
+                $title = $feedback->id . ' | Написать нам | LEVERING';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);
@@ -240,13 +197,15 @@ class AjaxController extends Controller {
 
     //заказать звонок
     public function postCallback(Request $request) {
-        $data = $request->only(['name', 'phone']);
+        $data = $request->only(['name', 'phone', 'time']);
         $valid = Validator::make($data, [
             'name' => 'required',
             'phone' => 'required',
+            'time' => 'required',
         ], [
             'name.required' => 'Не заполнено поле Имя',
             'phone.required' => 'Не заполнено поле Телефон',
+            'time.required' => 'Не заполнено поле Удобное время',
         ]);
 
         if ($valid->fails()) {
@@ -258,7 +217,7 @@ class AjaxController extends Controller {
             ];
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Заказать звонок | БМС>';
+                $title = $feedback->id . ' | Заказать звонок | LEVERING>';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);
@@ -288,7 +247,7 @@ class AjaxController extends Controller {
             ];
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Быстрый заказ | БМС';
+                $title = $feedback->id . ' | Быстрый заказ | LEVERING';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);
@@ -328,7 +287,7 @@ class AjaxController extends Controller {
 
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Задать вопрос | БМС';
+                $title = $feedback->id . ' | Задать вопрос | LEVERING';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);
@@ -338,17 +297,15 @@ class AjaxController extends Controller {
         }
     }
 
-    //свяжитесь с нами
-    public function postContactUs(Request $request) {
-        $data = $request->only(['name', 'phone', 'text']);
+    //запрос менеджеру
+    public function postManagerRequest(Request $request) {
+        $data = $request->only(['name', 'phone', 'message']);
         $valid = Validator::make($data, [
             'name' => 'required',
             'phone' => 'required',
-            'text' => 'required'
         ], [
             'name.required' => 'Не заполнено поле Имя',
             'phone.required' => 'Не заполнено поле Телефон',
-            'text.required' => 'Не заполнено поле Сообщение',
         ]);
 
         if ($valid->fails()) {
@@ -360,7 +317,7 @@ class AjaxController extends Controller {
             ];
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Свяжитесь с нами | БМС';
+                $title = $feedback->id . ' | Запрос менеджеру | LEVERING';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);
@@ -453,7 +410,7 @@ class AjaxController extends Controller {
 //        }
 
         Mail::send('mail.new_order', ['order' => $order], function ($message) use ($order) {
-            $title = $order->id . ' | Новый заказ | БМС';
+            $title = $order->id . ' | Новый заказ | LEVERING';
             $message->from($this->fromMail, $this->fromName)
                 ->to(Settings::get('feedback_email'))
                 ->subject($title);
@@ -616,114 +573,4 @@ class AjaxController extends Controller {
 
         return ['success' => true];
     }
-
-    public function postUpdateFilter(Request $request) {
-        $column1 = $request->get('column1');
-        $column2 = $request->get('column2');
-        $category_id = $request->get('category_id');
-        $filter_name1 = $request->get('filter_name1');
-        $filter_name2 = $request->get('filter_name2');
-
-        \Debugbar::log($column1);
-        \Debugbar::log($column2);
-        \Debugbar::log($category_id);
-        \Debugbar::log($filter_name1);
-        \Debugbar::log($filter_name2);
-
-        $category = Catalog::find($category_id);
-
-        if ($category->parent_id !== 0) {
-            $root = $category->findRootCategory($category->parent_id);
-        } else {
-            $root = $category;
-        }
-
-        if (!$column1 && !$column2) {
-            if ($category->parent_id == 0) {
-                $ids = $category->getRecurseChildrenIds();
-                $items = Product::public()->whereIn('catalog_id', $ids)
-                    ->orderBy('name', 'asc')->paginate(10);
-            } else {
-                $items = $category->products()->paginate(10);
-            }
-        } else {
-            if ($category->parent_id == 0) {
-                $ids = $category->getRecurseChildrenIds();
-                $items = Product::public()->whereIn('catalog_id', $ids)
-                    ->where($filter_name1, '=', $column1)
-                    ->orderBy('name', 'asc')
-                    ->paginate(10);
-            } else {
-                $items = $category->products()->where($filter_name1, '=', 100)->paginate(10);
-            }
-        }
-
-        $filters = $root->filters()->get();
-        $sort = [];
-        foreach ($filters as $filter) {
-            if ($ids) {
-                $sort[$filter->alias] = Product::public()->whereIn('catalog_id', $ids)
-                    ->orderBy($filter->alias, 'asc')
-                    ->groupBy($filter->alias)
-                    ->distinct()
-                    ->pluck($filter->alias)
-                    ->all();
-            } else {
-                $sort[$filter->alias] = Product::public()->where('catalog_id', $category->id)
-                    ->orderBy($filter->alias, 'asc')
-                    ->groupBy($filter->alias)
-                    ->distinct()
-                    ->pluck($filter->alias)
-                    ->all();
-            }
-        }
-
-//        $list = view('catalog.views.list', [
-//            'items' => $items,
-//            'category' => $category,
-//            'filters' => $filters,
-//            'sort' => $sort,
-//            'root' => $root,
-//            'per_page' => 10,
-//        ])->render();
-
-        $paginate = view('catalog.views.paginate', ['items' => $items])->render();
-
-        $list = [];
-        foreach ($items as $item) {
-            $list[] = view('catalog.list_row', [
-                'item' => $item,
-                'filters' => $filters,
-                'sort' => $sort,
-                'root' => $root,
-                'per_page' => 10,
-            ])->render();
-        }
-
-        return ['success' => true, 'list' => $list, 'paginate' => $paginate];
-
-    }
-
-    public function fetchData(Request $request, $id) {
-        if ($request->ajax()) {
-            $category = Catalog::whereId($id)->first();
-            $items = $category->getRecurseProducts()->paginate(Settings::get('product_per_page') ?: 9);
-            $view_items = [];
-            foreach ($items as $item) {
-                $view_items[] = view('catalog.product_item', [
-                    'item' => $item,
-                    'category' => $category,
-                ])->render();
-            }
-
-            return response()->json([
-                'list' => $view_items,
-                'paginate' => view('catalog.section_pagination', [
-                    'paginator' => $items,
-                ])->render(),
-            ]);
-        }
-
-    }
-
 }

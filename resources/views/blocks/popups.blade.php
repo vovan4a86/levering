@@ -1,4 +1,5 @@
-<form class="popup" id="callback" action="#" style="display: none">
+<form class="popup" id="callback" action="{{ route('ajax.callback') }}"
+      onclick="sendCallback(this, event)" style="display: none">
     <div class="popup__container">
         <div class="popup__head">
             <div class="popup__title">Обратный звонок</div>
@@ -22,7 +23,7 @@
                 <input class="checkbox__input" type="checkbox" checked required>
                 <span class="checkbox__box"></span>
                 <span class="checkbox__policy">Согласен на обработку
-							<a href="javascript:void(0)" target="_blank">персональных данных</a>
+							<a href="{{ route('policy') }}" target="_blank">персональных данных</a>
 						</span>
             </label>
         </div>
@@ -33,7 +34,8 @@
         </div>
     </div>
 </form>
-<form class="popup" id="request" action="#" style="display: none">
+<form class="popup" id="request" action="{{ route('ajax.manager-request') }}"
+      onclick="sendCallback(this, event)" style="display: none">
     <div class="popup__container">
         <div class="popup__head">
             <div class="popup__title">Запрос менеджеру</div>
@@ -57,7 +59,7 @@
                 <input class="checkbox__input" type="checkbox" checked required>
                 <span class="checkbox__box"></span>
                 <span class="checkbox__policy">Согласен на обработку
-							<a href="javascript:void(0)" target="_blank">персональных данных</a>
+							<a href="{{ route('policy') }}" target="_blank">персональных данных</a>
 						</span>
             </label>
         </div>
@@ -158,7 +160,7 @@
 </form>
 <div class="popup" id="request-done" style="display:none">
     <div class="popup__complete">
-        <div class="popup__complete-icon lazy" data-bg="static/images/common/ico_done.svg"></div>
+        <div class="popup__complete-icon lazy" data-bg="/static/images/common/ico_done.svg"></div>
         <div class="popup__complete-label">Ваша заявка отправлена. Наши специалисты свяжутся с вами в ближайшее время. Спасибо.</div>
     </div>
 </div>

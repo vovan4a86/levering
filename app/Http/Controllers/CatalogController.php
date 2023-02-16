@@ -100,7 +100,7 @@ class CatalogController extends Controller {
 
             return response()->json([
                 'items' => $view_items,
-                'paginate' => view('paginations.with_pages', [
+                'paginate' => view('catalog.section_pagination', [
                     'paginator' => $items,
                 ])->render(),
             ]);

@@ -17,8 +17,6 @@ Route::get('robots.txt', 'PageController@robots')->name('robots');
 
 Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
     Route::post('add-to-cart', [AjaxController::class, 'postAddToCart'])->name('add-to-cart');
-    Route::post('add-to-cart-pi', [AjaxController::class, 'postAddToCartPerItem'])->name('add-to-cart-pi');
-    Route::post('add-to-cart-pkilo', [AjaxController::class, 'postAddToCartPerKilo'])->name('add-to-cart-pkilo');
     Route::post('update-to-cart', [AjaxController::class, 'postUpdateToCart'])->name('update-to-cart');
     Route::post('remove-from-cart', [AjaxController::class, 'postRemoveFromCart'])->name('remove-from-cart');
     Route::post('purge-cart', [AjaxController::class, 'postPurgeCart'])->name('purge-cart');
@@ -28,18 +26,13 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
     Route::post('fast-request', 'AjaxController@postFastRequest')->name('fast-request');
     Route::post('questions', 'AjaxController@postQuestions')->name('questions');
 	Route::post('writeback', 'AjaxController@postWriteback')->name('writeback');
-	Route::post('contact-us', 'AjaxController@postContactUs')->name('contact-us');
+	Route::post('manager-request', 'AjaxController@postManagerRequest')->name('manager-request');
 	Route::post('callback', 'AjaxController@postCallback')->name('callback');
-//    Route::post('set-city', 'AjaxController@postSetCity')->name('set-city');
     Route::post('set-city', 'AjaxController@setCity')->name('set-city');
     Route::post('confirm-city', 'AjaxController@confirmCity')->name('confirm-city');
     Route::post('unconfirm-city', 'AjaxController@unConfirmCity')->name('unconfirm-city');
     Route::post('get-correct-region-link', 'AjaxController@postGetCorrectRegionLink')->name('get-correct-region-link');
-    Route::get('show-popup-cities', [AjaxController::class, 'showCitiesPopup'])
-        ->name('show-popup-cities');
-//    Route::get('search', [AjaxController::class, 'showCitiesPopup'])
-//        ->name('search');
-    Route::get('pagination/fetch_data', 'AjaxController@fetchData');
+    Route::get('show-popup-cities', [AjaxController::class, 'showCitiesPopup'])->name('show-popup-cities');
 });
 
 Route::group(['middleware' => ['redirects', 'regions']], function() {
