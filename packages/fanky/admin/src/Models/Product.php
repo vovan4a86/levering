@@ -132,6 +132,11 @@ class Product extends Model {
             ->orderBy('order');
     }
 
+    public function docs(): HasMany {
+        return $this->hasMany(ProductDoc::class, 'product_id')
+            ->orderBy('order');
+    }
+
     public function image(): HasOne {
         return $this->hasOne(ProductImage::class, 'product_id')
             ->orderBy('order');
@@ -154,7 +159,7 @@ class Product extends Model {
         }
     }
 
-    public function chars() {
+    public function chars(): HasMany {
         return $this->hasMany(ProductChar::class, 'product_id')->orderBy('order')
             ->join('chars', 'chars.id', '=', 'product_chars.char_id');
     }
@@ -328,7 +333,7 @@ class Product extends Model {
         return self::$defaultTitleTemplate;
     }
 
-    public static $defaultTitleTemplate = '{name} купить - LEVERING URAL';
+    public static $defaultTitleTemplate = '{name} купить';
 
     public function generateTitle() {
         if (!($template = $this->getTitleTemplate())) {
@@ -365,7 +370,7 @@ class Product extends Model {
         return null;
     }
 
-    public static $defaultDescriptionTemplate = '{name} купить по цене от {price} руб. | LEVERING URAL';
+    public static $defaultDescriptionTemplate = '{name} купить по цене от {price} руб.';
 
     public function generateDescription() {
         if (!($template = $this->getDescriptionTemplate())) {
@@ -443,6 +448,17 @@ class Product extends Model {
         if($category->discount) return $category->discount;
         elseif($category->parent_id == 0) return 0;
         else $this->getRecourseDiscountAmount($category->parent_id);
+    }
+
+    public function getRecourseMeasure($id = null) {
+        if($this->measure) return $this->measure;
+
+        if(!$id) $category = Catalog::find($this->catalog_id);
+        else $category = Catalog::find($id);
+
+        if($category->catalog_measure) return $category->catalog_measure;
+        elseif($category->parent_id == 0) return 0;
+        else $this->getRecourseMeasure($category->parent_id);
     }
 
     public function getPriceWithDiscount() {

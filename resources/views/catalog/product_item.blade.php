@@ -15,24 +15,23 @@
                 @if($item->price)
                     @if($item->getRecourseDiscountAmount())
                         <div class="p-card__discounts">
-                            <span data-end="₽/{{ $item->measure ?: 'шт' }}">{{ round($item->getPriceWithDiscount()) }}</span>
+                            <span data-end="₽/{{ $item->getRecourseMeasure() }}">{{ round($item->getPriceWithDiscount()) }}</span>
                             <div class="p-card__value">
                                 -{{ $item->getRecourseDiscountAmount() }}%
                             </div>
                         </div>
                     @endif
                     <div class="p-card__current"
-                         data-end="/ {{ $item->measure ?: 'шт' }}">{{ $item->price }}
+                         data-end="/ {{ $item->getRecourseMeasure() }}">{{ $item->price }}
                         ₽
                     </div>
                 @endif
             </div>
             <div class="p-card__action">
-                <button class="btn btn--primary btn--small btn-reset"
-                        type="button"
-                        aria-label="Заказать">
+                <a class="btn btn--primary btn--small btn-reset"
+                    href="{{ $item->url }}">
                     <span>Заказать</span>
-                </button>
+                </a>
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 <section class="b-contacts">
     <div class="b-contacts__container container">
-        <form class="b-contacts__body lazy" data-bg="static/images/common/b-contacts.svg" action="#">
+        <form class="b-contacts__body lazy" data-bg="/static/images/common/b-contacts.svg"
+              action="{{ route('ajax.optimal-decision') }}" onsubmit="sendRequestFile(this, event)">
             <div class="b-contacts__grid">
                 <div class="b-contacts__content">
                     <div class="b-contacts__title">Предложим оптимальное решение</div>
@@ -33,7 +34,7 @@
                             <input class="checkbox__input" type="checkbox" checked required>
                             <span class="checkbox__box"></span>
                             <span class="checkbox__policy">Согласен на обработку
-											<a href="javascript:void(0)" target="_blank">персональных данных</a>
+											<a href="{{ route('policy') }}" target="_blank">персональных данных</a>
 										</span>
                         </label>
                     </div>

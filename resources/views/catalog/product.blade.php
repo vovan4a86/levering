@@ -4,404 +4,14 @@
     <!-- aside layout-->
     <div class="layout">
         <div class="layout__container container">
-            <div class="layout__aside">
-                <aside class="aside">
-                    <div class="aside__nav">
-                        <div class="aside-nav">
-                            <div class="aside-nav__item">
-                                <div class="aside-nav__head" data-aside-head>
-                                    <div class="aside-nav__title">Кабельная продукция</div>
-                                    <div class="aside-nav__icon lazy"
-                                         data-bg="static/images/common/ico_aside.svg"></div>
-                                </div>
-                                <div class="aside-nav__body" data-aside-body>
-                                    <ul class="aside-nav__list list-reset">
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели силовые с ПВХ
-                                                изоляцией</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели гибкие с резиновой
-                                                изоляцией</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Авиационный провод</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Автомобильный провод</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Волоконно-оптический кабель</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели бронированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели и провода монтажные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели контрольные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели связи</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели сигнальные
-                                                огнестойкие</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели силовые с бумажной
-                                                изоляцией</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабели управления</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Провода для воздушных линий</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Провода изолированные
-                                                самонесущие</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Провода обмоточные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Провода установочные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Радиочастотный кабель
-                                                (коаксиальный)</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Судовой кабель</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="aside-nav__item">
-                                <div class="aside-nav__head" data-aside-head>
-                                    <div class="aside-nav__title">Кабеленесущие системы</div>
-                                    <div class="aside-nav__icon lazy"
-                                         data-bg="static/images/common/ico_aside.svg"></div>
-                                </div>
-                                <div class="aside-nav__body" data-aside-body>
-                                    <ul class="aside-nav__list list-reset">
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>ГЭМ</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>СТАНДАРТ</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>PROMTRAY</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="aside-nav__item">
-                                <div class="aside-nav__head" data-aside-head>
-                                    <div class="aside-nav__title">Промышленное освещение</div>
-                                    <div class="aside-nav__icon lazy"
-                                         data-bg="static/images/common/ico_aside.svg"></div>
-                                </div>
-                                <div class="aside-nav__body" data-aside-body>
-                                    <ul class="aside-nav__list list-reset">
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Наружное освещение</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Производственное освещение</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Светильники для АЗС</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Взрывозащищенные
-                                                светильники</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Парковое освещение</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Освещение для ЖКХ</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Освещение для офисов</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Архитектурное освещение</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="aside-nav__item">
-                                <div class="aside-nav__head" data-aside-head>
-                                    <div class="aside-nav__title">Теплоизоляция</div>
-                                    <div class="aside-nav__icon lazy"
-                                         data-bg="static/images/common/ico_aside.svg"></div>
-                                </div>
-                                <div class="aside-nav__body" data-aside-body>
-                                    <ul class="aside-nav__list list-reset">
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Базальтовая теплоизоляция</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Минеральная теплоизоляция
-                                                (кварц)</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Экструдированный
-                                                пенополистирол</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Джут, пакля</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Вспененный полиэтилен</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="aside-nav__item">
-                                <div class="aside-nav__head" data-aside-head>
-                                    <div class="aside-nav__title">Водосточные системы</div>
-                                    <div class="aside-nav__icon lazy"
-                                         data-bg="static/images/common/ico_aside.svg"></div>
-                                </div>
-                                <div class="aside-nav__body" data-aside-body>
-                                    <ul class="aside-nav__list list-reset">
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Grand Line 125/90</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Grand Line 150/100</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Optima круглый 125/90</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Optima круглый 150/100</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Vortex прямоугольный</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Vortex прямоугольный Matt</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Vortex Lite</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Vortex Lite Matt</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Vortex Project</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Vortex Mix</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="aside-nav__item">
-                                <div class="aside-nav__head" data-aside-head>
-                                    <div class="aside-nav__title">Трубы для строительства инженерных систем</div>
-                                    <div class="aside-nav__icon lazy"
-                                         data-bg="static/images/common/ico_aside.svg"></div>
-                                </div>
-                                <div class="aside-nav__body" data-aside-body>
-                                    <ul class="aside-nav__list list-reset">
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПЭ 100 газовые ГОСТ Р
-                                                58121.2-2018</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Ленты сигнальные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПНД обсадные для
-                                                скважин</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Плиты ПЗК для закрытия
-                                                кабеля</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПЭ 100 питьевые ГОСТ
-                                                18599-2001</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПВХ гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПНД гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПП гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПА гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПВХ жесткие</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Коробки электромонтажные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Аксессуары для труб</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы НПВХ обсадные для
-                                                скважин</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПНД технические
-                                                безнапорные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ЗПТ защитные
-                                                пластмассовые</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПВХ канализационные
-                                                наружные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПВХ канализационные
-                                                внутренние</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПНД гофрированные
-                                                двустенные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Фитинги ПЭ 100</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПНД дренажные
-                                                гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Кабель-каналы</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Колодцы кабельные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы хризотилцементные
-                                                напорные (ВТ, ТТ)</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПНД канализационные
-                                                гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПП канализационные
-                                                гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы ПП дренажные
-                                                гофрированные</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Металлорукав</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трубы хризотилцементные
-                                                безнапорные (БНТ)</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="aside-nav__item">
-                                <div class="aside-nav__head" data-aside-head>
-                                    <div class="aside-nav__title">Аренда спецтехники</div>
-                                    <div class="aside-nav__icon lazy"
-                                         data-bg="static/images/common/ico_aside.svg"></div>
-                                </div>
-                                <div class="aside-nav__body" data-aside-body>
-                                    <ul class="aside-nav__list list-reset">
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Экскаваторы-погрузчики</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Экскаваторы</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Фронтальные погрузчики</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Самосвалы</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Автокраны</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Манипуляторы</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Автовышки</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Бульдозеры</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Катки</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Трактор с щеткой</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Автокомпрессор</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Ямобуры</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Тралы</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Гидромолот</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" data-aside-link>Дизельные генераторы DCA</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="aside__request">
-                        <div class="aside-request lazy" data-bg="static/images/common/aside-request-bg.jpg">
-                            <div class="aside-request__title">Нет времени на поиск в каталоге — Запроси консультацию
-                            </div>
-                            <div class="aside-request__text">Наш специалист подскажет по ассортименту и сделает лучшее
-                                предложение
-                            </div>
-                            <div class="aside-request__action">
-                                <button class="btn btn--primary btn--small btn-reset" type="button" data-popup
-                                        data-src="#request" aria-label="Оставить заявку">
-                                    <span>Оставить заявку</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="aside__text">Наша главная цель – снабжение строительных объектов квалифицированной
-                        рабочей силой и надежной продукцией, которая будет служить долгие десятилетия.
-                    </div>
-                </aside>
-            </div>
+            @include('catalog.blocks.layout_aside')
             <div class="layout__content">
                 <main>
                     <section class="section">
-                        <div class="section__head">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                            пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                        </div>
+                        <div class="section__head">{{ $product->name }}</div>
                         <form class="product" action="#">
                             <input type="hidden" name="product"
-                                   value="Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 - пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15">
+                                   value="{{ $product->name }}">
                             <div class="product__top">
                                 <button class="product__share share btn-reset" type="button" aria-label="Поделиться">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -418,20 +28,23 @@
                                     </svg>
                                     <span>Поделиться</span>
                                 </button>
-                                <div class="product__code">Код товар: 121332</div>
+                                <div class="product__code">Код товара: {{ $product->id }}</div>
                             </div>
                             <div class="product__grid">
                                 <div class="product__preview">
-                                    <div class="product__preview-top">
-                                        <div class="product__badge badge">Лучшая цена</div>
-                                        <img class="product__brand lazy" src="/"
-                                             data-src="static/images/common/brand.png" width="105" height="21" alt="">
-                                    </div>
+                                    @if($product->getRecourseDiscountAmount())
+                                        <div class="product__preview-top">
+                                            <div class="product__badge badge">Лучшая цена</div>
+{{--                                            <img class="product__brand lazy" src="/"--}}
+{{--                                                 data-src="/static/images/common/brand.png" width="105" height="21"--}}
+{{--                                                 alt="">--}}
+                                        </div>
+                                    @endif
                                     <div class="product__preview-body">
-                                        <a href="static/images/common/product.png" data-fancybox
-                                           title="Комплект Gidrolica Light">
-                                            <img class="product__view lazy" src="/"
-                                                 data-src="static/images/common/product.png" width="359" height="239"
+                                        <a href="{{ $image }}" data-fancybox
+                                           title="{{ $product->name }}">
+                                            <img class="product__view lazy" src="{{ $image }}"
+                                                 data-src="{{ $image }}" width="359" height="239"
                                                  alt="">
                                         </a>
                                     </div>
@@ -441,14 +54,18 @@
                                         <div class="p-actions__row">
                                             <div class="p-actions__col p-actions__col--price">
                                                 <div class="p-actions__label">Стоимость ед.</div>
-                                                <div class="p-actions__price">744.1 руб.</div>
+                                                @if($product->price)
+                                                    <div class="p-actions__price">{{ $product->price }} руб.</div>
+                                                @else
+                                                    <div class="p-actions__price">0</div>
+                                                @endif
                                             </div>
                                             <div class="p-actions__col p-actions__col--count">
                                                 <div class="p-actions__label">Кол-во</div>
                                                 <div class="p-actions__count">
                                                     <div class="counter" data-counter="data-counter">
                                                         <button class="counter__btn counter__btn--prev btn-reset"
-                                                                type="button" aria-label="Меньше">
+                                                                type="button" aria-label="Меньше" onclick="changeQuantityDown({{$product->price ? 1 : 0}})">
                                                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                                                  xmlns="http://www.w3.org/2000/svg">
                                                                 <g clip-path="url(#clip0_657_3899)">
@@ -462,12 +79,11 @@
                                                                     </clipPath>
                                                                 </defs>
                                                             </svg>
-
                                                         </button>
                                                         <input class="counter__input" type="number" name="count"
-                                                               value="1" data-count="data-count"/>
+                                                               value="{{ $product->price ? 1 : 0 }}" data-count="data-count"/>
                                                         <button class="counter__btn counter__btn--next btn-reset"
-                                                                type="button" aria-label="Больше">
+                                                                type="button" aria-label="Больше" onclick="changeQuantityUp()">
                                                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                                                  xmlns="http://www.w3.org/2000/svg">
                                                                 <g clip-path="url(#clip0_657_3897)">
@@ -481,16 +97,19 @@
                                                                     </clipPath>
                                                                 </defs>
                                                             </svg>
-
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="p-actions__col p-actions__col--total">
                                                 <div class="p-actions__total">Итого:&nbsp;
-                                                    <span>за 1 шт.</span>
+                                                    <span>за 1 {{ $product->getRecourseMeasure() }}</span>
                                                 </div>
-                                                <div class="p-actions__summary">744.10 ₽</div>
+                                                @if($product->price)
+                                                    <div class="p-actions__summary">{{ $product->price }} ₽</div>
+                                                @else
+                                                    <div class="p-actions__summary">0 ₽</div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="p-actions__action">
@@ -500,71 +119,60 @@
                                         </div>
                                     </div>
                                     <div class="p-infos" x-data="{ open: false }">
-                                        <div class="p-infos__item">
-                                            <div class="p-infos__head"
-                                                 :class="open == 'Информация о доставке' &amp;&amp; 'is-active'"
-                                                 @click="open == 'Информация о доставке' ? open = false : open = 'Информация о доставке'">
-                                                <div class="p-infos__title">
-                                                    <div class="p-infos__icon lazy"
-                                                         data-bg="static/images/common/ico_delivery.svg"></div>
-                                                    <div class="p-infos__label">Информация о доставке</div>
+                                        @if($deliv = Settings::get('prod_delivery_info'))
+                                            <div class="p-infos__item">
+                                                <div class="p-infos__head"
+                                                     :class="open == 'Информация о доставке' &amp;&amp; 'is-active'"
+                                                     @click="open == 'Информация о доставке' ? open = false : open = 'Информация о доставке'">
+                                                    <div class="p-infos__title">
+                                                        <div class="p-infos__icon lazy"
+                                                             data-bg="/static/images/common/ico_delivery.svg"></div>
+                                                        <div class="p-infos__label">Информация о доставке</div>
+                                                    </div>
+                                                    <div class="p-infos__trigger lazy"
+                                                         data-bg="/static/images/common/ico_dropdown.svg"></div>
                                                 </div>
-                                                <div class="p-infos__trigger lazy"
-                                                     data-bg="static/images/common/ico_dropdown.svg"></div>
-                                            </div>
-                                            <div class="p-infos__body" x-show="open == 'Информация о доставке'"
-                                                 x-transition.duration.250ms x-cloak>
-                                                <p>Чтобы получить заказ, необходимо обратиться к сотруднику стойки
-                                                    информации и сообщить ему номер заказа.</p>
-                                                <p>Уведомление о готовности заказа может осуществляться через
-                                                    SMS-сообщения, мессенджеры (Viber, WhatsApp и т.д.) и/или сообщения
-                                                    на электронную почту.</p>
-                                            </div>
-                                        </div>
-                                        <div class="p-infos__item">
-                                            <div class="p-infos__head"
-                                                 :class="open == 'Варианты оплаты' &amp;&amp; 'is-active'"
-                                                 @click="open == 'Варианты оплаты' ? open = false : open = 'Варианты оплаты'">
-                                                <div class="p-infos__title">
-                                                    <div class="p-infos__icon lazy"
-                                                         data-bg="static/images/common/ico_cash.svg"></div>
-                                                    <div class="p-infos__label">Варианты оплаты</div>
+                                                <div class="p-infos__body" x-show="open == 'Информация о доставке'"
+                                                     x-transition.duration.250ms x-cloak>
+                                                    @foreach($deliv as $item)
+                                                        <p>{{ $item }}</p>
+                                                    @endforeach
                                                 </div>
-                                                <div class="p-infos__trigger lazy"
-                                                     data-bg="static/images/common/ico_dropdown.svg"></div>
                                             </div>
-                                            <div class="p-infos__body" x-show="open == 'Варианты оплаты'"
-                                                 x-transition.duration.250ms x-cloak>
-                                                <p>Вы можете оплатить свою покупку наличными в кассе в нашем центральном
-                                                    офисе. При заказе с доставкой оплата наличными производится водителю
-                                                    после приемки товара.</p>
-                                                <p>Вы можете оплатить свою покупку банковской картой при заказе. Мы
-                                                    принимаем все виды карт. Заказ, оформленный на сайте, Вы также
-                                                    можете оплатить на сайте с помощью банковской карты VISA и
-                                                    MasterCard, Мир через платежную систему, это безопасно
-                                                    и быстро.</p>
+                                        @endif
+                                        @if($pay = Settings::get('prod_pay_info'))
+                                            <div class="p-infos__item">
+                                                <div class="p-infos__head"
+                                                     :class="open == 'Варианты оплаты' &amp;&amp; 'is-active'"
+                                                     @click="open == 'Варианты оплаты' ? open = false : open = 'Варианты оплаты'">
+                                                    <div class="p-infos__title">
+                                                        <div class="p-infos__icon lazy"
+                                                             data-bg="/static/images/common/ico_cash.svg"></div>
+                                                        <div class="p-infos__label">Варианты оплаты</div>
+                                                    </div>
+                                                    <div class="p-infos__trigger lazy"
+                                                         data-bg="/static/images/common/ico_dropdown.svg"></div>
+                                                </div>
+                                                <div class="p-infos__body" x-show="open == 'Варианты оплаты'"
+                                                     x-transition.duration.250ms x-cloak>
+                                                    @foreach($pay as $item)
+                                                        <p>{{ $item }}</p>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-                            <div class="block-request">
-                                <button class="block-request__request btn-reset" type="button" data-popup="data-popup"
-                                        data-src="#request" aria-label="Получить расчёт цены">
-                                    <span>Получить расчёт цены</span>
-                                </button>
-                                <div class="block-request__body">Получите детальный расчет чены на ваш строительный
-                                    объект. Используйте запорную арматуру высокого качества. Детальную информацию можно
-                                    получить в отделе продаж.
-                                </div>
-                            </div>
+                            @include('blocks.send_detail_count')
                             <div class="product__content" x-data="{ view: 'Описание' }">
                                 <div class="product__nav">
                                     <div class="tabs">
                                         <div class="tabs__item" :class="view == 'Описание' &amp;&amp; 'is-active'"
                                              @click="view = 'Описание'">Описание
                                         </div>
-                                        <div class="tabs__item" :class="view == 'Характеристики' &amp;&amp; 'is-active'"
+                                        <div class="tabs__item"
+                                             :class="view == 'Характеристики' &amp;&amp; 'is-active'"
                                              @click="view = 'Характеристики'">Характеристики
                                         </div>
                                     </div>
@@ -572,43 +180,10 @@
                                 <div class="product__views">
                                     <div class="product__content" x-show="view == 'Описание'"
                                          x-transition.duration.250ms x-cloak>
-                                        <div class="product__subtitle">Лоток листовой прямой перфорированный ЛЛП
-                                            применяется на прямых участках кабельной трассы
-                                        </div>
+                                        <div class="product__subtitle">{{ $product->name }}</div>
                                         <div class="product__grid-view">
                                             <div class="product__grid-body">
-                                                <ul class="product__params list-reset">
-                                                    <li>
-                                                        <strong>Тип замка для крышки</strong>&nbsp;— V-образный.
-                                                    </li>
-                                                    <li>
-                                                        <strong>Тип соединения</strong>&nbsp;— встык.
-                                                    </li>
-                                                    <li>
-                                                        <strong>Исполнение:</strong>&nbsp;оцинкованная сталь по методу
-                                                        Сендзимира.
-                                                    </li>
-                                                    <li>
-                                                        <strong>Возможны исполнения:</strong>&nbsp;горячее цинкование,
-                                                        полимерноепокрытие, нержавеющая сталь (AISI 304 / AISI 316).
-                                                    </li>
-                                                </ul>
-                                                <div class="product__heading">Чертеж ЛЛП</div>
-                                                <ul class="product__params list-reset">
-                                                    <li>
-                                                        <strong>Длина L</strong>&nbsp;= 2000 / 2500 / 6000 мм.
-                                                    </li>
-                                                    <li>
-                                                        <strong>Высота борта H</strong>&nbsp;= 25 / 50 / 65 / 80 / 100 /
-                                                        150 / 200 мм.
-                                                    </li>
-                                                    <li>
-                                                        <strong>Толщина металла</strong>&nbsp;= 0,7 / 1 / 1,2 / 1,5 мм.
-                                                    </li>
-                                                    <li>Масса изменяется в зависимости от размера, толщины металла и
-                                                        исполнения.
-                                                    </li>
-                                                </ul>
+                                                {!! $product->description !!}
                                             </div>
                                             <div class="product__grid-aside">
                                                 <div class="docs">
@@ -618,7 +193,7 @@
                                                            title="Чертеж Комплекта Gidrolica Light с пласт. решеткой"
                                                            download>
                                                             <span class="docs__icon lazy"
-                                                                  data-bg="static/images/common/ico_doc.svg"></span>
+                                                                  data-bg="/static/images/common/ico_doc.svg"></span>
                                                             <span class="docs__body">
 																	<span class="docs__subtitle">Чертеж Комплекта Gidrolica Light с пласт. решеткой</span>
 																	<span class="docs__size">PDF, 118.71 Кб</span>
@@ -628,7 +203,7 @@
                                                            title="Чертеж Комплекта Gidrolica Light с пласт. решеткой"
                                                            download>
                                                             <span class="docs__icon lazy"
-                                                                  data-bg="static/images/common/ico_doc.svg"></span>
+                                                                  data-bg="/static/images/common/ico_doc.svg"></span>
                                                             <span class="docs__body">
 																	<span class="docs__subtitle">Чертеж Комплекта Gidrolica Light с пласт. решеткой</span>
 																	<span class="docs__size">PDF, 118.71 Кб</span>
@@ -636,100 +211,60 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="b-alert">Внимание! Цвет, характеристики и комплектация
-                                                    товаров, указанныена сайте, могут отличаться от реальных
+                                                <div class="b-alert">{{ Settings::get('prod_warn') ?: '' }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="product__content" x-show="view == 'Характеристики'"
+                                             x-transition.duration.250ms x-cloak>
+                                            <div class="product__heading">Характеристики</div>
+                                            @if(count($chars))
+                                            <div class="b-context" x-data="{ contextIsOpen: false }">
+                                                <div class="b-context__list">
+                                                    @foreach($chars as $char)
+                                                        <dl>
+                                                            <dt>{{ $char->name }}</dt>
+                                                            <dd>{{ $char->value }}</dd>
+                                                        </dl>
+                                                        @if($loop->iteration > 5)
+                                                            <dl x-show="contextIsOpen" x-transition.duration.250ms
+                                                                x-cloak>
+                                                                <dt>{{ $char->name }}</dt>
+                                                                <dd>{{ $char->value }}</dd>
+                                                            </dl>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
+                                                @if(count($chars) > 5)
+                                                    <div class="b-context__action"
+                                                         @click="contextIsOpen = !contextIsOpen">
+                                                        <span x-show="!contextIsOpen">Показать все характеристики</span>
+                                                        <span x-show="contextIsOpen">Скрыть характеристики</span>
+                                                    </div>
+                                                @endif
                                             </div>
+                                            @else
+                                                <div class="b-context__list">
+                                                    Не указаны
+                                                </div>
+                                            @endif
                                         </div>
-                                    </div>
-                                    <div class="product__content" x-show="view == 'Характеристики'"
-                                         x-transition.duration.250ms x-cloak>
-                                        <div class="product__heading">Характеристики</div>
-                                        <div class="b-context" x-data="{ contextIsOpen: false }">
-                                            <div class="b-context__list">
-                                                <dl>
-                                                    <dt>Марка</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Материал жилы</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Марка</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Материал изоляции</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Материал жилы</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl x-show="contextIsOpen" x-transition.duration.250ms x-cloak>
-                                                    <dt>Марка</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl x-show="contextIsOpen" x-transition.duration.250ms x-cloak>
-                                                    <dt>Материал жилы</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl x-show="contextIsOpen" x-transition.duration.250ms x-cloak>
-                                                    <dt>Марка</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl x-show="contextIsOpen" x-transition.duration.250ms x-cloak>
-                                                    <dt>Материал изоляции</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                                <dl x-show="contextIsOpen" x-transition.duration.250ms x-cloak>
-                                                    <dt>Материал жилы</dt>
-                                                    <dd>ВВГнг(А)-LS 3х1,5</dd>
-                                                </dl>
-                                            </div>
-                                            <div class="b-context__action" @click="contextIsOpen = !contextIsOpen">
-                                                <span x-show="!contextIsOpen">Показать все характеристики</span>
-                                                <span x-show="contextIsOpen">Скрыть характеристики</span>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="block-request">
-                                <button class="block-request__request btn-reset" type="button" data-popup="data-popup"
-                                        data-src="#request" aria-label="Получить расчёт цены">
-                                    <span>Получить расчёт цены</span>
-                                </button>
-                                <div class="block-request__body">Получите детальный расчет чены на ваш строительный
-                                    объект. Используйте запорную арматуру высокого качества. Детальную информацию можно
-                                    получить в отделе продаж.
-                                </div>
-                            </div>
+                            @include('blocks.send_detail_count')
                             <div class="section">
                                 <div class="section__block">
                                     <div class="section__row">
                                         <div class="section__content">
-                                            <div class="section__subtitle">Электричество</div>
-                                            <p>Кабеленесущие системы создаются таким образом, чтобы организовать,
-                                                защитить и скрыть кабели, провода в них гораздо легче прокладывать и
-                                                обслуживать, без проблем возможно наращивание кабельных трасс, их
-                                                изменение и ремонт.</p>
-                                            <p>Кабеленесущие системы создаются таким образом, чтобы организовать,
-                                                защитить и скрыть кабели, провода в них гораздо легче прокладывать и
-                                                обслуживать, без проблем возможно наращивание кабельных трасс, их
-                                                изменение и ремонт.</p>
-                                            <p>Кабеленесущие системы создаются таким образом, чтобы организовать,
-                                                защитить и скрыть кабели, провода в них гораздо легче прокладывать и
-                                                обслуживать, без проблем возможно наращивание кабельных трасс, их
-                                                изменение и ремонт.</p>
+                                            {!! $text !!}
                                         </div>
                                         <div class="section__aside">
                                             <a class="b-aside" href="javascript:void(0)" title="Оптовый прайс-лист">
                                                 <div class="b-aside__currency">₽</div>
                                                 <div class="b-aside__label">Оптовый прайс-лист</div>
-                                                <div class="b-aside__text">Отправте заявку на получение прайс-листа на
-                                                    технические трубы ПНД - получите выгодные цены сейчас
+                                                <div class="b-aside__text">
+                                                    Отправьте заявку на получение прайс-листа {{ $root->name }}
+                                                    - получите выгодные цены сейчас
                                                 </div>
                                             </a>
                                         </div>
@@ -741,246 +276,10 @@
                 </main>
             </div>
         </div>
-        <section class="s-related">
-            <div class="s-related__container container">
-                <div class="s-related__title">Похожие товары</div>
-                <div class="related-nav">
-                    <div class="related-nav__link related-nav__link--prev lazy" data-bg="static/images/common/ico_l.svg"
-                         data-related-prev></div>
-                    <div class="related-nav__link related-nav__link--next lazy" data-bg="static/images/common/ico_r.svg"
-                         data-related-next></div>
-                </div>
-                <div class="s-related__slider swiper" data-related-slider>
-                    <div class="s-related__wrapper swiper-wrapper">
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="s-related__item swiper-slide">
-                            <div class="p-card">
-                                <div class="p-card__badge badge">Лучшая цена</div>
-                                <div class="p-card__preview">
-                                    <img class="p-card__img lazy" src="/" data-src="static/images/common/p-card.png"
-                                         width="227" height="162" alt=""/>
-                                </div>
-                                <div class="p-card__code">Код: 197404</div>
-                                <div class="p-card__body">Комплект Gidrolica Light: лоток водоотводный ЛВ -10.11,5.9,5 -
-                                    пластиковый с решеткой РВ -10.10,8.100 стальной оцинкованной, кл. A15
-                                </div>
-                                <div class="p-card__bottom">
-                                    <div class="p-card__pricing">
-                                        <div class="p-card__discounts">
-                                            <span data-end="₽/шт">1 063</span>
-                                            <div class="p-card__value">-30%</div>
-                                        </div>
-                                        <div class="p-card__current" data-end="/ шт">744.10 ₽</div>
-                                    </div>
-                                    <div class="p-card__action">
-                                        <button class="btn btn--primary btn--small btn-reset" type="button"
-                                                aria-label="Заказать">
-                                            <span>Заказать</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <div class="s-calc lazy" data-bg="static/images/common/calc-bg.jpg">
+
+        @include('blocks.similar')
+
+        <div class="s-calc lazy" data-bg="/static/images/common/calc-bg.jpg">
             <div class="s-calc__container container">
                 <div class="s-calc__title">Комплексное снабжение строительных объектов</div>
                 <div class="s-calc__text">Подбор аналогов с полным соответствием характеристик товаров по проекту для

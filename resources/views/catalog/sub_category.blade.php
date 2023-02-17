@@ -68,6 +68,6 @@
                 </div>
             </div>
         </section>
-        @include('blocks.send_request_conultation')
+        @include('blocks.send_request_consultation')
     </main>
 @endsection

@@ -23,7 +23,7 @@
             <li><a href="#tab_2" data-toggle="tab">Текст</a></li>
             <li><a href="#tab_4" data-toggle="tab">Изображения</a></li>
             <li><a href="#tab_sert" data-toggle="tab">Сертификаты и ТУ</a></li>
-            <li><a href="#tab_5" data-toggle="tab">Похожие товары</a></li>
+            <li><a href="#tab_docs" data-toggle="tab">Документы</a></li>
             <li class="pull-right">
                 <a href="{{ route('admin.catalog.products', [$product->catalog_id]) }}"
                    onclick="return catalogContent(this)">К списку товаров</a>
@@ -112,8 +112,8 @@
                 @endif
             </div>
 
-            <div class="tab-pane" id="tab_5">
-                @include('admin::catalog.tabs.tab_related')
+            <div class="tab-pane" id="tab_docs">
+                @include('admin::catalog.tabs.tab_docs')
             </div>
         </div>
 

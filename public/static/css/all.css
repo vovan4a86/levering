@@ -9885,3 +9885,6 @@ body:not(.is-using-mouse) .fancybox__container :focus {
     scroll-behavior: smooth;
   }
 }
+.breadcrumbs__list {
+    flex-wrap: wrap;
+}

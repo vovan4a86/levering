@@ -60,12 +60,13 @@
                     </button>
                 </div>
                 <div class="header__search">
-                    <form class="search-field" action="#">
+                    <form class="search-field" action="{{ route('search') }}">
                         <!-- innerPage ? "ico_loupe--grey.svg" : "ico_loupe.svg"-->
                         <button class="search-field__btn btn-reset lazy"
                                 data-bg="/static/images/common/{{ isset($innerPage) ? 'ico_loupe--grey.svg' : 'ico_loupe.svg' }}"
                                 name="submit" aria-label="Найти"></button>
-                        <input class="search-field__input input-reset" type="search" name="search"
+                        <input class="search-field__input input-reset" type="search" name="q"
+                               value="{{ Request::get('q') }}"
                                placeholder="Что Вы ищете?" required autocomplete="off">
                     </form>
                 </div>

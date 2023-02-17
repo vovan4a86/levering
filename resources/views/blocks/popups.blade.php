@@ -1,5 +1,5 @@
 <form class="popup" id="callback" action="{{ route('ajax.callback') }}"
-      onclick="sendCallback(this, event)" style="display: none">
+      onsubmit="sendCallback(this, event)" style="display: none">
     <div class="popup__container">
         <div class="popup__head">
             <div class="popup__title">Обратный звонок</div>
@@ -35,7 +35,7 @@
     </div>
 </form>
 <form class="popup" id="request" action="{{ route('ajax.manager-request') }}"
-      onclick="sendCallback(this, event)" style="display: none">
+      onsubmit="sendCallback(this, event)" style="display: none">
     <div class="popup__container">
         <div class="popup__head">
             <div class="popup__title">Запрос менеджеру</div>
@@ -70,7 +70,8 @@
         </div>
     </div>
 </form>
-<form class="popup" id="calc" action="#" style="display: none">
+<form class="popup" id="calc" action="{{ route('ajax.complex-decision') }}"
+      onsubmit="sendRequestFileComplex(this, event)" style="display: none">
     <div class="popup__container">
         <div class="popup__head">
             <div class="popup__title">Оставьте заявку</div>
@@ -94,7 +95,7 @@
             <div class="popup__file-upload">
                 <label class="upload upload--popup">
                     <span class="upload__name">Прикрепить файл</span>
-                    <input type="file" name="file" accept=".jpg, .jpeg, .png, .pdf, .doc, .docs, .xls, .xlsx">
+                    <input type="file" name="cfile" accept=".jpg, .jpeg, .png, .pdf, .doc, .docs, .xls, .xlsx">
                 </label>
             </div>
         </div>
@@ -103,7 +104,7 @@
                 <input class="checkbox__input" type="checkbox" checked required>
                 <span class="checkbox__box"></span>
                 <span class="checkbox__policy">Согласен на обработку
-							<a href="javascript:void(0)" target="_blank">персональных данных</a>
+							<a href="{{ route('policy') }}" target="_blank">персональных данных</a>
 						</span>
             </label>
         </div>
@@ -114,7 +115,8 @@
         </div>
     </div>
 </form>
-<form class="popup" id="consult" action="#" style="display: none">
+<form class="popup" id="consult" action="#" style="display: none"
+      onsubmit="sendRequestProductConsult(this, event)">
     <div class="popup__container">
         <div class="popup__head">
             <div class="popup__title">Заказать консультацию</div>
@@ -138,7 +140,7 @@
             <div class="popup__file-upload">
                 <label class="upload upload--popup">
                     <span class="upload__name">Прикрепить файл</span>
-                    <input type="file" name="file" accept=".jpg, .jpeg, .png, .pdf, .doc, .docs, .xls, .xlsx">
+                    <input type="file" name="dfile" accept=".jpg, .jpeg, .png, .pdf, .doc, .docs, .xls, .xlsx">
                 </label>
             </div>
         </div>

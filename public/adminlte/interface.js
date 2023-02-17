@@ -455,7 +455,7 @@ function sendCallback(frm, e) {
 			form.find('.sending__title').after('<div class="err-msg-block has-error">Заполните, пожалуйста, обязательные поля.</div>');
 		} else {
 			resetForm(form);
-			// form.find('.is-close').click();
+			form.find('.is-close').click();
 			Fancybox.show([{ src: '#request-done', type: 'inline' }], {
 				mainClass: 'popup--custom popup--complete',
 				template: { closeButton: closeBtn },
@@ -466,7 +466,7 @@ function sendCallback(frm, e) {
 }
 
 //форма с прикрепленным файлом
-function sendQuestion(frm, e) {
+function sendRequestFile(frm, e) {
 	e.preventDefault();
 	var form = $(frm);
 	var url = form.attr('action');
@@ -477,6 +477,76 @@ function sendQuestion(frm, e) {
 		data.append(value.name, value.value);
 	});
 	data.append('file', inputFile.prop('files')[0]);
+
+	sendAjaxWithFile(url, data, function (json) {
+		if (typeof json.errors !== 'undefined') {
+			let focused = false;
+			for (var key in json.errors) {
+				if (!focused) {
+					form.find('#' + key).focus();
+					focused = true;
+				}
+				form.find('#' + key).after('<span class="has-error">' + json.errors[key] + '</span>');
+			}
+			form.find('.sending__title').after('<div class="err-msg-block has-error">Заполните, пожалуйста, обязательные поля.</div>');
+		} else {
+			resetForm(form);
+			form.find('.is-close').click();
+			Fancybox.show([{ src: '#request-done', type: 'inline' }], {
+				mainClass: 'popup--custom popup--complete',
+				template: { closeButton: closeBtn },
+				hideClass: 'fancybox-zoomOut'
+			});
+		}
+	});
+}
+
+function sendRequestFileComplex(frm, e) {
+	e.preventDefault();
+	var form = $(frm);
+	var url = form.attr('action');
+	var inputFile = $('input[name=cfile]');
+
+	var data = new FormData();
+	$.each($(form).serializeArray(), function(key, value){
+		data.append(value.name, value.value);
+	});
+	data.append('cfile', inputFile.prop('files')[0]);
+
+	sendAjaxWithFile(url, data, function (json) {
+		if (typeof json.errors !== 'undefined') {
+			let focused = false;
+			for (var key in json.errors) {
+				if (!focused) {
+					form.find('#' + key).focus();
+					focused = true;
+				}
+				form.find('#' + key).after('<span class="has-error">' + json.errors[key] + '</span>');
+			}
+			form.find('.sending__title').after('<div class="err-msg-block has-error">Заполните, пожалуйста, обязательные поля.</div>');
+		} else {
+			resetForm(form);
+			form.find('.is-close').click();
+			Fancybox.show([{ src: '#request-done', type: 'inline' }], {
+				mainClass: 'popup--custom popup--complete',
+				template: { closeButton: closeBtn },
+				hideClass: 'fancybox-zoomOut'
+			});
+		}
+	});
+}
+
+function sendRequestProductConsult(frm, e) {
+	e.preventDefault();
+	var form = $(frm);
+	var url = form.attr('action');
+	var inputFile = $('input[name=dfile]');
+
+	var data = new FormData();
+	$.each($(form).serializeArray(), function(key, value){
+		data.append(value.name, value.value);
+	});
+	data.append('dfile', inputFile.prop('files')[0]);
 
 	sendAjaxWithFile(url, data, function (json) {
 		if (typeof json.errors !== 'undefined') {

@@ -165,36 +165,6 @@ class AjaxController extends Controller {
         }
     }
 
-    //написать нам
-    public function postWriteback(Request $request) {
-        $data = $request->only(['name', 'phone', 'text']);
-        $valid = Validator::make($data, [
-            'name' => 'required',
-            'phone' => 'required',
-        ], [
-            'name.required' => 'Не заполнено поле Имя',
-            'phone.required' => 'Не заполнено поле Телефон',
-        ]);
-
-        if ($valid->fails()) {
-            return ['errors' => $valid->messages()];
-        } else {
-            $feedback_data = [
-                'type' => 2,
-                'data' => $data
-            ];
-            $feedback = Feedback::create($feedback_data);
-            Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Написать нам | LEVERING';
-                $message->from($this->fromMail, $this->fromName)
-                    ->to(Settings::get('feedback_email'))
-                    ->subject($title);
-            });
-
-            return ['success' => true];
-        }
-    }
-
     //заказать звонок
     public function postCallback(Request $request) {
         $data = $request->only(['name', 'phone', 'time']);
@@ -227,8 +197,8 @@ class AjaxController extends Controller {
         }
     }
 
-    //быстрый заказ
-    public function postFastRequest(Request $request) {
+    //получить консультацию
+    public function postConsultation(Request $request) {
         $data = $request->only(['name', 'phone']);
         $valid = Validator::make($data, [
             'name' => 'required',
@@ -242,12 +212,12 @@ class AjaxController extends Controller {
             return ['errors' => $valid->messages()];
         } else {
             $feedback_data = [
-                'type' => 4,
+                'type' => 3,
                 'data' => $data
             ];
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Быстрый заказ | LEVERING';
+                $title = $feedback->id . ' | Консультация | LEVERING';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);
@@ -257,18 +227,16 @@ class AjaxController extends Controller {
         }
     }
 
-    //задать вопрос
-    public function postQuestions(Request $request) {
-        $data = $request->only(['name', 'phone', 'question']);
+    //предложим оптимальное решение
+    public function postOptimalDecision(Request $request) {
+        $data = $request->only(['name', 'phone']);
         $file = $request->file('file');
         $valid = Validator::make($data, [
             'name' => 'required',
             'phone' => 'required',
-            'question' => 'required',
         ], [
             'name.required' => 'Не заполнено поле имя',
             'phone.required' => 'Не заполнено поле телефон',
-            'question.required' => 'Не заполнено поле сообщение',
         ]);
 
         if ($valid->fails()) {
@@ -281,13 +249,90 @@ class AjaxController extends Controller {
             }
 
             $feedback_data = [
-                'type' => 5,
+                'type' => 4,
                 'data' => $data
             ];
 
             $feedback = Feedback::create($feedback_data);
             Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
-                $title = $feedback->id . ' | Задать вопрос | LEVERING';
+                $title = $feedback->id . ' | Оптимальное решение | LEVERING';
+                $message->from($this->fromMail, $this->fromName)
+                    ->to(Settings::get('feedback_email'))
+                    ->subject($title);
+            });
+
+            return ['success' => true];
+        }
+    }
+
+    //консультация с файлом
+    public function postProductConsult(Request $request) {
+        $data = $request->only(['name', 'phone', 'message']);
+        $file = $request->file('dfile');
+        $valid = Validator::make($data, [
+            'name' => 'required',
+            'phone' => 'required',
+        ], [
+            'name.required' => 'Не заполнено поле имя',
+            'phone.required' => 'Не заполнено поле телефон',
+        ]);
+
+        if ($valid->fails()) {
+            return ['errors' => $valid->messages()];
+        } else {
+            if ($file) {
+                $file_name = md5(uniqid(rand(), true)) . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path(Feedback::UPLOAD_URL), $file_name);
+                $data['file'] = '<a target="_blanc" href=\'' . Feedback::UPLOAD_URL . $file_name . '\'>' . $file_name . '</a>';
+            }
+
+            $feedback_data = [
+                'type' => 2,
+                'data' => $data
+            ];
+
+            $feedback = Feedback::create($feedback_data);
+            Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
+                $title = $feedback->id . ' | Консультация по товару | LEVERING';
+                $message->from($this->fromMail, $this->fromName)
+                    ->to(Settings::get('feedback_email'))
+                    ->subject($title);
+            });
+
+            return ['success' => true];
+        }
+    }
+
+    //комплексное решение
+    public function postComplexDecision(Request $request) {
+        $data = $request->only(['name', 'phone', 'message']);
+        $file = $request->file('cfile');
+        $valid = Validator::make($data, [
+            'name' => 'required',
+            'phone' => 'required',
+            'message' => 'required',
+        ], [
+            'name.required' => 'Не заполнено поле имя',
+            'phone.required' => 'Не заполнено поле телефон',
+        ]);
+
+        if ($valid->fails()) {
+            return ['errors' => $valid->messages()];
+        } else {
+            if ($file) {
+                $file_name = md5(uniqid(rand(), true)) . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path(Feedback::UPLOAD_URL), $file_name);
+                $data['file'] = '<a target="_blanc" href=\'' . Feedback::UPLOAD_URL . $file_name . '\'>' . $file_name . '</a>';
+            }
+
+            $feedback_data = [
+                'type' => 7,
+                'data' => $data
+            ];
+
+            $feedback = Feedback::create($feedback_data);
+            Mail::send('mail.feedback', ['feedback' => $feedback], function ($message) use ($feedback) {
+                $title = $feedback->id . ' | Комплексное решение | LEVERING';
                 $message->from($this->fromMail, $this->fromName)
                     ->to(Settings::get('feedback_email'))
                     ->subject($title);

@@ -23,8 +23,10 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
     Route::post('edit-cart-product', [AjaxController::class, 'postEditCartProduct'])->name('edit-cart-product');
     Route::post('order', [AjaxController::class, 'postOrder'])->name('order');
 	Route::post('request', 'AjaxController@postRequest')->name('request');
-    Route::post('fast-request', 'AjaxController@postFastRequest')->name('fast-request');
-    Route::post('questions', 'AjaxController@postQuestions')->name('questions');
+    Route::post('consultation', 'AjaxController@postConsultation')->name('consultation');
+    Route::post('product-consult', 'AjaxController@postProductConsult')->name('product-consult');
+    Route::post('optimal-decision', 'AjaxController@postOptimalDecision')->name('optimal-decision');
+    Route::post('complex-decision', 'AjaxController@postComplexDecision')->name('complex-decision');
 	Route::post('writeback', 'AjaxController@postWriteback')->name('writeback');
 	Route::post('manager-request', 'AjaxController@postManagerRequest')->name('manager-request');
 	Route::post('callback', 'AjaxController@postCallback')->name('callback');

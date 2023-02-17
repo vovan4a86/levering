@@ -35,27 +35,24 @@ class SearchController extends Controller {
                 ->pluck('product_id')->all();
         }
         $items = Product::whereIn('id', $items_ids)
-            ->paginate(Settings::get('search_per_page') ?? 10)
+            ->paginate(Settings::get('search_per_page') ?: 9)
             ->appends(['q' => $q]); //Добавить параметры в строку запроса можно через метод appends().
 
         if ($request->ajax()) {
             $view_items = [];
             foreach ($items as $item) {
-                $view_items[] = view('search.search_item', [
+                $view_items[] = view('catalog.product_item', [
                     'item' => $item,
                 ])->render();
             }
 
             return response()->json([
                 'items'      => $view_items,
-                'paginate'   => view('paginations.with_pages', [
+                'paginate'   => view('catalog.section_pagination', [
                     'paginator' => $items
                 ])->render()
             ]);
         }
-
-        $filterSizes = Product::public()->whereIn('catalog_id', $items_ids)->distinct()->pluck( 'size')->all();
-        $filterNames = Product::public()->whereIn('catalog_id', $items_ids)->distinct()->pluck( 'name')->all();
 
         return view('search.index', [
             'items'       => $items,
@@ -65,9 +62,6 @@ class SearchController extends Controller {
             'name'        => 'Поиск ' . $q,
             'keywords'    => 'Поиск',
             'description' => 'Поиск',
-            'headerIsWhite' => true,
-            'filterSizes' => $filterSizes,
-            'filterNames' => $filterNames,
         ]);
 	}
 

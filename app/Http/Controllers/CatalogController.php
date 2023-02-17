@@ -85,7 +85,8 @@ class CatalogController extends Controller {
             'bread' => $bread,
             'category' => $category,
             'h1' => $category->getH1(),
-            'items' => $items
+            'items' => $items,
+            'asideName' => $root->name,
         ];
 
         if (Request::ajax()) {
@@ -111,7 +112,7 @@ class CatalogController extends Controller {
 
     public function product(Product $product) {
         $bread = $product->getBread();
-        $productCleanName = $product->name;
+        $rawSimilarName = $product->name;
         $product = $this->add_region_seo($product);
         $product->generateTitle();
         $product->generateDescription();
@@ -124,8 +125,6 @@ class CatalogController extends Controller {
         while ($root->parent_id !== 0) {
             $root = $root->findRootCategory($root->parent_id);
         }
-
-        $similar = Product::whereName($productCleanName)->where('alias', '<>', $productCleanName)->get();
 
         $relatedIds = $product->related()->get()->pluck('related_id'); //похожие товары добавленные из админки
         $related = Product::whereIn('id', $relatedIds)->get();
@@ -147,25 +146,29 @@ class CatalogController extends Controller {
             if (!$image) $image = Catalog::UPLOAD_URL . Catalog::whereId($product->catalog_id)->first()->image;
         }
 
-        if (!$product->text) {
-            $text = $root->text;
+        $text = $product->text ?: $root->text;
+        $chars = $product->chars;
+
+        $similarName = explode(' ', $rawSimilarName)[0];
+        $similar = Product::where('catalog_id', $product->catalog_id)->where('alias', '<>', $product->alias)->where('name', 'like', $similarName . '%')->get();
+        if(count($similar) > 10) {
+            $similar = $similar->random(10);
         }
 
         return view('catalog.product', [
             'product' => $product,
             'categories' => $categories,
             'in_cart' => $in_cart,
-            'text' => $text ?? null,
+            'text' => $text,
             'bread' => $bread,
-            'headerIsWhite' => true,
             'name' => $product->name,
-            'specParams' => $product->params_on_spec,
-            'params' => $params ?? null,
-            'add_params' => $add_params ?? null,
-            'similar' => $similar,
             'related' => $related,
             'image' => $image,
             'cat_image' => $cat_image ?? null,
+            'chars' => $chars,
+            'root' => $root,
+            'asideName' => $root->name,
+            'similar' => $similar,
         ]);
     }
 

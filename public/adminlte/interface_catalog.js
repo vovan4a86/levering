@@ -15,14 +15,14 @@ function newsImageAttache(elem, e){
     $(elem).val('');
 }
 
-var actionImage = null;
-function actionImageAttache(elem, e){
+var doc = null;
+function docAttache(elem, e){
     $.each(e.target.files, function(key, file)
     {
         if(file['size'] > max_file_size){
             alert('Слишком большой размер файла. Максимальный размер 2Мб');
         } else {
-            actionImage = file;
+            doc = file;
             renderImage(file, function (imgSrc) {
                 var item = '<img class="img-polaroid" src="' + imgSrc + '" height="100" data-image="' + imgSrc + '" onclick="return popupImage($(this).data(\'image\'))">';
                 $('#action-image-block').html(item);
@@ -241,18 +241,37 @@ $(document).ready(function () {
     });
 });
 
-function addRelated(elem, e) {
+function addDoc(elem, e) {
     e.preventDefault();
-    var name = $('select[name=rel-name] option:selected');
-    var data = {
-        related_id: name.val(),
-        related_name: name.text(),
-    }
-    var url = $(elem).attr('href');
+    var dataForm = new FormData();
 
-    sendAjax(url, data, function(json){
+    var url = $(elem).attr('href');
+    var name = $('select[name=name]').val();
+    var file = $('.add-action #doc-file');
+
+    if(!name){
+        alert('Введите название');
+        return;
+    }
+
+    dataForm.append('name', name);
+    dataForm.append('file', file[0].files[0]);
+
+
+    sendAjaxWithFile(sendUrl, dataForm, function(json){
+        if (typeof json.errors != 'undefined') {
+            // applyFormValidate(form, json.errors);
+            var errMsg = [];
+            for (var key in json.errors) { errMsg.push(json.errors[key]);  }
+            $(elem).after(autoHideMsg('red', urldecode(errMsg.join(' '))));
+        }
         if(typeof json.row != 'undefined'){
-            $('#related_list tbody').append(json.row);
+            $('.overlay-nav__actions').append(json.row);
+            title.val('');
+            text.val('');
+            price.val('');
+            measure.val('');
+            file.val('');
         }
     });
 }

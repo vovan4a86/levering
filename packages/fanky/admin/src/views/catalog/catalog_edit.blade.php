@@ -42,6 +42,7 @@
                 {!! Form::groupText('description', $catalog->description, 'description') !!}
 
                 {!! Form::groupText('discount', $catalog->discont, 'Скидка на все товары категории') !!}
+                {!! Form::groupText('catalog_measure', $catalog->catalog_measure, 'Указать измерение для всех товаров каталога') !!}
 
                 <div class="form-group" style="display: flex; column-gap: 30px;">
                     <div>

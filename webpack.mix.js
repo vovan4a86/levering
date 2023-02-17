@@ -28,6 +28,7 @@ mix.js([
     ], 'public/static/js/all.js')
     .styles([
         'resources/assets/css/styles.css',
+        'resources/assets/css/custom.css',
     ], 'public/static/css/all.css')
     .version();
 /*

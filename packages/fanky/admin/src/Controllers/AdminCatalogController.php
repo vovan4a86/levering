@@ -7,6 +7,7 @@ use Fanky\Admin\Models\CatalogFilter;
 use Fanky\Admin\Models\CatalogSubShow;
 use Fanky\Admin\Models\MenuAction;
 use Fanky\Admin\Models\Param;
+use Fanky\Admin\Models\ProductDoc;
 use Fanky\Admin\Models\ProductFilters;
 use Fanky\Admin\Models\ProductIcon;
 use Fanky\Admin\Models\ProductChar;
@@ -68,13 +69,10 @@ class AdminCatalogController extends AdminController {
 
         $catalogProducts = $catalog->getRecurseProducts()->orderBy('name')->pluck('id', 'name')->all();
 
-        $menuActions = $catalog->menu_actions()->get();
-
         return view('admin::catalog.catalog_edit', [
             'catalog'  => $catalog,
             'catalogs' => $catalogs,
             'catalogProducts' => $catalogProducts,
-            'menuActions' => $menuActions
         ]);
     }
 
@@ -318,11 +316,11 @@ class AdminCatalogController extends AdminController {
         return $result;
     }
 
-    public function postAddRelated($product_id): array {
+    public function postAddDoc($product_id): array {
         $product = Product::findOrFail($product_id);
         $data = Request::all();
         $valid = Validator::make($data, [
-            'related_id' => 'required',
+            'name' => 'required',
         ]);
 
         if ($valid->fails()) {
@@ -330,106 +328,17 @@ class AdminCatalogController extends AdminController {
         } else {
             $data = array_map('trim', $data);
             $data['product_id'] = $product->id;
-            $data['order'] = 0;
-            $related = ProductRelated::create($data);
-            $row = view('admin::catalog.related_row', ['related' => $related])->render();
+            $data['order'] = ProductDoc::whereProductId($product_id)->max('order') + 1;
+            $doc = ProductDoc::create($data);
+            $row = view('admin::catalog.doc_row', compact('doc'))->render();
 
             return ['row' => $row];
         }
     }
 
-    public function postDelRelated($related_id): array {
-        $related = ProductRelated::findOrFail($related_id);
+    public function postDelRelated($doc_id): array {
+        $related = ProductDoc::findOrFail($doc_id);
         $related->delete();
-
-        return ['success' => true];
-    }
-
-    public function postAddParam($catalog_id): array {
-        $data = Request::all();
-        $valid = Validator::make($data, [
-            'name'  => 'required',
-        ]);
-
-        if($valid->fails()) {
-            return ['errors' => $valid->messages()];
-        } else {
-            $data = array_map('trim', $data);
-            $data['cat_id'] = $catalog_id;
-            $data['alias'] = Text::translit($data['name']);
-            $data['title'] = $data['name'];
-            $param = Param::create($data);
-
-            CatalogParam::create([
-                'catalog_id' => $catalog_id,
-                'param_id' => $param->id,
-                'order' => 1
-            ]);
-            CatalogFilter::create([
-                'catalog_id' => $catalog_id,
-                'param_id' => $param->id,
-            ]);
-            $row = view('admin::catalog.param_row', ['param' => $param])->render();
-
-            return ['row' => $row];
-        }
-    }
-
-    /**
-     * @throws \Throwable
-     */
-    public function postAddMenuAction($catalog_id): array {
-        $data = Request::except(['file']);
-        $file = Request::file('file');
-
-        $valid = Validator::make($data, [
-            'title'  => 'required',
-            'price'  => 'required',
-            'measure'  => 'required',
-        ]);
-
-        if($file) {
-            $file_name = Catalog::uploadImage($file);
-            $data['image'] = $file_name;
-        }
-
-        if($valid->fails()) {
-            return ['errors' => $valid->messages()];
-        } else {
-            $product = Product::find($data['product_id']);
-            if(!$data['url']) $data['url'] = $product->url;
-            $data['catalog_id'] = $catalog_id;
-            $action = MenuAction::create($data);
-
-            $row = view('admin::catalog.tabs.menu_action_item', ['action' => $action])->render();
-
-            return ['row' => $row];
-        }
-    }
-
-    public function postUpdateMenuAction($action_id): array {
-        $data = Request::all();
-
-        $valid = Validator::make($data, [
-            'title'  => 'required',
-        ]);
-
-        if($valid->fails()) {
-            return ['errors' => $valid->messages()];
-        } else {
-            $action = MenuAction::find($action_id);
-            $action->update($data);
-            $action->save();
-
-            $row = view('admin::catalog.tabs.menu_action_span', ['action' => $action])->render();
-
-            return ['row' => $row, 'id' => $action_id];
-        }
-    }
-
-    public function postDeleteMenuAction($action_id): array {
-        $action = MenuAction::findOrFail($action_id);
-        $action->delete();
 
         return ['success' => true];
     }

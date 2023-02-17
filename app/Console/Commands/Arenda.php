@@ -61,6 +61,11 @@ class Arenda extends Command {
      * @return mixed
      */
     public function handle() {
+
+        $p = Product::whereName('Лоток лестничный крестообразный НЛ-К')->first();
+        $this->info(($p->id));
+        exit();
+
         $categoryUrl = 'https://xn--80ac5aetf.xn--p1ai/arenda-tehniki/';
         $res = $this->client->get($categoryUrl);
         $html = $res->getBody()->getContents();
