@@ -65,7 +65,8 @@
                                                 <div class="p-actions__count">
                                                     <div class="counter" data-counter="data-counter">
                                                         <button class="counter__btn counter__btn--prev btn-reset"
-                                                                type="button" aria-label="Меньше" onclick="changeQuantityDown({{$product->price ? 1 : 0}})">
+                                                                type="button" aria-label="Меньше"
+                                                                onclick="changeQuantityDown()">
                                                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                                                  xmlns="http://www.w3.org/2000/svg">
                                                                 <g clip-path="url(#clip0_657_3899)">
@@ -81,9 +82,11 @@
                                                             </svg>
                                                         </button>
                                                         <input class="counter__input" type="number" name="count"
-                                                               value="{{ $product->price ? 1 : 0 }}" data-count="data-count"/>
+                                                               value="{{ $product->price ? 1 : 0 }}"
+                                                               data-count="data-count"/>
                                                         <button class="counter__btn counter__btn--next btn-reset"
-                                                                type="button" aria-label="Больше" onclick="changeQuantityUp()">
+                                                                type="button" aria-label="Больше"
+                                                                onclick="changeQuantityUp()">
                                                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                                                  xmlns="http://www.w3.org/2000/svg">
                                                                 <g clip-path="url(#clip0_657_3897)">
@@ -102,8 +105,11 @@
                                                 </div>
                                             </div>
                                             <div class="p-actions__col p-actions__col--total">
+
                                                 <div class="p-actions__total">Итого:&nbsp;
-                                                    <span>за 1 {{ $product->getRecourseMeasure() }}</span>
+                                                    @if($product->price)
+                                                        <span>за 1 {{ $product->getRecourseMeasure() }}</span>
+                                                    @endif
                                                 </div>
                                                 @if($product->price)
                                                     <div class="p-actions__summary">{{ $product->price }} ₽</div>
@@ -113,7 +119,9 @@
                                             </div>
                                         </div>
                                         <div class="p-actions__action">
-                                            <button class="p-actions__btn btn-reset" aria-label="Добавить в заказ">
+                                            <button class="p-actions__btn btn-reset" aria-label="Добавить в заказ"
+                                                    data-count="{{ $product->price ? 1 : 0 }}"
+                                                    onclick="addToCart(this, {{ $product->id }})">
                                                 <span>Добавить в заказ</span>
                                             </button>
                                         </div>
@@ -164,7 +172,9 @@
                                     </div>
                                 </div>
                             </div>
+
                             @include('blocks.send_detail_count')
+
                             <div class="product__content" x-data="{ view: 'Описание' }">
                                 <div class="product__nav">
                                     <div class="tabs">
@@ -186,39 +196,34 @@
                                                 {!! $product->description !!}
                                             </div>
                                             <div class="product__grid-aside">
-                                                <div class="docs">
-                                                    <div class="docs__title">Документы</div>
-                                                    <div class="docs__list">
-                                                        <a class="docs__item" href="javascript:void(0)"
-                                                           title="Чертеж Комплекта Gidrolica Light с пласт. решеткой"
-                                                           download>
+                                                @if(count($product->docs))
+                                                    <div class="docs">
+                                                        <div class="docs__title">Документы</div>
+                                                        <div class="docs__list">
+                                                            @foreach($product->docs as $item)
+                                                                <a class="docs__item"
+                                                                   href="{{ \Fanky\Admin\Models\ProductDoc::UPLOAD_URL . $item->file }}"
+                                                                   title="{{ $item->name }}"
+                                                                   download>
                                                             <span class="docs__icon lazy"
                                                                   data-bg="/static/images/common/ico_doc.svg"></span>
-                                                            <span class="docs__body">
-																	<span class="docs__subtitle">Чертеж Комплекта Gidrolica Light с пласт. решеткой</span>
-																	<span class="docs__size">PDF, 118.71 Кб</span>
+                                                                    <span class="docs__body">
+																	<span class="docs__subtitle">{{ $item->name }}</span>
+																	<span class="docs__size">{{ $item->getExtension() }}, {{ $item->getFileSizeAttribute() }}</span>
 																</span>
-                                                        </a>
-                                                        <a class="docs__item" href="javascript:void(0)"
-                                                           title="Чертеж Комплекта Gidrolica Light с пласт. решеткой"
-                                                           download>
-                                                            <span class="docs__icon lazy"
-                                                                  data-bg="/static/images/common/ico_doc.svg"></span>
-                                                            <span class="docs__body">
-																	<span class="docs__subtitle">Чертеж Комплекта Gidrolica Light с пласт. решеткой</span>
-																	<span class="docs__size">PDF, 118.71 Кб</span>
-																</span>
-                                                        </a>
+                                                                </a>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endif
                                                 <div class="b-alert">{{ Settings::get('prod_warn') ?: '' }}</div>
                                             </div>
                                         </div>
                                     </div>
-                                        <div class="product__content" x-show="view == 'Характеристики'"
-                                             x-transition.duration.250ms x-cloak>
-                                            <div class="product__heading">Характеристики</div>
-                                            @if(count($chars))
+                                    <div class="product__content" x-show="view == 'Характеристики'"
+                                         x-transition.duration.250ms x-cloak>
+                                        <div class="product__heading">Характеристики</div>
+                                        @if(count($chars))
                                             <div class="b-context" x-data="{ contextIsOpen: false }">
                                                 <div class="b-context__list">
                                                     @foreach($chars as $char)
@@ -243,12 +248,12 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            @else
-                                                <div class="b-context__list">
-                                                    Не указаны
-                                                </div>
-                                            @endif
-                                        </div>
+                                        @else
+                                            <div class="b-context__list">
+                                                Не указаны
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             @include('blocks.send_detail_count')

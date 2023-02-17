@@ -1,4 +1,4 @@
-<footer class="footer section section--slide swiper-slide" data-background="light">
+<footer class="footer section {{ Route::is('main') ? 'section--slide swiper-slide' : null}}" data-background="light">
     <div class="footer__container container">
         <div class="footer__grid">
             <div class="footer__info">

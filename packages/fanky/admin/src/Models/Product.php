@@ -468,4 +468,10 @@ class Product extends Model {
         }
     }
 
+    public function getStartCount() {
+        if(!$this->price) return 0;
+        if($this->min_hours) return $this->min_hours;
+        return 1;
+    }
+
 }

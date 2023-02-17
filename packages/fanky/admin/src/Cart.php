@@ -20,8 +20,7 @@ class Cart {
         Session::put(self::$key, $cart);
     }
 
-    public static function ifInCart($id): bool
-    {
+    public static function ifInCart($id): bool {
         $cart = self::all();
         return isset($cart[$id]);
     }
@@ -29,16 +28,7 @@ class Cart {
     public static function updateCount($id, $count) {
         $cart = self::all();
         if (isset($cart[$id])) {
-            if ($cart[$id]['measure'] == 'т') {
-                $cart[$id]['weight'] = $count;
-            } elseif ($cart[$id]['measure'] == 'кг') {
-                $cart[$id]['weight'] = $count;
-            } elseif ($cart[$id]['measure'] == 'м') {
-                $cart[$id]['count'] = $count;
-            } else {
-                $cart[$id]['count'] = $count;
-            }
-
+            $cart[$id]['count'] = $count;
             Session::put(self::$key, $cart);
         }
     }
@@ -47,8 +37,7 @@ class Cart {
         Session::put(self::$key, []);
     }
 
-    public static function all(): array
-    {
+    public static function all(): array {
         $res = Session::get(self::$key, []);
         return is_array($res) ? $res : [];
     }
@@ -57,17 +46,9 @@ class Cart {
         $cart = self::all();
         $sum = 0;
         foreach ($cart as $item) {
-            if ($item['measure'] == 'т') {
-                $sum += $item['weight'] * $item['price'];
-            } elseif ($item['measure'] == 'кг') {
-                $sum += $item['weight'] * $item['price_per_kilo'];
-            } elseif ($item['measure'] == 'шт') {
-                $sum += $item['count'] * $item['price_per_item'];
-            } elseif ($item['measure'] == 'м') {
-                $sum += $item['count'] * $item['price_per_metr'];
-            }
+            $sum += $item['count'] * $item['price'];
         }
-        return round($sum);
+        return $sum;
     }
 
     public static function total_weight(): int {

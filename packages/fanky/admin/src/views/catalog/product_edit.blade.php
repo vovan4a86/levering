@@ -45,6 +45,7 @@
                 {!! Form::groupText('keywords', $product->keywords, 'keywords') !!}
                 {!! Form::groupText('description', $product->description, 'description') !!}
                 {!! Form::groupText('price', $product->price ?: 0, 'price') !!}
+                {!! Form::groupText('measure', $product->measure ?: 0, 'Измерение') !!}
 
                 {!! Form::groupText('discount', $product->discont, 'Скидка на товар (приоритет перед скидкой во всем разделе)') !!}
                 <hr>

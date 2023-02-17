@@ -60,9 +60,6 @@ function catalogSave(form, e){
     if (newsImage) {
         data.append('image', newsImage);
     }
-    if (actionImage) {
-        data.append('aimage', actionImage);
-    }
     sendFiles(url, data, function(json){
         if (typeof json.row != 'undefined') {
             if ($('#users-list tr[data-id='+json.id+']').length) {
@@ -81,8 +78,6 @@ function catalogSave(form, e){
         if (typeof json.msg != 'undefined') $(form).find('[type=submit]').after(autoHideMsg('green', urldecode(json.msg)));
         if (typeof json.success != 'undefined' && json.success == true) {
             newsImage = null;
-            fileGost = null;
-            actionImage = null;
         }
     });
     return false;
@@ -245,18 +240,17 @@ function addDoc(elem, e) {
     e.preventDefault();
     var dataForm = new FormData();
 
-    var url = $(elem).attr('href');
-    var name = $('select[name=name]').val();
-    var file = $('.add-action #doc-file');
+    var sendUrl = $(elem).attr('href');
+    var name = $('input[name=doc_name]');
+    var file = $('#doc-file');
 
-    if(!name){
+    if(!name.val()){
         alert('Введите название');
         return;
     }
 
-    dataForm.append('name', name);
+    dataForm.append('name', name.val());
     dataForm.append('file', file[0].files[0]);
-
 
     sendAjaxWithFile(sendUrl, dataForm, function(json){
         if (typeof json.errors != 'undefined') {
@@ -266,19 +260,16 @@ function addDoc(elem, e) {
             $(elem).after(autoHideMsg('red', urldecode(errMsg.join(' '))));
         }
         if(typeof json.row != 'undefined'){
-            $('.overlay-nav__actions').append(json.row);
-            title.val('');
-            text.val('');
-            price.val('');
-            measure.val('');
+            $('#doc_list tbody').append(json.row);
+            name.val('');
             file.val('');
         }
     });
 }
 
-function delRelated(elem, e) {
+function delDoc(elem, e) {
     e.preventDefault();
-    if(!confirm('Точно удалить этот товар?')) return;
+    if(!confirm('Точно удалить этот документ?')) return;
     var url = $(elem).attr('href');
     var row = $(elem).closest('tr');
 

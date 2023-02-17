@@ -13,8 +13,7 @@ use GuzzleHttp\Cookie\CookieJar;
 use SVG\SVG;
 use Symfony\Component\DomCrawler\Crawler;
 
-trait ParseFunctions
-{
+trait ParseFunctions {
 
     public $userAgents = [
         "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
@@ -59,8 +58,7 @@ trait ParseFunctions
     ];
 
     //парсим категории
-    public function parseCategory($categoryName, $categoryUrl, $parentId)
-    {
+    public function parseCategory($categoryName, $categoryUrl, $parentId) {
         $this->info($categoryName . ' => ' . $categoryUrl);
         $catalog = $this->getCatalogByName($categoryName, $parentId);
 
@@ -73,8 +71,7 @@ trait ParseFunctions
     }
 
     //парсим товары
-    public function parseListProducts($catalog, $categoryUrl, $subcatName)
-    {
+    public function parseListProducts($catalog, $categoryUrl, $subcatName) {
         $this->info('Parse products from: ' . $catalog->name);
         $res = $this->client->get($categoryUrl);
         $html = $res->getBody()->getContents();
@@ -152,8 +149,7 @@ trait ParseFunctions
      * @param string $str
      * @return bool
      */
-    public function checkIsImageJpg(string $str): bool
-    {
+    public function checkIsImageJpg(string $str): bool {
         $imgEnds = ['.jpg', 'jpeg', 'png'];
         foreach ($imgEnds as $ext) {
             if (str_ends_with($str, $ext)) {
@@ -179,8 +175,7 @@ trait ParseFunctions
         }
     }
 
-    public function downloadSvgFile($url, $uploadPath, $fileName): bool
-    {
+    public function downloadSvgFile($url, $uploadPath, $fileName): bool {
         $safeUrl = str_replace(' ', '%20', $url);
 
         $image = SVG::fromFile($this->baseUrl . $safeUrl);
@@ -196,8 +191,7 @@ trait ParseFunctions
         }
     }
 
-    public function parseProductWallFromString($str, $productSize, $rectangle = null)
-    {
+    public function parseProductWallFromString($str, $productSize, $rectangle = null) {
         if (!$productSize) return null;
         if (!$rectangle) {
             $sizePos = mb_stripos($str, $productSize); //находим место в строке с текущим размером
@@ -227,8 +221,7 @@ trait ParseFunctions
         }
     }
 
-    public function getKFromScriptUrl($scriptUrl)
-    {
+    public function getKFromScriptUrl($scriptUrl) {
         try {
             $scriptPage = $this->client->get($scriptUrl);
             $scriptHtml = $scriptPage->getBody()->getContents();
@@ -247,8 +240,7 @@ trait ParseFunctions
      * @param int $parentId
      * @return Catalog
      */
-    private function getCatalogByName(string $categoryName, int $parentId): Catalog
-    {
+    private function getCatalogByName(string $categoryName, int $parentId): Catalog {
         $catalog = Catalog::whereName($categoryName)->first();
         if (!$catalog) {
             $catalog = Catalog::create([
@@ -266,8 +258,7 @@ trait ParseFunctions
         return $catalog;
     }
 
-    private function getCatalogTestByName(string $categoryName, int $parentId, string $catFilters = null): CatalogTest
-    {
+    private function getCatalogTestByName(string $categoryName, int $parentId, string $catFilters = null): CatalogTest {
         $catalog = CatalogTest::whereName($categoryName)->first();
         if (!$catalog) {
             $catalog = CatalogTest::create([
@@ -288,8 +279,7 @@ trait ParseFunctions
         return $catalog;
     }
 
-    private function updateCatalogUpdatedAt(Catalog $catalog)
-    {
+    private function updateCatalogUpdatedAt(Catalog $catalog) {
         $catalog->updated_at = Carbon::now();
         $catalog->save();
         if ($catalog->parent_id !== 0) {
@@ -298,8 +288,7 @@ trait ParseFunctions
         }
     }
 
-    public function getInnerSiteScript($node): string
-    {
+    public function getInnerSiteScript($node): string {
         $idt = $node->attr('idt');
         $idf = $node->attr('idf');
         $idb = $node->attr('idb');
@@ -307,8 +296,7 @@ trait ParseFunctions
         return 'mc.ru//pages/blocks/add_basket.asp/id/' . $idt . '/idf/' . $idf . '/idb/' . $idb;
     }
 
-    public function getArticulFromName(string $name): string
-    {
+    public function getArticulFromName(string $name): string {
         $start = stripos($name, '[');
         $end = stripos($name, ']');
         if ($start && $end) {
@@ -319,8 +307,7 @@ trait ParseFunctions
 
     }
 
-    public function getNameFromString(string $name): string
-    {
+    public function getNameFromString(string $name): string {
         $mark = stripos($name, '[');
         if ($mark) {
             return trim(substr($name, 0, $mark));
@@ -330,8 +317,7 @@ trait ParseFunctions
 
     }
 
-    public function getExtensionFromSrc(string $url): string
-    {
+    public function getExtensionFromSrc(string $url): string {
         $mark = strripos($url, '.');
         if ($mark) {
             return trim(substr($url, $mark));
@@ -341,8 +327,7 @@ trait ParseFunctions
 
     }
 
-    public function getTextWithNewImage(string $text, string $imgUrl): string
-    {
+    public function getTextWithNewImage(string $text, string $imgUrl): string {
         if ($text == null) return '';
         $start = stripos($text, '<img');
         if (!$start) return $text;
@@ -353,10 +338,9 @@ trait ParseFunctions
         return str_replace($searchString, $img, $text);
     }
 
-    public function getUpdatedTextWithNewImages(string $text, array $imgSrc, array $imgArr): string
-    {
+    public function getUpdatedTextWithNewImages(string $text, array $imgSrc, array $imgArr): string {
         if ($text == null) return '';
-        if(count($imgArr) == 0) return $text;
+        if (count($imgArr) == 0) return $text;
         $res = str_replace($imgSrc, $imgArr, $text);
 
         return $res;
@@ -364,9 +348,9 @@ trait ParseFunctions
 
     //чтобы найти название файла на русском для последующей замены
     public function encodeUrlFileName($url) {
-        $start = strripos($url, '/') + 1 ;
+        $start = strripos($url, '/') + 1;
         $end = strripos($url, '.');
-        if($start && $end) {
+        if ($start && $end) {
             $searchName = substr($url, $start, $end - $start);
             $encodeName = urlencode($searchName);
             $encodeName = str_replace('25', '', $encodeName);
@@ -374,8 +358,7 @@ trait ParseFunctions
         }
     }
 
-    public function curlGetData(string $url): string
-    {
+    public function curlGetData(string $url): string {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -385,8 +368,7 @@ trait ParseFunctions
         return $response;
     }
 
-    public function curlSaveDataToFile(string $url, string $fileName)
-    {
+    public function curlSaveDataToFile(string $url, string $fileName) {
         $uploadPath = '/data-site/';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -401,8 +383,7 @@ trait ParseFunctions
     }
 
     //used only for https://rus-kab.ru
-    public function extractCableProductName(string $name)
-    {
+    public function extractCableProductName(string $name) {
         if (!stripos($name, ' ')) return $name;
 
         $result = explode(' ', $name);
@@ -411,7 +392,7 @@ trait ParseFunctions
 
     public function addProductParamName($name) {
         $param = Param::whereName($name)->first();
-        if(!$param) {
+        if (!$param) {
             $param = Param::create([
                 'name' => $name,
             ]);
@@ -421,7 +402,7 @@ trait ParseFunctions
 
     //заменить запятую в цене на точку, иначе не сохр. во FLOAT
     public function replaceFloatValue(string $str) {
-        if(stripos($str, ',')) {
+        if (stripos($str, ',')) {
             return str_replace(',', '.', $str);
         }
         return $str;

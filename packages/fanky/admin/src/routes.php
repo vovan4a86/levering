@@ -102,14 +102,14 @@ Route::group(['namespace' => 'Fanky\Admin\Controllers', 'prefix' => 'admin', 'as
 		Route::get('get-catalogs/{id?}', $controller . 'getGetCatalogs')
 			->name('.get_catalogs');
 
-        Route::post('add-related/{id}', [
-            'as'   => '.add_related',
-            'uses' => $controller . 'postAddRelated'
+        Route::post('add-doc/{id}', [
+            'as'   => '.add_doc',
+            'uses' => $controller . 'postAddDoc'
         ]);
 
-        Route::post('del-related/{id}', [
-            'as'   => '.del_related',
-            'uses' => $controller . 'postDelRelated'
+        Route::post('del-doc/{id}', [
+            'as'   => '.del_doc',
+            'uses' => $controller . 'postDelDoc'
         ]);
 
         Route::post('save-related/{id}', [
@@ -315,6 +315,20 @@ Route::group(['namespace' => 'Fanky\Admin\Controllers', 'prefix' => 'admin', 'as
 
 		Route::post('save', $controller . 'postSave')
 			->name('.save');
+	});
+
+	Route::group(['as' => '.char_settings', 'prefix' => 'char_settings'], function () {
+		$controller = 'AdminCharSettingsController@';
+		Route::get('/', $controller . 'getIndex');
+
+		Route::any('edit/{id?}', $controller . 'getView')
+			->name('.edit');
+
+		Route::post('save', $controller . 'postSave')
+			->name('.save');
+
+		Route::post('del', $controller . 'postDelete')
+			->name('.del');
 	});
 
 	Route::group(['as' => '.redirects', 'prefix' => 'redirects'], function () {

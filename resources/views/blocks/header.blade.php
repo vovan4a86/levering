@@ -5,16 +5,21 @@
 -->
 {{--<header class="header --}}
 <header class="header {{ Request::url() == route('main') ? 'header--home' : null }}
-        {{ isset($innerPage) ? 'header--inner' : null }}
-        {{ isset($landingPage) ? 'header--landing' : null }}">
+{{ isset($innerPage) ? 'header--inner' : null }}
+{{ isset($landingPage) ? 'header--landing' : null }}">
     <div class="header__top">
         <div class="header__container container">
             <div class="header__row">
                 <div class="header__col">
                     <!-- homepage ? block : link-->
                     <!-- innerPage ? "logo--solid.svg" : "logo.svg"-->
-                    <div class="header__logo lazy"
-                         data-bg="/static/images/common/{{ isset($innerPage) ? 'logo--solid.svg' : 'logo.svg' }}"></div>
+                    @if(Route::is('main'))
+                        <div class="header__logo lazy"
+                             data-bg="/static/images/common/{{ isset($innerPage) ? 'logo--solid.svg' : 'logo.svg' }}"></div>
+                    @else
+                        <a class="header__logo lazy" href="{{ route('main') }}"
+                           data-bg="/static/images/common/{{ isset($innerPage) ? 'logo--solid.svg' : 'logo.svg' }}"></a>
+                    @endif
                     @if(count($topMenu))
                         <nav class="header__nav">
                             <ul class="header__nav-list list-reset">
@@ -33,14 +38,21 @@
                     </button>
                     <div class="header__msg">
                         @if(Settings::get('header_telegram'))
-                            <a class="header__msg-icon lazy" href="https://t.me/{{ Settings::get('header_telegram') }}" data-bg="/static/images/common/ico_tg.svg" target="_blank" title="Написать в Telegram"></a>
+                            <a class="header__msg-icon lazy" href="https://t.me/{{ Settings::get('header_telegram') }}"
+                               data-bg="/static/images/common/ico_tg.svg" target="_blank"
+                               title="Написать в Telegram"></a>
                         @endif
                         @if(Settings::get('header_whatsapp'))
-                            <a class="header__msg-icon lazy" href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('header_whatsapp')) }}" data-bg="/static/images/common/ico_wa.svg" target="_blank" title="Написать в Whatsapp"></a>
+                            <a class="header__msg-icon lazy"
+                               href="https://wa.me/{{ preg_replace('/[^\d+]/', '', Settings::get('header_whatsapp')) }}"
+                               data-bg="/static/images/common/ico_wa.svg" target="_blank"
+                               title="Написать в Whatsapp"></a>
                         @endif
                     </div>
                     @if(Settings::get('header_phone'))
-                        <a class="header__phone" href="tel:{{ preg_replace('/[^\d+]/', '', Settings::get('header_phone')) }}" title="Позвонить нам">{{ Settings::get('header_phone') }}</a>
+                        <a class="header__phone"
+                           href="tel:{{ preg_replace('/[^\d+]/', '', Settings::get('header_phone')) }}"
+                           title="Позвонить нам">{{ Settings::get('header_phone') }}</a>
                     @endif
                     <button class="header__burger btn-reset" type="button" aria-label="Открыть меню">
                         <span class="iconify" data-icon="charm:menu-hamburger" data-width="40"></span>
@@ -82,8 +94,8 @@
                 <div class="o-nav__container container" x-data="{current: '{{ $catalogMenu->first()->name }}'}">
                     <!-- o-nav__aside-->
                     <div class="o-nav__aside">
-                        @foreach($catalogMenu as $item)
-                            <!-- o-link-->
+                    @foreach($catalogMenu as $item)
+                        <!-- o-link-->
                             <div class="o-link" :class="current == '{{ $item->name }}' &amp;&amp; 'is-active'"
                                  @click="current = '{{ $item->name }}'" aria-label="{{ $item->name }}">
                                 <div class="o-link__label">{{ $item->name }}</div>
@@ -93,8 +105,8 @@
                     </div>
                     <!-- o-nav__body-->
                     <div class="o-nav__body">
-                        @foreach($catalogMenu as $item)
-                            <!-- o-nav__view-->
+                    @foreach($catalogMenu as $item)
+                        <!-- o-nav__view-->
                             <div class="o-nav__view" x-show="current == '{{ $item->name }}'">
                                 @if($item->children)
                                     <ul class="o-nav__list list-reset">

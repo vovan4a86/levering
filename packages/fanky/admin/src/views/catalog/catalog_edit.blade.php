@@ -108,8 +108,8 @@
 
             <div class="tab-pane" id="tab_2">
                 {!! Form::groupRichtext('text', $catalog->text, 'Основной текст', ['rows' => 3]) !!}
-                {!! Form::groupRichtext('chars', $catalog->chars, 'Характеристики', ['rows' => 3]) !!}
-                {!! Form::groupRichtext('sphere', $catalog->sphere, 'Сфера применения', ['rows' => 3]) !!}
+{{--                {!! Form::groupRichtext('chars', $catalog->chars, 'Характеристики', ['rows' => 3]) !!}--}}
+{{--                {!! Form::groupRichtext('sphere', $catalog->sphere, 'Сфера применения', ['rows' => 3]) !!}--}}
             </div>
         </div>
 

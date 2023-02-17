@@ -12,19 +12,9 @@ class Order extends Model {
     const UPLOAD_PATH = '/public/uploads/orders/';
     const UPLOAD_URL  = '/uploads/orders/';
 
-    public static $payer_type = [
-        1	=> 'Частное лицо',
-        2	=> 'Юридическое лицо',
-    ];
-
-    public static $payment = [
-        1   => 'Наличный расчет',
-        2	=> 'Безналичным расчет',
-    ];
-
     public function products() {
         return $this->belongsToMany('Fanky\Admin\Models\Product')
-            ->withPivot('count', 'weight', 'price');
+            ->withPivot('count', 'price');
     }
 
     public function dateFormat($format = 'd.m.Y')

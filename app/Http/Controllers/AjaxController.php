@@ -27,33 +27,33 @@ class AjaxController extends Controller {
     //РАБОТА С КОРЗИНОЙ
     public function postAddToCart(Request $request): array {
         $id = $request->get('id');
-        $size = $request->get('size');
-        $weight = $request->get('weight');
+        $count = $request->get('count');
 
         /** @var Product $product */
         $product = Product::find($id);
         if ($product) {
-            $product_item = $product->toArray();
-            $product_item['current_price'] = $product->getMeasurePrice();
-            $product_item['count'] = $size;
-            $product_item['round_k'] = $product->round_k;
-            if (!$weight) {
-                $product_item['weight'] = $product_item['count'] * $product_item['round_k'];
+            $product_item['id'] = $product->id;
+            $product_item['name'] = $product->name;
+            $product_item['price'] = $product->price;
+            $product_item['measure'] = $product->getRecourseMeasure();
+            $product_item['count'] = $count;
+            $product_item['url'] = $product->url;
+
+            $prodImage = $product->image()->first();
+            if ($prodImage) {
+                $product_item['image'] = $prodImage->image;
             } else {
-                $product_item['weight'] = $weight;
-            }
-            if ($product_item['measure'] == 'м') {
-                $product_item['weight'] = $size;
-                $product_item['count'] = $weight;
+                $image = Catalog::whereId($product->catalog_id)->first()->section_image;
+                if (!$image) $product_item['image'] = Catalog::UPLOAD_URL . Catalog::whereId($product->catalog_id)->first()->image;
             }
 
-            $product_item['url'] = $product->url;
             Cart::add($product_item);
         }
-        $header_cart = view('blocks.header_cart')->render();
+//        $header_cart = view('blocks.header_cart')->render();
 
         return [
-            'header_cart' => $header_cart,
+            'success' => true,
+//            'header_cart' => $header_cart,
         ];
     }
 
@@ -82,54 +82,46 @@ class AjaxController extends Controller {
 
         $product = Product::find($id);
 
-        $product_item = $product->toArray();
+        $product_item['id'] = $product->id;
+        $product_item['name'] = $product->name;
+        $product_item['price'] = $product->price;
+        $product_item['count'] = $count;
+        $product_item['measure'] = $product->getRecourseMeasure();
         $product_item['url'] = $product->url;
 
-        if ($product_item['measure'] == 'т') {
-            $product_item['weight'] = $count;
-        } elseif ($product_item['measure'] == 'кг') {
-            $product_item['weight'] = $count;
-        } elseif ($product_item['measure'] == 'м') {
-            $product_item['count'] = $count;
+        $prodImage = $product->image()->first();
+        if ($prodImage) {
+            $product_item['image'] = $prodImage->image;
         } else {
-            $product_item['count'] = $count;
+            $image = Catalog::whereId($product->catalog_id)->first()->section_image;
+            if (!$image) $product_item['image'] = Catalog::UPLOAD_URL . Catalog::whereId($product->catalog_id)->first()->image;
         }
 
         Cart::updateCount($id, $count);
 
-        $cur_summ = view('cart.table_row_summ', ['item' => $product_item])->render();
-        $order_total = view('cart.blocks.order_total')->render();
+        $item_summ = view('cart.table_row_summ', ['item' => $product_item])->render();
+        $total = view('cart.table_row_total')->render();
 
         return [
-            'cur_summ' => $cur_summ,
-            'order_total' => $order_total,
+            'success' => true,
+            'item_summ' => $item_summ,
+            'total' => $total,
         ];
     }
 
     public function postRemoveFromCart(Request $request) {
         $id = $request->get('id');
         Cart::remove($id);
-
-        $sum = Cart::sum();
-
-        $header_cart = view('blocks.header_cart')->render();
-        $cart_values = view('blocks.cart_values', ['sum' => $sum])->render();
-
-        return ['header_cart' => $header_cart, 'cart_values' => $cart_values];
+        $total = view('cart.table_row_total')->render();
+        return ['success' => true, 'total' => $total];
     }
 
     public function postPurgeCart() {
         Cart::purge();
-
-        $header_cart = view('blocks.header_cart')->render();
-        $order_total = view('cart.blocks.order_total', [
-            'total_weight' => Cart::total_weight(),
-            'sum' => Cart::sum()
-        ])->render();
-
+        $total = view('cart.table_row_total')->render();
         return [
-            'header_cart' => $header_cart,
-            'order_total' => $order_total,
+            'success' => true,
+            'total' => $total,
         ];
     }
 
@@ -375,84 +367,59 @@ class AjaxController extends Controller {
     //ОФОРМЛЕНИЕ ЗАКАЗА
     public function postOrder(Request $request) {
         $data = $request->only([
-            'payer_type',
             'name',
-            'email',
             'phone',
+            'email',
             'company',
-            'delivery_item_id',
-            'payment',
-            'callback',
+            'delivery',
+            'city',
+            'code',
+            'street',
+            'home-number',
+            'apartment-number',
+            'comment',
         ]);
 
         array_get($data, 'callback') == 'on' ? $data['callback'] = 1 : $data['callback'] = 0;
 
         $messages = array(
-            'payer_type' => 'Не указан тип плательщика',
-            'email.required' => 'Не указан ваш e-mail адрес!',
-            'email.email' => 'Не корректный e-mail адрес!',
             'name.required' => 'Не заполнено поле Имя',
             'phone.required' => 'Не заполнено поле Телефон',
-            'delivery_item_id.required' => 'Не выбран способ доставки',
-            'payment.required' => 'Не выбран способ оплаты',
+            'company.required' => 'Не заполнено поле Компания',
+            'delivery.required' => 'Не выбран способ доставки',
+            'city.required' => 'Не заполнено поле Город',
+            'code.required' => 'Не заполнено поле Индекс',
+            'street.required' => 'Не заполнено поле Улица',
+            'home-number.required' => 'Не заполнено поле Дом',
+            'apartment-number.required' => 'Не заполнено поле Квартира',
         );
 
         $valid = Validator::make($data, [
-            'payer_type' => 'required',
             'name' => 'required',
-            'email' => 'required',
             'phone' => 'required',
-            'company' => 'required_if:payer_type,2',
-            'delivery_item_id' => 'required',
+            'company' => 'required',
+            'city' => 'required_if:delivery,1',
+            'code' => 'required_if:delivery,1',
+            'street' => 'required_if:delivery,1',
+            'home-number' => 'required_if:delivery,1',
+            'apartment-number' => 'required_if:delivery,1',
         ], $messages);
         if ($valid->fails()) {
             return ['errors' => $valid->messages()];
         }
 
         $data['summ'] = Cart::sum();
-        $data['total_weight'] = Cart::total_weight();
 
         $order = Order::create($data);
         $items = Cart::all();
 
         foreach ($items as $item) {
-            if ($item['weight'] == 0) {
-                $itemPrice = $item['count'] * $item['current_price'];
-            } elseif ($item['measure'] == 'кг') {
-                $itemPrice = $item['weight'] * $item['current_price'];
-                $item['weight'] = $item['weight'] / 1000;
-            } else {
-                $itemPrice = $item['weight'] * $item['current_price'];
-            }
-
+            $itemPrice = $item['price'] * $item['count'];
             $order->products()->attach($item['id'], [
                 'count' => $item['count'],
-                'weight' => $item['weight'],
                 'price' => $itemPrice
             ]);
         }
-
-//        $data['total_sum'] = Cart::getRawTotalSum();
-//        $order = Order::create($data);
-//        $cart = Cart::getCart();
-//        foreach ($cart as $item){
-//            $product = array_get($item, 'model');
-//            $product->update(['order_count' => $product->order_count +1]);
-//            $size = array_get($item, 'size') ? array_get($item, 'size'): $product->param_size;
-//            $order_item_data = [
-//                'order_id'	=> $order->id,
-//                'product_id'	=> array_get($item, 'id'),
-//                'product_name'	=> $product->name,
-//                'size'	=> $size,
-//                'count'	=> array_get($item, 'count'),
-//                'price'	=> array_get($item, 'price'),
-//            ];
-//            OrderItem::create($order_item_data);
-//        }
-
-//        if($data['payment_method'] == 3) {
-//            return ['success' => true, 'redirect' => route('pay.order', ['id' => $order->id])];
-//        }
 
         Mail::send('mail.new_order', ['order' => $order], function ($message) use ($order) {
             $title = $order->id . ' | Новый заказ | LEVERING';

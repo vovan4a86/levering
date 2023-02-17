@@ -65,6 +65,8 @@ class AdminMenuMiddleware {
 				->nickname('settings');
 			$menu->settings->add('Настройки', ['route' => 'admin.settings', 'icon' => 'fa-gear'])
 				->active('/admin/settings/*');
+            $menu->settings->add('Характеристики продуктов', ['route' => 'admin.char_settings', 'icon' => 'fa-gear'])
+                ->active('/admin/chars_settings/*');
 			$menu->settings->add('Редиректы', ['route' => 'admin.redirects', 'icon' => 'fa-retweet'])
 				->active('/admin/redirects/*');
 //			$menu->add('Медиаменеджер', ['route' => 'admin.pages.imagemanager', 'icon' => 'fa-picture-o'])

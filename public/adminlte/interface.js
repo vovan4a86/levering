@@ -249,27 +249,9 @@ $('button.clear-btn').on('click', function (e) {
 });
 
 let Cart = {
-	add: function (id, size, weight, callback) {
+	add: function (id, count, callback) {
 		sendAjax('/ajax/add-to-cart',
-			{id, size, weight}, (result) => {
-				if (typeof callback == 'function') {
-					callback(result);
-				}
-			});
-	},
-
-	add_pi: function (id, size, weight, callback) {
-		sendAjax('/ajax/add-to-cart-pi',
-			{id, size, weight}, (result) => {
-				if (typeof callback == 'function') {
-					callback(result);
-				}
-			});
-	},
-
-	add_pkilo: function (id, size, weight, callback) {
-		sendAjax('/ajax/add-to-cart-pkilo',
-			{id, size, weight}, (result) => {
+			{id, count}, (result) => {
 				if (typeof callback == 'function') {
 					callback(result);
 				}
@@ -285,9 +267,9 @@ let Cart = {
 			});
 	},
 
-	edit:  function (id, weight, callback) {
+	edit:  function (id, count, callback) {
 		sendAjax('/ajax/edit-cart-product',
-			{id: id, count: count}, (result) => {
+			{id, count}, (result) => {
 				if (typeof callback == 'function') {
 					callback(result);
 				}

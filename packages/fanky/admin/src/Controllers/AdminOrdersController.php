@@ -18,21 +18,17 @@ class AdminOrdersController extends AdminController {
         $items = $order->products;
         $all_count = 0;
         $all_summ = 0;
-        $all_weight = 0;
 
         foreach ($items as $item) {
             $all_summ += $item->pivot->price;
             $all_count += $item->pivot->count;
-            $all_weight += $item->pivot->weight;
         }
 
         return view('admin::orders.view', [
-//            'payment_order' => $paymentOrder,
             'order'     => $order,
             'items'     => $items,
             'all_count' => $all_count,
             'all_summ'  => $all_summ,
-            'all_weight' => $all_weight,
         ]);
     }
 

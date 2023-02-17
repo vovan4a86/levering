@@ -18,12 +18,6 @@ class CartController extends Controller {
 	public function getIndex() {
 //        Cart::purge();
 		$items = Cart::all();
-//		if (!count($items)) {
-//			return Response::redirectTo(route('catalog.index', [], false), 307);
-//		}
-
-//        $page = Page::getByPath(['cart']);
-//        $bread = $page->getBread();
 
         $bread[] = [
             'url'  => '/cart',
@@ -33,9 +27,7 @@ class CartController extends Controller {
         return view('cart.index', [
 			'items' => $items,
             'sum' => Cart::sum(),
-            'total_weight' => Cart::total_weight(),
             'bread' => $bread,
-            'headerIsWhite' => true,
 		]);
 	}
 

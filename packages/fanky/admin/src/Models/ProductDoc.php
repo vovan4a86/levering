@@ -1,5 +1,6 @@
 <?php namespace Fanky\Admin\Models;
 
+use App\Traits\HasFile;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -20,11 +21,19 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\Fanky\Admin\Models\ProductChar whereValue($value)
  */
 class ProductDoc extends Model {
+    use HasFile;
+
 	protected $guarded = ['id'];
 	protected $table = 'product_docs';
 	public $timestamps = false;
 
+	const UPLOAD_URL = '/uploads/docs/';
+
 	public function product(){
 		return $this->belongsTo(Product::class);
 	}
+
+	public function getExtension() {
+        return strtoupper(explode('.', $this->file)[1]);
+    }
 }

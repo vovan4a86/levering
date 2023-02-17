@@ -22,42 +22,43 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">
+                        <div class="col-md-4 text-bold">Дата заказа</div>
+                        <div class="col-md-8">{{ $order->dateFormat() }}</div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4 text-bold">Заказчик</div>
                         <div class="col-md-8">{{ $order->name }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 text-bold">Тип</div>
-                        <div class="col-md-8">{{ array_get(\Fanky\Admin\Models\Order::$payer_type, $order->payer_type)  }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 text-bold">Email</div>
-                        <div class="col-md-8">{{ $order->email }}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-bold">Телефон</div>
                         <div class="col-md-8">{{ $order->phone }}</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 text-bold">Нужен звонок для подтверждения заказа</div>
-                        <div class="col-md-8">{{ $order->callback ? 'Да' : 'Нет' }} </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-4 text-bold">Дата заказа</div>
-                        <div class="col-md-8">{{ $order->dateFormat() }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 text-bold">Способ доставки</div>
-                        <div class="col-md-8">{{ $order->delivery_item->name }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 text-bold">Способ оплаты</div>
-                        <div class="col-md-8">{{ array_get(\Fanky\Admin\Models\Order::$payment, $order->payment) }}</div>
+                        <div class="col-md-4 text-bold">Доставка</div>
+                        <div class="col-md-8">{{ $order->delivery == 1 ? 'Да' : 'Нет' }}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-bold">Сумма заказа</div>
-                        <div class="col-md-8">{{ number_format($all_summ, 0, '', ' ') }}</div>
+                        <div class="col-md-8"><strong>{{ number_format($all_summ, 0, '', ' ') }}</strong></div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4 text-bold">Компания</div>
+                        <div class="col-md-8">{{ $order->company }} </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-bold">Email</div>
+                        <div class="col-md-8">{{ $order->email }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-bold">Город, индекс</div>
+                        <div class="col-md-8">{{ $order->city }}, {{ $order->code }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-bold">Адрес доставки</div>
+                        <div class="col-md-8">{{ $order->street }}, д.{{ $order->home_number }}, кв.{{ $order->apartment_number }}</div>
                     </div>
                 </div>
             </div>
@@ -69,9 +70,9 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th style="text-align: center;">N</th>
                         <th>Товар</th>
-                        <th style="text-align: center;">Количество, шт(м2)</th>
-                        <th style="text-align: center;">Вес, т</th>
+                        <th style="text-align: center;">Количество</th>
                         <th style="text-align: center;">Цена, руб</th>
                         <th style="text-align: center;">Сумма, руб</th>
                     </tr>
@@ -79,19 +80,19 @@
                     <tbody>
                     @foreach ($items as $item)
                         <tr>
+                            <td width="10" style="text-align: center;">{{ $loop->iteration }}</td>
                             <td><a target="_blank" href="{{ route('admin.catalog.productEdit', [$item->id]) }}">{{ $item->name }}</a></td>
                             <td style="text-align: center;">{{ $item->pivot->count }}</td>
-                            <td style="text-align: center;">{{ $item->pivot->weight ?? '-' }}</td>
-                            <td style="text-align: center;">{{ number_format($item->getMeasurePrice(), 0, '', ' ') }}/{{ $item->measure }}</td>
+                            <td style="text-align: center;">{{ number_format($item->price, 0, '', ' ') }}/{{ $item->measure }}</td>
                             <td style="text-align: center;">{{ number_format($item->pivot->price, 0, '', ' ') }} </td>
                         </tr>
                     @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th></th>
                             <th>Итого:</th>
                             <th style="text-align: center;">{{ $all_count }}</th>
-                            <th style="text-align: center;">{{ $all_weight }}</th>
                             <th>{{ '' }}</th>
                             <th style="text-align: center;">{{ number_format($all_summ, 0, '', ' ') }}</th>
                         </tr>

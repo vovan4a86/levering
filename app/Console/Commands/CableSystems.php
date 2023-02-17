@@ -58,7 +58,7 @@ class CableSystems extends Command {
      */
     public function handle() {
         foreach ($this->categoryList() as $categoryName => $categoryUrl) {
-            if ($categoryName == 'PROMTRAY') $this->isPROMTRAY = true;
+            if ($categoryName == 'СТАНДАРТ') $this->isPROMTRAY = true;
             $this->parseCategoryCableSystems($categoryName, $categoryUrl, 2);
         }
         $this->info('The command was successful!');
@@ -68,15 +68,16 @@ class CableSystems extends Command {
         return [
 //            'ГЭМ' => 'https://asd-e.ru/product/gem/',
 //            'СТАНДАРТ' => 'https://asd-e.ru/product/kabelenesushchie-sistemy/',
-            'PROMTRAY' => 'https://asd-e.ru/product/promtray/',
+//            'PROMTRAY' => 'https://asd-e.ru/product/promtray/',
         ];
     }
 
+    //https://asd-e.ru/product/kabelenesushchie-sistemy/provolochnye-lotki-rt/lotok-provolochnyy-s-vysotoy-borta-105-mm/
     public function parseCategoryCableSystems($categoryName, $categoryUrl, $parentId) {
         $this->info($categoryName . ' => ' . $categoryUrl);
-        if ($this->isPROMTRAY && $categoryName != 'PROMTRAY') $categoryName .= ' PROMTRAY';
+        if ($this->isPROMTRAY && $categoryName != 'СТАНДАРТ') $categoryName .= ' СТАНДАРТ';
         $catalog = $this->getCatalogByName($categoryName, $parentId);
-        $uploadPath = Catalog::UPLOAD_URL;
+        $uploadPath = Catalog::UPLOAD_URL . 'inner_text_imgs/';
 
         try {
             $res = $this->client->get($categoryUrl);
@@ -85,30 +86,28 @@ class CableSystems extends Command {
 
             //текст раздела
             if ($sectionCrawler->filter('.text_after_items')->count() != 0) {
-                if ($sectionCrawler->filter('.text_after_items b')->count() > 0) {
-                    $text = $sectionCrawler->filter('.text_after_items')->html();
-                    if ($sectionCrawler->filter('.text_after_items img')->count() != 0) {
-                        $imgSrc = [];
-                        $newImgSrc = [];
-                        $sectionCrawler->filter('.text_after_items img')
-                            ->each(function (Crawler $img, $n) use (&$newImgSrc, &$imgSrc, $catalog, $uploadPath) {
-                                $imageSrc = $this->baseUrl . $img->attr('src');
-                                $find = $img->attr('src');
-                                $ext = $this->getExtensionFromSrc($imageSrc);
-                                $fileName = 'section_' . $catalog->id . '_text_img_' . $n . $ext;
-                                if (!file_exists(public_path($uploadPath . $fileName))) {
-                                    $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                                }
-                                $imgSrc[] = $this->encodeUrlFileName($find);
-                                $newImgSrc[] = $fileName;
-                            });
-                        $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
-                        $catalog->save();
-                    }
-                } else {
-                    $catalog->text = null;
+                $text = $sectionCrawler->filter('.text_after_items')->html();
+
+                if ($sectionCrawler->filter('.text_after_items img')->count() != 0) {
+                    $imgSrc = [];
+                    $newImgSrc = [];
+                    $sectionCrawler->filter('.text_after_items img')
+                        ->each(function (Crawler $img, $n) use (&$newImgSrc, &$imgSrc, $catalog, $uploadPath) {
+                            $imageSrc = $this->baseUrl . $img->attr('src');
+                            $find = $img->attr('src');
+                            $ext = $this->getExtensionFromSrc($imageSrc);
+                            $fileName = 'section_' . $catalog->id . '_text_img_' . $n . $ext;
+                            if (!file_exists(public_path($uploadPath . $fileName))) {
+                                $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                            }
+                            $imgSrc[] = $this->encodeUrlFileName($find);
+                            $newImgSrc[] = $uploadPath . $fileName;
+                        });
+                    $catalog->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
                     $catalog->save();
                 }
+                $catalog->text = $text;
+                $catalog->save();
             }
 
             if ($sectionCrawler->filter('.item-views.catalog.sections .title a.dark-color')->count() != 0) {
@@ -120,85 +119,86 @@ class CableSystems extends Command {
                     });
             } else {
                 //парсим товары
-                try {
-                    $this->parseListProductCableSystems($catalog, $categoryUrl);
-                } catch (\Exception $e) {
-                    $this->error('Error Parse Products from section: ' . $e->getMessage());
-                    $this->error('See line: ' . $e->getLine());
-                }
+//                try {
+//                    $this->parseListProductCableSystems($catalog, $categoryUrl);
+//                } catch (\Exception $e) {
+//                    $this->error('Error Parse Products from section: ' . $e->getMessage());
+//                    $this->error('See line: ' . $e->getLine());
+//                }
             }
         } catch (GuzzleException $e) {
-            $this->error('Error Parse Sections: ' . $e->getMessage());
-        }
-    }
+$this->error('Error Parse Sections: ' . $e->getMessage());
+}
+}
 
-    public function parseListProductCableSystems($catalog, $categoryUrl) {
-        $this->info('Parse products from: ' . $catalog->name);
-        try {
-            $res = $this->client->get($categoryUrl);
-            $html = $res->getBody()->getContents();
-            $crawler = new Crawler($html); //products page from url
+public
+function parseListProductCableSystems($catalog, $categoryUrl) {
+    $this->info('Parse products from: ' . $catalog->name);
+    try {
+        $res = $this->client->get($categoryUrl);
+        $html = $res->getBody()->getContents();
+        $crawler = new Crawler($html); //products page from url
 
-            $uploadPath = $this->basePath . $catalog->alias . '/';
+        $uploadPath = $this->basePath . $catalog->alias . '/';
 
-            if ($crawler->filter('.catalog.item-views.table.many')->count() != 0) {
-                $table = $crawler->filter('.catalog.item-views.table.many')->first(); //table of products
-                $table->filter('a.dark-color')
+        if ($crawler->filter('.catalog.item-views.table.many')->count() != 0) {
+            $table = $crawler->filter('.catalog.item-views.table.many')->first(); //table of products
+            $table->filter('a.dark-color')
 //                    ->reduce(function (Crawler $none, $i) {return ($i < 3);})
-                    ->each(function (Crawler $node, $n) use ($catalog, $uploadPath) {
-                        $data = [];
-                        try {
-                            $url = $this->baseUrl . trim($node->attr('href'));
-                            $data['name'] = trim($node->text());
-                            $data['h1'] = $node->text();
-                            $data['title'] = $node->text();
-                            $data['alias'] = Text::translit($node->text());
+                ->each(function (Crawler $node, $n) use ($catalog, $uploadPath) {
+                    $data = [];
+                    try {
+                        $url = $this->baseUrl . trim($node->attr('href'));
+                        $data['name'] = trim($node->text());
+                        $data['h1'] = $node->text();
+                        $data['title'] = $node->text();
+                        $data['alias'] = Text::translit($node->text());
 
-                            $this->info(++$n . ') ' . $data['name']);
+                        $this->info(++$n . ') ' . $data['name']);
 
-                            $product = Product::whereParseUrl($url)->first();
+                        $product = Product::whereParseUrl($url)->first();
 
-                            if (!$product) {
-                                $productPage = $this->client->get($url);
-                                $productHtml = $productPage->getBody()->getContents();
-                                $productCrawler = new Crawler($productHtml); //product page
+                        if (!$product) {
+                            $productPage = $this->client->get($url);
+                            $productHtml = $productPage->getBody()->getContents();
+                            $productCrawler = new Crawler($productHtml); //product page
 
-                                $order = $catalog->products()->max('order') + 1;
-                                $newProd = Product::create(array_merge([
-                                    'catalog_id' => $catalog->id,
-                                    'parse_url' => $url,
-                                    'published' => 1,
-                                    'order' => $order,
-                                ], $data));
+                            $order = $catalog->products()->max('order') + 1;
+                            $newProd = Product::create(array_merge([
+                                'catalog_id' => $catalog->id,
+                                'parse_url' => $url,
+                                'published' => 1,
+                                'order' => $order,
+                            ], $data));
 
-                                //текстовое описание товара
-                                if ($productCrawler->filter('.content')->count() != 0) {
-                                    $text = $productCrawler->filter('.content')->html();
-                                    if ($productCrawler->filter('.content img')->count() != 0) {
-                                        $imgSrc = [];
-                                        $newImgSrc = [];
-                                        $productCrawler->filter('.content img')
-                                            ->each(function (Crawler $img) use ($newProd, $uploadPath, &$newImgSrc, &$imgSrc) {
-                                                $imageSrc = $this->baseUrl . $img->attr('src');
-                                                $find = $img->attr('src');
-                                                $ext = $this->getExtensionFromSrc($imageSrc);
-                                                $fileName = 'product_' . $newProd->id . '_text_img' . $ext;
-                                                if (!file_exists(public_path($uploadPath . $fileName))) {
-                                                    $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
-                                                }
+                            //текстовое описание товара
+                            if ($productCrawler->filter('.content')->count() != 0) {
+                                $text = $productCrawler->filter('.content')->html();
+                                if ($productCrawler->filter('.content img')->count() != 0) {
+                                    $imgSrc = [];
+                                    $newImgSrc = [];
+                                    $productCrawler->filter('.content img')
+                                        ->each(function (Crawler $img) use ($newProd, $uploadPath, &$newImgSrc, &$imgSrc) {
+                                            $imageSrc = $this->baseUrl . $img->attr('src');
+                                            $find = $img->attr('src');
+                                            $ext = $this->getExtensionFromSrc($imageSrc);
+                                            $fileName = 'product_' . $newProd->id . '_text_img' . $ext;
+                                            if (!file_exists(public_path($uploadPath . $fileName))) {
+                                                $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                            }
 
-                                                $imgSrc[] = $this->encodeUrlFileName($find);
-                                                $newImgSrc[] = $uploadPath . $fileName;
-                                            });
-                                        $newProd->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
-                                        $newProd->save();
-                                    } else {
-                                        $newProd->text = $text;
-                                        $newProd->save();
-                                    }
+                                            $imgSrc[] = $this->encodeUrlFileName($find);
+                                            $newImgSrc[] = $uploadPath . $fileName;
+                                        });
+                                    $newProd->text = $this->getUpdatedTextWithNewImages($text, $imgSrc, $newImgSrc);
+                                    $newProd->save();
+                                } else {
+                                    $newProd->text = $text;
+                                    $newProd->save();
                                 }
+                            }
 
-                                //характеристики
+                            //характеристики
 //                                if ($productCrawler->filter('#props tr.char')->count() != 0) {
 //                                    $chars = [];
 //                                    $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use (&$chars) {
@@ -209,92 +209,93 @@ class CableSystems extends Command {
 //                                    $newProd->chars = $this->getTextFromCharArray($chars);
 //                                    $newProd->save();
 //                                }
-                                if ($productCrawler->filter('#props tr.char')->count() != 0) {
-                                    $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use ($newProd) {
-                                        $name = $char->filter('.char_name span')->text();
-                                        $value = $char->filter('.char_value span')->text();
+                            if ($productCrawler->filter('#props tr.char')->count() != 0) {
+                                $productCrawler->filter('#props tr.char')->each(function (Crawler $char) use ($newProd) {
+                                    $name = $char->filter('.char_name span')->text();
+                                    $value = $char->filter('.char_value span')->text();
 
-                                        $currentChar = Char::whereName($name)->first();
-                                        if (!$currentChar) {
-                                            $currentChar = Char::create([
-                                                'name' => trim($name)
-                                            ]);
-                                        }
-
-                                        ProductChar::create([
-                                            'product_id' => $newProd->id,
-                                            'char_id' => $currentChar->id,
-                                            'value' => $value,
-                                            'order' => ProductChar::where('product_id', $newProd->id)->max('order') + 1,
+                                    $currentChar = Char::whereName($name)->first();
+                                    if (!$currentChar) {
+                                        $currentChar = Char::create([
+                                            'name' => trim($name)
                                         ]);
-                                    });
-                                }
+                                    }
 
-                                //сертификаты и ту
-                                if ($productCrawler->filter('#docs a')->count() != 0) {
-                                    $productCrawler->filter('#docs a')->each(function (Crawler $img, $n) use ($newProd, $uploadPath) {
-                                        $url = $this->baseUrl . $img->attr('href');
-                                        $ext = $this->getExtensionFromSrc($url);
-                                        $fileName = 'product_' . $newProd->id . '_' . $n . $ext;
-                                        $res = $this->downloadJpgFile($url, $this->certificatesPath, $fileName);
-                                        if ($res) {
-                                            ProductCertificate::create([
-                                                'product_id' => $newProd->id,
-                                                'image' => $fileName,
-                                                'order' => ProductCertificate::where('product_id', $newProd->id)->max('order') + 1,
-                                            ]);
-                                        }
-                                    });
-                                }
+                                    ProductChar::create([
+                                        'product_id' => $newProd->id,
+                                        'char_id' => $currentChar->id,
+                                        'value' => $value,
+                                        'order' => ProductChar::where('product_id', $newProd->id)->max('order') + 1,
+                                    ]);
+                                });
+                            }
 
-                                //сохраняем изображения товара
-                                $productCrawler->filter('.slides.items li img')->each(function ($img) use ($newProd, $catalog, $uploadPath) {
-                                    $imageSrc = $this->baseUrl . $img->attr('src');
-                                    $ext = $this->getExtensionFromSrc($imageSrc);
-                                    $fileName = md5(uniqid(rand(), true)) . '_' . time() . $ext;
-                                    $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                            //сертификаты и ту
+                            if ($productCrawler->filter('#docs a')->count() != 0) {
+                                $productCrawler->filter('#docs a')->each(function (Crawler $img, $n) use ($newProd, $uploadPath) {
+                                    $url = $this->baseUrl . $img->attr('href');
+                                    $ext = $this->getExtensionFromSrc($url);
+                                    $fileName = 'product_' . $newProd->id . '_' . $n . $ext;
+                                    $res = $this->downloadJpgFile($url, $this->certificatesPath, $fileName);
                                     if ($res) {
-                                        ProductImage::create([
+                                        ProductCertificate::create([
                                             'product_id' => $newProd->id,
-                                            'image' => $uploadPath . $fileName,
-                                            'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
+                                            'image' => $fileName,
+                                            'order' => ProductCertificate::where('product_id', $newProd->id)->max('order') + 1,
                                         ]);
                                     }
                                 });
-                            } else {
-                                $product->update($data);
-                                $product->save();
                             }
-                        } catch (\Exception $e) {
-                            $this->warn('error: ' . $e->getMessage());
-                            $this->warn('see line: ' . $e->getLine());
+
+                            //сохраняем изображения товара
+                            $productCrawler->filter('.slides.items li img')->each(function ($img) use ($newProd, $catalog, $uploadPath) {
+                                $imageSrc = $this->baseUrl . $img->attr('src');
+                                $ext = $this->getExtensionFromSrc($imageSrc);
+                                $fileName = md5(uniqid(rand(), true)) . '_' . time() . $ext;
+                                $res = $this->downloadJpgFile($imageSrc, $uploadPath, $fileName);
+                                if ($res) {
+                                    ProductImage::create([
+                                        'product_id' => $newProd->id,
+                                        'image' => $uploadPath . $fileName,
+                                        'order' => ProductImage::where('product_id', $newProd->id)->max('order') + 1,
+                                    ]);
+                                }
+                            });
+                        } else {
+                            $product->update($data);
+                            $product->save();
                         }
-                        sleep(rand(0, 2));
-                    });
-            }
-            //проход по страницам
-            if ($crawler->filter('.next a')->count() != 0) {
-                $nextUrl = $crawler->filter('.next a');
-                $nextUrl = $this->baseUrl . $nextUrl->attr('href');
-                $this->info('parse next url: ' . $nextUrl);
-                $this->parseListProductCableSystems($catalog, $nextUrl);
-            }
-
-        } catch (GuzzleException $e) {
-            $this->error('Error Parse Product: ' . $e->getMessage());
-            $this->error('See: ' . $e->getLine());
+                    } catch (\Exception $e) {
+                        $this->warn('error: ' . $e->getMessage());
+                        $this->warn('see line: ' . $e->getLine());
+                    }
+                    sleep(rand(0, 2));
+                });
         }
-    }
-
-    public function getTextFromCharArray(array $chars): ?string {
-        if (!count($chars)) return null;
-
-        $res = '<ul class="prod-char">';
-        foreach ($chars as $name => $value) {
-            $res .= "<li><span class='char-name'>$name</span> - <span class='char-value'>$value</span></li>";
+        //проход по страницам
+        if ($crawler->filter('.next a')->count() != 0) {
+            $nextUrl = $crawler->filter('.next a');
+            $nextUrl = $this->baseUrl . $nextUrl->attr('href');
+            $this->info('parse next url: ' . $nextUrl);
+            $this->parseListProductCableSystems($catalog, $nextUrl);
         }
-        $res .= '</ul>';
-        return $res;
+
+    } catch (GuzzleException $e) {
+        $this->error('Error Parse Product: ' . $e->getMessage());
+        $this->error('See: ' . $e->getLine());
     }
+}
+
+public
+function getTextFromCharArray(array $chars): ?string {
+    if (!count($chars)) return null;
+
+    $res = '<ul class="prod-char">';
+    foreach ($chars as $name => $value) {
+        $res .= "<li><span class='char-name'>$name</span> - <span class='char-value'>$value</span></li>";
+    }
+    $res .= '</ul>';
+    return $res;
+}
 
 }
