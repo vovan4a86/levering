@@ -35,9 +35,9 @@
                                     @if($product->getRecourseDiscountAmount())
                                         <div class="product__preview-top">
                                             <div class="product__badge badge">Лучшая цена</div>
-{{--                                            <img class="product__brand lazy" src="/"--}}
-{{--                                                 data-src="/static/images/common/brand.png" width="105" height="21"--}}
-{{--                                                 alt="">--}}
+                                            {{--                                            <img class="product__brand lazy" src="/"--}}
+                                            {{--                                                 data-src="/static/images/common/brand.png" width="105" height="21"--}}
+                                            {{--                                                 alt="">--}}
                                         </div>
                                     @endif
                                     <div class="product__preview-body">
@@ -216,6 +216,25 @@
                                                         </div>
                                                     </div>
                                                 @endif
+                                                @if(count($product->certificates))
+                                                    <div class="docs">
+                                                        <div class="docs__title">Сертификаты</div>
+                                                        <div class="docs__list">
+                                                            @foreach($product->certificates as $item)
+                                                                <a class="docs__item"
+                                                                   href="{{ \Fanky\Admin\Models\ProductCertificate::UPLOAD_URL . $item->image }}"
+                                                                   title="Сертификат {{ $product->name }}"
+                                                                   download>
+                                                            <span class="docs__icon lazy"
+                                                                  data-bg="/static/images/common/ico_doc.svg"></span>
+                                                                    <span class="docs__body">
+																	<span class="docs__subtitle">Сертификат {{ $loop->iteration }}</span>
+																</span>
+                                                                </a>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                 <div class="b-alert">{{ Settings::get('prod_warn') ?: '' }}</div>
                                             </div>
                                         </div>
@@ -261,14 +280,19 @@
                                 <div class="section__block">
                                     <div class="section__row">
                                         <div class="section__content">
-                                            {!! $text !!}
+                                            <div class="text-block">
+                                                @if($category->text)
+                                                    <div class="section__subtitle">{{ $category->name }}</div>
+                                                    {!! $category->text !!}
+                                                @endif
+                                            </div>
                                         </div>
                                         <div class="section__aside">
                                             <a class="b-aside" href="javascript:void(0)" title="Оптовый прайс-лист">
                                                 <div class="b-aside__currency">₽</div>
                                                 <div class="b-aside__label">Оптовый прайс-лист</div>
                                                 <div class="b-aside__text">
-                                                    Отправьте заявку на получение прайс-листа {{ $root->name }}
+                                                    Отправьте заявку на получение прайс-листа "{{ $root->name }}"
                                                     - получите выгодные цены сейчас
                                                 </div>
                                             </a>
@@ -284,11 +308,12 @@
 
         @include('blocks.similar')
 
-        <div class="s-calc lazy" data-bg="/static/images/common/calc-bg.jpg">
+        <div class="s-calc lazy"
+             data-bg="{{ Settings::fileSrc(Settings::get('complex_banner')['complex_banner_img']) ?: '/static/images/common/calc-bg.jpg' }}">
             <div class="s-calc__container container">
-                <div class="s-calc__title">Комплексное снабжение строительных объектов</div>
-                <div class="s-calc__text">Подбор аналогов с полным соответствием характеристик товаров по проекту для
-                    экономии бюджета
+                <div class="s-calc__title">{{ Settings::get('complex_banner')['complex_banner_title'] ?: 'Комплексное снабжение строительных объектов' }}</div>
+                <div class="s-calc__text">{{ Settings::get('complex_banner')['complex_banner_text'] ?: 'Подбор аналогов с полным соответствием характеристик товаров по проекту для
+                    экономии бюджета' }}
                 </div>
                 <div class="s-calc__action">
                     <button class="btn btn--primary btn-reset" type="button" data-popup data-src="#calc"
@@ -298,30 +323,5 @@
                 </div>
             </div>
         </div>
-        <section class="s-seo text-block">
-            <div class="s-seo__container container">
-                <h1>Заголовок первого уровня</h1>
-                <p>Кабеленесущие системы создаются таким образом, чтобы организовать, защитить и скрыть кабели, провода
-                    в них гораздо легче прокладывать и обслуживать, без проблем возможно наращивание кабельных трасс, их
-                    изменение и ремонт.</p>
-                <p>Кабеленесущие системы создаются таким образом, чтобы организовать, защитить и скрыть кабели, провода
-                    в них гораздо легче прокладывать и обслуживать, без проблем возможно наращивание кабельных трасс, их
-                    изменение и ремонт.</p>
-                <h2>Заголовок второго уровня</h2>
-                <p>Кабеленесущие системы создаются таким образом, чтобы организовать, защитить и скрыть кабели, провода
-                    в них гораздо легче прокладывать и обслуживать, без проблем возможно наращивание кабельных трасс, их
-                    изменение и ремонт.</p>
-                <h3>Заголовок третьего уровня</h3>
-                <p>Кабеленесущие системы создаются таким образом, чтобы организовать, защитить и скрыть кабели, провода
-                    в них гораздо легче прокладывать и обслуживать, без проблем возможно наращивание кабельных трасс, их
-                    изменение и ремонт.</p>
-                <p>Кабеленесущие системы создаются таким образом, чтобы организовать, защитить и скрыть кабели, провода
-                    в них гораздо легче прокладывать и обслуживать, без проблем возможно наращивание кабельных трасс, их
-                    изменение и ремонт.</p>
-                <p>
-                    <a href="http://v2.fanky.ru/levering/08-text.html">Типографика</a>
-                </p>
-            </div>
-        </section>
     </div>
 @endsection

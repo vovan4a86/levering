@@ -20,10 +20,11 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab_1" data-toggle="tab">Параметры</a></li>
-            <li><a href="#tab_2" data-toggle="tab">Текст</a></li>
-            <li><a href="#tab_4" data-toggle="tab">Изображения</a></li>
-            <li><a href="#tab_sert" data-toggle="tab">Сертификаты и ТУ</a></li>
-            <li><a href="#tab_docs" data-toggle="tab">Документы</a></li>
+            <li><a href="#tab_2" data-toggle="tab">Текст ({{ $product->text ? 1 : 0 }})</a></li>
+            <li><a href="#tab_3" data-toggle="tab">Характеристики ({{ count($product->chars()->get()) }})</a></li>
+            <li><a href="#tab_4" data-toggle="tab">Изображения ({{ count($product->images()->get()) }})</a></li>
+            <li><a href="#tab_sert" data-toggle="tab">Сертификаты и ТУ ({{ count($product->certificates()->get()) }})</a></li>
+            <li><a href="#tab_docs" data-toggle="tab">Документы ({{ count($product->docs) }})</a></li>
             <li class="pull-right">
                 <a href="{{ route('admin.catalog.products', [$product->catalog_id]) }}"
                    onclick="return catalogContent(this)">К списку товаров</a>
@@ -46,34 +47,38 @@
                 {!! Form::groupText('description', $product->description, 'description') !!}
                 {!! Form::groupText('price', $product->price ?: 0, 'price') !!}
                 {!! Form::groupText('measure', $product->measure ?: 0, 'Измерение') !!}
-
                 {!! Form::groupText('discount', $product->discont, 'Скидка на товар (приоритет перед скидкой во всем разделе)') !!}
                 <hr>
-                <h4>Характеристики:</h4>
-                @if($product->chars()->get())
-                    <ul>
-                        @foreach($product->chars()->get() as $ch)
-                            <li><strong>{{ $ch->name }}: </strong> {{ $ch->value }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-                <hr>
-                {{--                {!! Form::groupSelect('in_stock', [0 => 'Временно отсутствует', 1 => 'В наличии', 2 => 'Под заказ' ], $product->in_stock, 'Наличие') !!}--}}
                 {!! Form::hidden('in_stock', 0) !!}
                 {!! Form::groupCheckbox('published', 1, $product->published, 'Показывать товар') !!}
                 {!! Form::groupCheckbox('in_stock', 1, $product->in_stock, 'В наличии') !!}
-                {{--                {!! Form::groupCheckbox('on_main', 1, $product->on_main, 'Показывать на главной') !!}--}}
-
-                {{--                {!! Form::hidden('is_action', 0) !!}--}}
-                {{--                {!! Form::groupCheckbox('is_action', 1, $product->is_action, 'Акция') !!}--}}
-                {{--                {!! Form::hidden('is_popular', 0) !!}--}}
-                {{--                {!! Form::groupCheckbox('is_popular', 1, $product->is_popular, 'Популярный товар') !!}--}}
 
             </div>
             <div class="tab-pane" id="tab_2">
                 {{--                {!! Form::groupRichtext('announce_text', $product->announce_text, 'Краткое описание', ['rows' => 3]) !!}--}}
                 {!! Form::groupRichtext('text', $product->text, 'Текст', ['rows' => 3]) !!}
                 {{--                {!! Form::groupRichtext('seo_text', $product->seo_text, 'SEO Текст', ['rows' => 3]) !!}--}}
+            </div>
+            <div class="tab-pane" id="tab_3">
+                @if($product->chars()->get())
+                    @foreach($product->chars()->get() as $ch)
+                        <div class="char" style="display: flex; column-gap: 20px;"
+                             data-id="{{ $ch->id }}" data-product="{{ $product->id }}">
+                            <input type="text" value="{{ $ch->name }}" disabled class="form-control"
+                                   style="max-width: 250px;">
+                            <div style="max-width: 400px; display: flex;">
+                                <input type="text" name="char" value="{{ $ch->value }}"
+                                       class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success btn-flat" onclick="updateCharValue(this, event)">
+                                       <span class="glyphicon glyphicon-ok"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+                <hr>
             </div>
 
             <div class="tab-pane" id="tab_4">

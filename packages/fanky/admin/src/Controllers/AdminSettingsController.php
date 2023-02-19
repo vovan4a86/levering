@@ -246,8 +246,6 @@ class AdminSettingsController extends AdminController {
                   ->save(null, 25);
               }
               $item = $file_name;
-            } else {
-              $item = '';
             }
           }
         });

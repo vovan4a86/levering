@@ -71,6 +71,8 @@ class CatalogController extends Controller {
         $category = $this->add_region_seo($category);
         $category->setSeo();
 
+        $view = $category->parent_id == 0 ? 'catalog.sub_category' : 'catalog.category';
+
         $root = $category;
         while ($root->parent_id !== 0) {
             $root = $root->findRootCategory($root->parent_id);
@@ -87,6 +89,7 @@ class CatalogController extends Controller {
             'h1' => $category->getH1(),
             'items' => $items,
             'asideName' => $root->name,
+            'root' => $root,
         ];
 
         if (Request::ajax()) {
@@ -107,7 +110,7 @@ class CatalogController extends Controller {
             ]);
         }
 
-        return view('catalog.category', $data);
+        return view($view, $data);
     }
 
     public function product(Product $product) {

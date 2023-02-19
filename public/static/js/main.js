@@ -33137,7 +33137,7 @@ try {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\_funky\levering-git\resources\assets\js--sources\main.js */"./resources/assets/js--sources/main.js");
+module.exports = __webpack_require__(/*! /home/vovan4a/Funky/levering/levering-git/resources/assets/js--sources/main.js */"./resources/assets/js--sources/main.js");
 
 
 /***/ })

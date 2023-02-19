@@ -164,11 +164,12 @@ class AdminCatalogController extends AdminController {
             $product = new Product([
                 'catalog_id' => Request::get('catalog'),
                 'published' => 1,
-                'measure' => 'т',
             ]);
         }
         $catalogs = Catalog::getCatalogList();
         $product_list = Product::public()->where('id', '<>', $product->id)->orderBy('name')->pluck('name', 'id')->all();
+
+//        dd($product->chars);
 
         $data = [
             'product' => $product,
@@ -189,7 +190,7 @@ class AdminCatalogController extends AdminController {
 
     public function postProductSave(): array {
         $id = Request::get('id');
-        $data = Request::except(['id', 'icons']);
+        $data = Request::except(['id']);
 
         if (!array_get($data, 'published')) $data['published'] = 0;
         if (!array_get($data, 'alias')) $data['alias'] = Text::translit($data['name']);

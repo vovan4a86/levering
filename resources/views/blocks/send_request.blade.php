@@ -4,9 +4,10 @@
               action="{{ route('ajax.optimal-decision') }}" onsubmit="sendRequestFile(this, event)">
             <div class="b-contacts__grid">
                 <div class="b-contacts__content">
-                    <div class="b-contacts__title">Предложим оптимальное решение</div>
-                    <div class="b-contacts__text">Мы осуществляем комплексное снабжение стройматериалами на
-                        условиях, которых вы ни у кого не найдете
+                    <div class="b-contacts__title">{{ Settings::get('optimal_banner')['optimal_banner_title'] ?: 'Предложим оптимальное решение' }}</div>
+                    <div class="b-contacts__text">
+                        {{ Settings::get('optimal_banner')['optimal_banner_text'] ?: 'Мы осуществляем комплексное снабжение стройматериалами на
+                        условиях, которых вы ни у кого не найдете' }}
                     </div>
                 </div>
                 <div class="b-contacts__data">

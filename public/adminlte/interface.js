@@ -617,3 +617,21 @@ function setView(el, view) {
 	})
 }
 
+function updateCharValue(elem, e) {
+	e.preventDefault();
+
+	const char = $(elem).closest('.char').data('id');
+	const product = $(elem).closest('.char').data('product');
+	const charElem = $(elem).closest('.char');
+	const value = $(charElem).find('input[name=char]').val();
+
+	let url = '/ajax/update-char-value/';
+	sendAjax(url, {char, product, value}, function (json) {
+		if (json.success == true) {
+			$(charElem).find('input[name=char]').css('background', '#c3fda2'); //
+			setTimeout(function () {
+				$(charElem).find('input[name=char]').css('background', '#fff');
+			}, 1000);
+		}
+	})
+}

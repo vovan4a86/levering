@@ -585,4 +585,15 @@ class AjaxController extends Controller {
 
         return ['success' => true];
     }
+
+    public function postUpdateProductCharValue(Request $request) {
+        $id = $request->get('char');
+        $product_id = $request->get('product');
+        $value = $request->get('value');
+
+        ProductChar::where('product_id', $product_id)
+            ->where('char_id', $id)->update(['value' => $value]);
+
+        return ['success' => true];
+    }
 }

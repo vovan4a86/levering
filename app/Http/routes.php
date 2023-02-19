@@ -35,6 +35,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
     Route::post('unconfirm-city', 'AjaxController@unConfirmCity')->name('unconfirm-city');
     Route::post('get-correct-region-link', 'AjaxController@postGetCorrectRegionLink')->name('get-correct-region-link');
     Route::get('show-popup-cities', [AjaxController::class, 'showCitiesPopup'])->name('show-popup-cities');
+    Route::post('update-char-value', [AjaxController::class, 'postUpdateProductCharValue'])->name('update-char-value');
 });
 
 Route::group(['middleware' => ['redirects', 'regions']], function() {
