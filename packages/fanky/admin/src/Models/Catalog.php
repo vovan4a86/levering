@@ -392,7 +392,7 @@ class Catalog extends Model {
     public function getProducts() {
         return $this->products()
             ->orderBy('order')
-            ->with(['catalog', 'image', 'params_on_list'])
+            ->with(['catalog', 'image'])
             ->get();
     }
 

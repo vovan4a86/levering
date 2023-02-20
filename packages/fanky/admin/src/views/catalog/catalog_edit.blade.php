@@ -71,6 +71,7 @@
                 {!! Form::groupCheckbox('published', 1, $catalog->published, 'Показывать раздел') !!}
 
                 @if($catalog->parent_id == 0)
+                    {!! Form::groupCheckbox('is_table', 1, $catalog->is_table, 'Отображать раздел в виде таблицы') !!}
                     {!! Form::groupCheckbox('on_main', 1, $catalog->on_main, 'Показывать в каталоге на главной') !!}
                     {!! Form::groupCheckbox('on_menu', 1, $catalog->on_menu, 'Показывать в главном меню') !!}
                     {!! Form::groupCheckbox('on_main_list', 1, $catalog->on_main_list, 'Показывать в каталоге продукции') !!}

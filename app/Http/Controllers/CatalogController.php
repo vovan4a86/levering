@@ -71,17 +71,28 @@ class CatalogController extends Controller {
         $category = $this->add_region_seo($category);
         $category->setSeo();
 
-        $view = $category->parent_id == 0 ? 'catalog.sub_category' : 'catalog.category';
-
         $root = $category;
         while ($root->parent_id !== 0) {
             $root = $root->findRootCategory($root->parent_id);
         }
 
-        $per_page = Settings::get('product_per_page') ?: 9;
-        $data['per_page'] = $per_page;
+        $view = $category->parent_id == 0 ? 'catalog.sub_category' : 'catalog.category';
+        if($category->parent_id != 0 && $root->is_table) {
+            $view = 'catalog.sub_category_table';
+            $children = $category->children;
+            $items = collect();
 
-        $items = $category->getRecurseProducts()->paginate($per_page);
+            foreach ($children as $child) {
+                $prods = $child->products()->orderBy('name')->get();
+                $items->push([$child->h1 => ['url' => $child->url, 'value' => $prods->chunk(4)]]);
+            }
+//            dd($items);
+
+        } else {
+            $per_page = Settings::get('product_per_page') ?: 9;
+            $data['per_page'] = $per_page;
+            $items = $category->getRecurseProducts()->paginate($per_page);
+        }
 
         $data = [
             'bread' => $bread,
