@@ -77,7 +77,9 @@ class CatalogController extends Controller {
         }
 
         $view = $category->parent_id == 0 ? 'catalog.sub_category' : 'catalog.category';
-        if($category->parent_id != 0 && $root->is_table) {
+
+        $rootIds = Catalog::where('parent_id', 0)->pluck('id')->all();
+        if(in_array($category->parent_id, $rootIds) && $root->is_table == 1) {
             $view = 'catalog.sub_category_table';
             $children = $category->children;
             $items = collect();
@@ -86,7 +88,6 @@ class CatalogController extends Controller {
                 $prods = $child->products()->orderBy('name')->get();
                 $items->push([$child->h1 => ['url' => $child->url, 'value' => $prods->chunk(4)]]);
             }
-//            dd($items);
 
         } else {
             $per_page = Settings::get('product_per_page') ?: 9;
@@ -171,6 +172,7 @@ class CatalogController extends Controller {
 
         return view('catalog.product', [
             'product' => $product,
+            'category' => $catalog,
             'categories' => $categories,
             'in_cart' => $in_cart,
             'text' => $text,

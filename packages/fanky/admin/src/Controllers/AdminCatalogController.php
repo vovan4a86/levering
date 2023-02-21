@@ -97,8 +97,10 @@ class AdminCatalogController extends AdminController {
         if (!array_get($data, 'on_menu')) $data['on_menu'] = 0;
         if (!array_get($data, 'on_main_list')) $data['on_main_list'] = 0;
         if (!array_get($data, 'on_footer_menu')) $data['on_footer_menu'] = 0;
+        if (!array_get($data, 'discount')) $data['discount'] = 0;
         if (!array_get($data, 'is_table')) $data['is_table'] = 0;
         if (!array_get($data, 'size_main')) $data['size_main'] = null;
+        if (!array_get($data, 'catalog_measure')) $data['catalog_measure'] = null;
         if (!array_get($data, 'size_cat')) $data['size_cat'] = null;
         if (!array_get($data, 'catalog_measure')) $data['catalog_measure'] = null;
         $image = Request::file('image');
@@ -116,6 +118,8 @@ class AdminCatalogController extends AdminController {
             $file_name = Catalog::uploadImage($image);
             $data['image'] = $file_name;
         }
+
+        $data['discount'] = preg_replace("/[^0-9]/", '', $data['discount']);
 
         // сохраняем страницу
         $catalog = Catalog::find($id);

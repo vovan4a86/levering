@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Settings;
-use Thumb;
 use Carbon\Carbon;
 
 /**
@@ -197,7 +196,7 @@ class Product extends Model {
             : null;
     }
 
-    public function getUrlAttribute(): string  {
+    public function getUrlAttribute(): string {
         if (!$this->_url) {
             $this->_url = $this->catalog->url . '/' . $this->alias;
         }
@@ -403,26 +402,6 @@ class Product extends Model {
         }
     }
 
-    public function getPricePerTonnAttribute() {
-        return number_format($this->price, 0, '', ' ');
-    }
-
-    public function getMeasurePrice(): ?string {
-        if ($this->measure == 'т') {
-            return $this->price;
-        } elseif ($this->measure == 'шт') {
-            return $this->price_per_item;
-        } elseif ($this->measure == 'кг') {
-            return $this->price_per_kilo;
-        } elseif ($this->measure == 'м') {
-            return $this->price_per_metr;
-        } elseif ($this->measure == 'м2') {
-            return $this->price_per_m2;
-        } else {
-            return null;
-        }
-    }
-
     public function getProductOrderView(): ?string {
         if ($this->price) {
             return 'catalog.blocks.product_order_t';
@@ -440,37 +419,39 @@ class Product extends Model {
     }
 
     public function getRecourseDiscountAmount($id = null) {
-        if($this->discount) return $this->discount;
+        if ($this->discount) return $this->discount;
 
-        if(!$id) $category = Catalog::find($this->catalog_id);
+        if (!$id) $category = Catalog::find($this->catalog_id);
         else $category = Catalog::find($id);
 
-        if($category->discount) return $category->discount;
-        elseif($category->parent_id == 0) return 0;
+        if ($category->discount) return $category->discount;
+        elseif ($category->parent_id == 0) return 0;
         else $this->getRecourseDiscountAmount($category->parent_id);
     }
 
-    public function getRecourseMeasure($id = null) {
-        if($this->measure) return $this->measure;
+    public function getRecourseMeasure() {
+        if ($this->measure) return $this->measure;
 
-        if(!$id) $category = Catalog::find($this->catalog_id);
-        else $category = Catalog::find($id);
-
-        if($category->catalog_measure) return $category->catalog_measure;
-        elseif($category->parent_id == 0) return 0;
-        else $this->getRecourseMeasure($category->parent_id);
+        $catalog = Catalog::find($this->catalog_id);
+        while($catalog) {
+            if($catalog->catalog_measure) return $catalog->catalog_measure;
+            else {
+                if($catalog->parent) $catalog = $catalog->parent;
+                else return $catalog->catalog_measure;
+            }
+        }
     }
 
     public function getPriceWithDiscount() {
-        if($discount = $this->getRecourseDiscountAmount()) {
+        if ($discount = $this->getRecourseDiscountAmount()) {
             $amount = $this->price * $discount / 100;
             return $this->price + $amount;
         }
     }
 
     public function getStartCount() {
-        if(!$this->price) return 0;
-        if($this->min_hours) return $this->min_hours;
+        if (!$this->price) return 0;
+        if ($this->min_hours) return $this->min_hours;
         return 1;
     }
 

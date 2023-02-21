@@ -247,14 +247,14 @@
                                                 <div class="b-context__list">
                                                     @foreach($chars as $char)
                                                         <dl>
-                                                            <dt>{{ $char->name }}</dt>
-                                                            <dd>{{ $char->value }}</dd>
+                                                            <dt>{{ trim($char->name) }}</dt>
+                                                            <dd>{{ trim($char->value) }}</dd>
                                                         </dl>
                                                         @if($loop->iteration > 5)
                                                             <dl x-show="contextIsOpen" x-transition.duration.250ms
                                                                 x-cloak>
-                                                                <dt>{{ $char->name }}</dt>
-                                                                <dd>{{ $char->value }}</dd>
+                                                                <dt>{{ trim($char->name) }}</dt>
+                                                                <dd>{{ trim($char->value) }}</dd>
                                                             </dl>
                                                         @endif
                                                     @endforeach
